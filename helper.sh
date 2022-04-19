@@ -43,9 +43,10 @@ function drawing
     #Append 70-wacom.conf
         XORG_APPEND=$(cat /usr/share/X11/xorg.conf.d/70-wacom.conf | grep "S620" | cut -d' ' -f2,3 | sed 's/ //g')
         if [ "$XORG_APPEND" != "GaomonS620" ]; then
-                sudo -i #spawn root sub-shell. This needs to be on its own line. Can't just use sudo, else the redirect does not get run as root.
-                echo -e '\n\n# Gaomon S620\nSection "InputClass"\n\tIdentifier "GAOMON Gaomon Tablet"\n\tMatchUSBID  "256c:006d"\n\tMatchDevicePath "/dev/input/event*"\n\tDriver "wacom"\nEndSection' >> /usr/share/X11/xorg.conf.d/70-wacom.conf
-                exit #exit root sub-shell
+            echo -e "Use root Password as Using 'su'\n"
+            su -c 'echo -e "\n\n# Gaomon S620\nSection "InputClass"\n\tIdentifier "GAOMON Gaomon Tablet"\n\tMatchUSBID  "256c:006d"\n\tMatchDevicePath "/dev/input/event*"\n\tDriver "wacom"\nEndSection" >> /usr/share/X11/xorg.conf.d/70-wacom.conf' root
+            echo -e "Need to Restart/Logout Before Continuing. Do so and Run Script Again"
+            exit 0
         fi
         # USBID can be found with 'lsusb'
 
@@ -69,7 +70,19 @@ function drawing
         #   xsetwacom --set 'GAOMON Gaomon Tablet Pen stylus' Button 2 "KEYBINDINGHERE"   #Upper Button
 }
 
-while getopts "umdt" FLAG; do
+function setup
+{
+    #updates
+    #sudo group
+    #apt installation
+    #graphics
+    #appearance
+    #dns
+    #firewall
+    echo -e "Entered Setup\n"
+}
+
+while getopts "umdts" FLAG; do
     case "$FLAG" in
         u)
             updater
@@ -79,6 +92,9 @@ while getopts "umdt" FLAG; do
             ;;
         d)
             drawing
+            ;;
+        s)
+            setup
             ;;
         *)
             echo -e "Usage: updater [OPTION]"
