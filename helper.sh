@@ -93,35 +93,52 @@ function drawing
 
 function setup
 {
-    #updates
-    #sudo group
-    #apt installation
-    #graphics
-    #appearance
-    #dns
-    #firewall
-    echo -e "Entered Setup\n"
+    echo -e "Run full setup script? (yes or n)"
+    read ANS
+    if [ "$ANS" == "yes" ]; then
+        echo -e "\nstuff"
+        #updates
+        #sudo group
+        #apt installation
+        #graphics
+        #appearance
+        #dns
+        #firewall
+    fi
 }
 
+HELP=1
 while getopts "umdts" FLAG; do
     case "$FLAG" in
         u)
+            HELP=0
             updater
             ;;
         m)
+            HELP=0
             monitors
             ;;
         d)
+            HELP=0
             drawing
             ;;
         s)
+            HELP=0
             setup
             ;;
         *)
-            echo -e "Usage: updater [OPTION]"
-            echo -e "\t-u\tupdater\t\tUpdate from Multiple Package Managers"
-            echo -e "\t-m\tmonitors\tSetup display link adapter and arrange monitors"
-            echo -e "\t-d\tdrawing\t\tSetup drawing tablet"
-            ;;
+       #     echo -e "Usage: updater [OPTION]"
+       #     echo -e "\t-u\tupdater\t\tUpdate from Multiple Package Managers"
+       #     echo -e "\t-m\tmonitors\tSetup display link adapter and arrange monitors"
+       #     echo -e "\t-d\tdrawing\t\tSetup drawing tablet"
+       #     ;;
     esac
 done
+
+if [ $HELP -ne 0 ]; then
+    echo -e "Usage: updater [OPTION]"
+    echo -e "\t-u\tupdater\t\tUpdate from Multiple Package Managers"
+    echo -e "\t-m\tmonitors\tSetup display link adapter and arrange monitors"
+    echo -e "\t-d\tdrawing\t\tSetup drawing tablet"
+    echo -e "\t-s\tsetup\t\tOverall Machine Setup"
+fi
