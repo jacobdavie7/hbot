@@ -3,16 +3,30 @@
 function updater
 {
     echo -e "Executing 'Updater' Function"
-    
-    echo -e "\n\e[35mapt\e[39m"
-    sudo apt update
+    # apt
+        echo -e "\n\e[35mapt\e[39m"
+        sudo apt update
+        echo
+        apt list --upgradeable
 
+        echo -e "\n\e[95mRun Apt Upgradeable? (y or n)\e[39m"
+        read ANS
+        if [ "$ANS" == "y" ]; then
+            sudo apt upgrade -y
 
-    echo -e "\n\e[35mflatpak\e[39m"
-    flatpak update
+            echo -e "\n\e[95mRun Apt autoremove? (y or n)\e[39m"
+            read ANS
+            if [ "$ANS" == "y" ]; then
+                sudo apt autoremove -y
+            fi
+        fi
+    # flatpak
+        echo -e "\n\e[35mflatpak\e[39m"
+        flatpak update
 
-    echo -e "\n\e[35msnap\e[39m"
-    sudo snap refresh
+    # snap
+        echo -e "\n\e[35msnap\e[39m"
+        sudo snap refresh
 }
 
 function monitors
