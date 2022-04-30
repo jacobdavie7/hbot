@@ -1,6 +1,6 @@
 #!/bin/bash
 
-function updater
+function updater ()
 {
     echo -e "Executing 'Updater' Function"
     # apt
@@ -29,7 +29,7 @@ function updater
         sudo snap refresh
 }
 
-function monitors
+function monitors ()
 {
     echo -e "Executing 'Monitors' Function"
 
@@ -59,10 +59,11 @@ function monitors
     #Top Monitor
         xrandr --output DVI-I-1-1 --pos 1320x0 --auto               #--above HDMI-0     --pos 1320x0
 
+    echo -e "\tIf the monitor is still NOT functioning and drivers ARE installed (from GitHub), the USB DisplayLink adapter may need to be reseated."
     # https://github.com/AdnanHodzic/displaylink-debian/blob/master/post-install-guide.md
 }
 
-function drawing
+function drawing ()
 {
     echo -e "Executing 'Drawing' Function"
 
@@ -95,148 +96,162 @@ function drawing
         # xsetwacom --set 'GAOMON Gaomon Tablet Pen stylus' Button 2 "KEYBINDINGHERE"   #Upper Button
 }
 
-function firewall
+function firewallServer
 {
-    echo -e "What firewall script do you want to deploy?\nEnter 's' for server, 'w' for workstation, or 'r' to reset (flush all chains + default policies to accept)"
+    echo -e "\nDeploying Server Firewall Rules"
+    echo "Flushing all chains"
+        sudo -i iptables -F
+
+    echo "Setting default policy to DROP"
+        sudo -i iptables -P FORWARD DROP
+        sudo -i iptables -P OUTPUT DROP
+        sudo -i iptables -P INPUT DROP
+
+    echo "Allowing anything marked RELATED/ESTABLISHED"
+        sudo -i iptables -A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT -m comment --comment "ACCEPT incoming RELATED/ESTABLISHED"
+        sudo -i iptables -A OUTPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT -m comment --comment "ACCEPT outgoing RELATED/ESTABLISHED"
+
+    echo "Allowing everything on loopback"
+        sudo -i iptables -A INPUT -s 127.0.0.1 -j ACCEPT -m comment --comment "ACCEPT all incoming on loopback"
+        sudo -i iptables -A OUTPUT -d 127.0.0.1 -j ACCEPT -m comment --comment "ACCEPT all outgoing on loopback"
+
+    echo "Dropping anything marked INVALID"
+        sudo -i iptables -A INPUT -m conntrack --ctstate INVALID -j DROP -m comment --comment "REJECT anything marked INVALID"
+
+    echo "Allowing ping"
+        sudo -i iptables -A INPUT -p icmp --icmp-type 8 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT incoming ping request"
+        sudo -i iptables -A OUTPUT -p icmp --icmp-type 0 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "ACCEPT outgoing ping reply"
+
+    echo "Allowing services"
+        echo " - ssh       (IN)"
+            sudo -i iptables -A INPUT -p tcp --dport 22 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT incoming ssh"
+
+        echo " - http      (IN)"
+            sudo -i iptables -A INPUT -p tcp --dport 80 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT incoming http"
+
+        echo " - https     (IN)"
+            sudo -i iptables -A INPUT -p tcp --dport 443 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT incoming https"
+
+        echo " - smtp      (OUT)"
+            sudo -i iptables -A OUTPUT -p tcp --dport 587 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outgoing smtp"
+
+        echo " - ntp       (OUT)"
+            sudo -i iptables -A OUTPUT -p udp --dport 123 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outgoing ntp"
+
+        # echo " - dns       (OUT)"
+            # sudo -i iptables -A OUTPUT -p udp --dport 53 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outdoing dns"
+
+    echo "Allowing users"
+
+        USERS=( root )
+
+        for U in "${USERS[@]}"
+        do
+            echo " - $U      (OUT)"
+                sudo -i iptables -A OUTPUT -m owner --uid-owner $U -j ACCEPT -m comment --comment "ACCEPT outgoing $U"
+        done
+
+    # echo "Allowing other boxes"
+        # echo " - backup    (OUT)"
+        # iptables -A OUTPUT -p tcp -d 0.0.0.0 --dport 22 -j ACCEPT -m comment --comment "ACCEPT outgoing backup (ssh)"
+
+    echo "Limit SYN Flood"
+        iptables -A INPUT -p tcp --syn -m limit --limit 5/s -j ACCEPT -m comment --comment "Limit SYN to 5/second"
+
+    echo "Gracefully rejecting everything else"
+        sudo -i iptables -A INPUT -p udp -j REJECT --reject-with icmp-port-unreachable -m comment --comment "Graceful UDP REJECTs"
+        sudo -i iptables -A INPUT -p tcp -j REJECT --reject-with tcp-rst -m comment --comment "Graceful TCP REJECTS"
+        sudo -i iptables -A INPUT -j REJECT --reject-with icmp-proto-unreachable -m comment --comment "Graceful UNKNOWN REJECTs"
+}
+function firewallWorkstation
+{
+    echo -e "\nDeploying Workstation Firewall Rules"
+    echo "Flushing all chains"
+        sudo -i iptables -F
+
+    echo "Setting default policy to DROP"
+        sudo -i iptables -P FORWARD DROP
+        sudo -i iptables -P OUTPUT DROP
+        sudo -i iptables -P INPUT DROP
+
+    echo "Allowing anything marked RELATED/ESTABLISHED"
+        sudo -i iptables -A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT -m comment --comment "ACCEPT incoming RELATED/ESTABLISHED"
+        sudo -i iptables -A OUTPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT -m comment --comment "ACCEPT outgoing RELATED/ESTABLISHED"
+
+    echo "Allowing everything on loopback"
+        sudo -i iptables -A INPUT -s 127.0.0.1 -j ACCEPT -m comment --comment "ACCEPT all incoming on loopback"
+        sudo -i iptables -A OUTPUT -d 127.0.0.1 -j ACCEPT -m comment --comment "ACCEPT all outgoing on loopback"
+
+    echo "Dropping anything marked INVALID"
+        sudo -i iptables -A INPUT -m conntrack --ctstate INVALID -j DROP -m comment --comment "REJECT anything marked INVALID"
+
+    echo "Allowing ping"
+        sudo -i iptables -A OUTPUT -p icmp --icmp-type 0 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "ACCEPT outgoing ping reply"
+    
+    echo "Allowing services"
+        echo " - SSH        (OUT)"
+            sudo -i iptables -A OUTPUT -p tcp --dport 22 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outgoing ssh"
+        echo " - HTTP       (OUT)"
+            sudo -i iptables -A OUTPUT -p tcp --dport 80 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outgoing http"
+
+        echo " - HTTPS      (OUT)"
+            sudo -i iptables -A OUTPUT -p tcp --dport 443 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outgoing https"
+
+        echo " - DNS        (OUT)"
+            sudo -i iptables -A OUTPUT -p udp --dport 53 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outdoing dns"
+        
+        echo " - CUPS       (OUT)"
+            sudo -i iptables -A OUTPUT -p tcp --dport 631 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outdoing cups"
+        
+        echo " - Meet RTC   (OUT)"
+            sudo -i iptables -A OUTPUT -p udp --dport 19302:19309 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outdoing RTC to Google Meet"
+        
+        echo " - Dis. RTC   (OUT)"
+            sudo -i iptables -A OUTPUT -p udp --dport 50000:50050 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outdoing RTC to Discord"
+
+        echo " - STUN RC    (OUT)"
+            sudo -i iptables -A OUTPUT -p udp --dport 3478 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outdoing STUN to RC Desktop"
+}
+function firewallReset
+{
+    echo -e "\nReseting all Firewall Rules (Default Accept + Flush Chains)"
+    echo "Flushing all chains"
+        sudo -i iptables -F
+
+    echo "Setting default policy to ALLOW"
+        sudo -i iptables -P FORWARD ACCEPT
+        sudo -i iptables -P OUTPUT ACCEPT
+        sudo -i iptables -P INPUT ACCEPT
+}
+
+function firewallSelect ()
+{
+    echo -e "What firewall ruleset do you want to deploy?"
+    echo -e "\ts\tServer"
+    echo -e "\tw\tWorkstation"
+    echo -e "\tr\tReset (Flush Chains + Accept All)"
+
     read ANS
     
     #Server Filewall Rule Set
     if [ "$ANS" == "s" ]; then
-        echo -e "\nDeploying Server Firewall Rules"
-        echo "Flushing all chains"
-            sudo -i iptables -F
-
-        echo "Setting default policy to DROP"
-            sudo -i iptables -P FORWARD DROP
-            sudo -i iptables -P OUTPUT DROP
-            sudo -i iptables -P INPUT DROP
-
-        echo "Allowing anything marked RELATED/ESTABLISHED"
-            sudo -i iptables -A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT -m comment --comment "ACCEPT incoming RELATED/ESTABLISHED"
-            sudo -i iptables -A OUTPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT -m comment --comment "ACCEPT outgoing RELATED/ESTABLISHED"
-
-        echo "Allowing everything on loopback"
-            sudo -i iptables -A INPUT -s 127.0.0.1 -j ACCEPT -m comment --comment "ACCEPT all incoming on loopback"
-            sudo -i iptables -A OUTPUT -d 127.0.0.1 -j ACCEPT -m comment --comment "ACCEPT all outgoing on loopback"
-
-        echo "Dropping anything marked INVALID"
-            sudo -i iptables -A INPUT -m conntrack --ctstate INVALID -j DROP -m comment --comment "REJECT anything marked INVALID"
-
-        echo "Allowing ping"
-            sudo -i iptables -A INPUT -p icmp --icmp-type 8 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT incoming ping request"
-            sudo -i iptables -A OUTPUT -p icmp --icmp-type 0 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "ACCEPT outgoing ping reply"
-
-        echo "Allowing services"
-
-            echo " - ssh       (IN)"
-                sudo -i iptables -A INPUT -p tcp --dport 22 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT incoming ssh"
-
-            echo " - http      (IN)"
-                sudo -i iptables -A INPUT -p tcp --dport 80 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT incoming http"
-
-            echo " - https     (IN)"
-                sudo -i iptables -A INPUT -p tcp --dport 443 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT incoming https"
-
-            echo " - smtp      (OUT)"
-                sudo -i iptables -A OUTPUT -p tcp --dport 587 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outgoing smtp"
-
-            echo " - ntp       (OUT)"
-                sudo -i iptables -A OUTPUT -p udp --dport 123 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outgoing ntp"
-
-            # echo " - dns       (OUT)"
-                # sudo -i iptables -A OUTPUT -p udp --dport 53 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outdoing dns"
-
-        echo "Allowing users"
-
-            USERS=( root )
-
-            for U in "${USERS[@]}"
-            do
-                echo " - $U      (OUT)"
-                    sudo -i iptables -A OUTPUT -m owner --uid-owner $U -j ACCEPT -m comment --comment "ACCEPT outgoing $U"
-            done
-
-        # echo "Allowing other boxes"
-
-            # echo " - backup    (OUT)"
-            # iptables -A OUTPUT -p tcp -d 0.0.0.0 --dport 22 -j ACCEPT -m comment --comment "ACCEPT outgoing backup (ssh)"
-
-        echo "Limit SYN Flood"
-            iptables -A INPUT -p tcp --syn -m limit --limit 5/s -j ACCEPT -m comment --comment "Limit SYN to 5/second"
-
-        echo "Gracefully rejecting everything else"
-            sudo -i iptables -A INPUT -p udp -j REJECT --reject-with icmp-port-unreachable -m comment --comment "Graceful UDP REJECTs"
-            sudo -i iptables -A INPUT -p tcp -j REJECT --reject-with tcp-rst -m comment --comment "Graceful TCP REJECTS"
-            sudo -i iptables -A INPUT -j REJECT --reject-with icmp-proto-unreachable -m comment --comment "Graceful UNKNOWN REJECTs"
+        firewallServer
     fi
 
     #Workstation Filewall Rule Set
     if [ "$ANS" == "w" ]; then
-        echo -e "\nDeploying Workstation Firewall Rules"
-        echo "Flushing all chains"
-            sudo -i iptables -F
-
-        echo "Setting default policy to DROP"
-            sudo -i iptables -P FORWARD DROP
-            sudo -i iptables -P OUTPUT DROP
-            sudo -i iptables -P INPUT DROP
-
-        echo "Allowing anything marked RELATED/ESTABLISHED"
-            sudo -i iptables -A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT -m comment --comment "ACCEPT incoming RELATED/ESTABLISHED"
-            sudo -i iptables -A OUTPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT -m comment --comment "ACCEPT outgoing RELATED/ESTABLISHED"
-
-        echo "Allowing everything on loopback"
-            sudo -i iptables -A INPUT -s 127.0.0.1 -j ACCEPT -m comment --comment "ACCEPT all incoming on loopback"
-            sudo -i iptables -A OUTPUT -d 127.0.0.1 -j ACCEPT -m comment --comment "ACCEPT all outgoing on loopback"
-
-        echo "Dropping anything marked INVALID"
-            sudo -i iptables -A INPUT -m conntrack --ctstate INVALID -j DROP -m comment --comment "REJECT anything marked INVALID"
-
-        echo "Allowing ping"
-            sudo -i iptables -A OUTPUT -p icmp --icmp-type 0 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "ACCEPT outgoing ping reply"
-      
-        echo "Allowing services"
-
-            echo " - SSH        (OUT)"
-                sudo -i iptables -A OUTPUT -p tcp --dport 22 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outgoing ssh"
-            echo " - HTTP       (OUT)"
-                sudo -i iptables -A OUTPUT -p tcp --dport 80 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outgoing http"
-
-            echo " - HTTPS      (OUT)"
-                sudo -i iptables -A OUTPUT -p tcp --dport 443 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outgoing https"
-
-            echo " - DNS        (OUT)"
-                sudo -i iptables -A OUTPUT -p udp --dport 53 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outdoing dns"
-            
-            echo " - CUPS       (OUT)"
-                sudo -i iptables -A OUTPUT -p tcp --dport 631 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outdoing cups"
-            
-            echo " - Meet RTC   (OUT)"
-                sudo -i iptables -A OUTPUT -p udp --dport 19302:19309 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outdoing RTC to Google Meet"
-            
-            echo " - Dis. RTC   (OUT)"
-                sudo -i iptables -A OUTPUT -p udp --dport 50000:50050 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outdoing RTC to Discord"
-
-            echo " - STUN RC    (OUT)"
-                sudo -i iptables -A OUTPUT -p udp --dport 3478 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outdoing STUN to RC Desktop"
+        firewallWorkstation
     fi
 
     #Firewall Reset
     if [ "$ANS" == "r" ]; then
-        echo -e "\nReseting all Firewall Rules (default accept)"
-        echo "Flushing all chains"
-            sudo -i iptables -F
-
-        echo "Setting default policy to ALLOW"
-            sudo -i iptables -P FORWARD ACCEPT
-            sudo -i iptables -P OUTPUT ACCEPT
-            sudo -i iptables -P INPUT ACCEPT
+        firewallReset
     fi
 }
 
-function setup
+function install ()
 {
-    echo -e "Run full setup script? (yes or n)"
+    echo -e "Run full install and setup script? (yes or n)"
     read ANS
     if [ "$ANS" == "yes" ]; then
         echo -e "\nstuff"
@@ -250,8 +265,16 @@ function setup
     fi
 }
 
+function startup ()
+{
+    monitors
+    drawing
+    firewallWorkstation
+    updater
+}
+
 HELP=1
-while getopts "umdsf" FLAG; do
+while getopts "umdsfi" FLAG; do
     case "$FLAG" in
         u)
             HELP=0
@@ -267,18 +290,18 @@ while getopts "umdsf" FLAG; do
             ;;
         s)
             HELP=0
-            setup
+            startup
             ;;
         f)
             HELP=0
-            firewall
+            firewallSelect
+            ;;
+        i)
+            HELP=0
+            install
             ;;
         *)
-       #     echo -e "Usage: updater [OPTION]"
-       #     echo -e "\t-u\tupdater\t\tUpdate from Multiple Package Managers"
-       #     echo -e "\t-m\tmonitors\tSetup display link adapter and arrange monitors"
-       #     echo -e "\t-d\tdrawing\t\tSetup drawing tablet"
-       #     ;;
+        #   echo -e "Usage: updater [OPTION]"
     esac
 done
 
@@ -288,5 +311,6 @@ if [ $HELP -ne 0 ]; then
     echo -e "\t-m\tmonitors\tSetup display link adapter and arrange monitors"
     echo -e "\t-d\tdrawing\t\tSetup drawing tablet"
     echo -e "\t-f\tfirewall\tDeploy firewall rules"
-    echo -e "\t-s\tsetup\t\tOverall Machine Setup"
+    echo -e "\t-s\tstartup\t\tRun Monitors, Drawing, Workstation Firewall"
+    echo -e "\t-i\tinstall\t\tOverall Machine Setup"
 fi
