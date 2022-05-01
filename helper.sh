@@ -138,18 +138,21 @@ function firewallServer
         echo " - ntp       (OUT)"
             sudo -i iptables -A OUTPUT -p udp --dport 123 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outgoing ntp"
 
-        # echo " - dns       (OUT)"
-            # sudo -i iptables -A OUTPUT -p udp --dport 53 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outdoing dns"
-
     echo "Allowing users"
 
-        USERS=( root )
-
-        for U in "${USERS[@]}"
+        GROUPS= ( network-access )
+        for G in "${GROUPS[@]}"
         do
-            echo " - $U      (OUT)"
-                sudo -i iptables -A OUTPUT -m owner --uid-owner $U -j ACCEPT -m comment --comment "ACCEPT outgoing $U"
+        echo " - $G      (OUT)"
+            sudo -i iptables -A OUTPUT -m owner --gid-owner $G -j ACCEPT -m comment --comment "ACCEPT outgoing $G"
         done
+
+        # USERS=( root )
+        # for U in "${USERS[@]}"
+        # do
+        #    echo " - $U      (OUT)"
+        #        sudo -i iptables -A OUTPUT -m owner --gid-owner $U -j ACCEPT -m comment --comment "ACCEPT outgoing $U"
+        # done
 
     # echo "Allowing other boxes"
         # echo " - backup    (OUT)"
