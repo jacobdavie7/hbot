@@ -131,10 +131,7 @@ function firewallServer
     echo "Flushing all chains"
         sudo -i iptables -F
 
-    echo "Setting default policy to DROP"
-        sudo -i iptables -P FORWARD DROP
-        sudo -i iptables -P OUTPUT DROP
-        sudo -i iptables -P INPUT DROP
+    #Change Policy to DROP at end of Server Ruleset. This prevents SSH session from freezing and needing to enter something to see output.
 
     echo "Allowing anything marked RELATED/ESTABLISHED"
         iptables -A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT -m comment --comment "ACCEPT incoming RELATED/ESTABLISHED"
@@ -182,6 +179,11 @@ function firewallServer
         iptables -A INPUT -p udp -j REJECT --reject-with icmp-port-unreachable -m comment --comment "Graceful UDP REJECTs"
         iptables -A INPUT -p tcp -j REJECT --reject-with tcp-rst -m comment --comment "Graceful TCP REJECTS"
         iptables -A INPUT -j REJECT --reject-with icmp-proto-unreachable -m comment --comment "Graceful UNKNOWN REJECTs"
+    
+    echo "Setting default policy to DROP"
+        sudo -i iptables -P FORWARD DROP
+        sudo -i iptables -P OUTPUT DROP
+        sudo -i iptables -P INPUT DROP
 }
 function firewallWorkstation
 {
