@@ -96,17 +96,39 @@ function drawing ()
         # xsetwacom --set 'GAOMON Gaomon Tablet Pen stylus' Button 2 "KEYBINDINGHERE"   #Upper Button
 }
 
+function firewallReset
+{
+    ELEV=$(id | grep root | cut -d' ' -f1)
+            if [ "$ELEV" == "uid=0(root)" ]; then
+                echo -e "\nReseting all Firewall Rules (Default Accept + Flush Chains)"
+                echo -e "Running as Root, commands will be run WITHOUT sudo"
+                    echo "Setting default policy to ALLOW"
+                        iptables -P INPUT ACCEPT
+                        iptables -P OUTPUT ACCEPT
+                        iptables -P FORWARD ACCEPT
+
+                    echo "Flushing all chains"
+                        iptables -F
+            fi
+            if [ "$ELEV" != "uid=0(root)" ]; then
+                echo -e "\nReseting all Firewall Rules (Default Accept + Flush Chains)"
+                echo -e "Running as standerd user, commands will be run with sudo"
+                    echo "Setting default policy to ALLOW"
+                        sudo -i iptables -P INPUT ACCEPT
+                        sudo -i iptables -P OUTPUT ACCEPT
+                        sudo -i iptables -P FORWARD ACCEPT
+
+                    echo "Flushing all chains"
+                        sudo -i iptables -F
+            fi
+
+}
+
 function firewallServer
 {
-    echo -e "\nServer Ruleset does not have sudo, must run as root"
     echo -e "\nDeploying Server Firewall Rules"
-    echo "Flushing all chains"
-        iptables -F
 
-    echo "Setting default policy to DROP"
-        iptables -P FORWARD DROP
-        iptables -P OUTPUT DROP
-        iptables -P INPUT DROP
+    firewallReset
 
     echo "Allowing anything marked RELATED/ESTABLISHED"
         iptables -A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT -m comment --comment "ACCEPT incoming RELATED/ESTABLISHED"
@@ -158,13 +180,8 @@ function firewallServer
 function firewallWorkstation
 {
     echo -e "\nDeploying Workstation Firewall Rules"
-    echo "Flushing all chains"
-        sudo -i iptables -F
 
-    echo "Setting default policy to DROP"
-        sudo -i iptables -P FORWARD DROP
-        sudo -i iptables -P OUTPUT DROP
-        sudo -i iptables -P INPUT DROP
+    firewallReset
 
     echo "Allowing anything marked RELATED/ESTABLISHED"
         sudo -i iptables -A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT -m comment --comment "ACCEPT incoming RELATED/ESTABLISHED"
@@ -203,17 +220,6 @@ function firewallWorkstation
 
         echo " - STUN RC    (OUT)"
             sudo -i iptables -A OUTPUT -p udp --dport 3478 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outdoing STUN to RC Desktop"
-}
-function firewallReset
-{
-    echo -e "\nReseting all Firewall Rules (Default Accept + Flush Chains)"
-    echo "Flushing all chains"
-        sudo -i iptables -F
-
-    echo "Setting default policy to ALLOW"
-        sudo -i iptables -P FORWARD ACCEPT
-        sudo -i iptables -P OUTPUT ACCEPT
-        sudo -i iptables -P INPUT ACCEPT
 }
 
 function firewallSelect ()
