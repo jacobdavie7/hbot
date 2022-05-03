@@ -140,6 +140,9 @@ function firewallServer
         iptables -A INPUT -s 127.0.0.1 -j ACCEPT -m comment --comment "ACCEPT all incoming on loopback"
         iptables -A OUTPUT -d 127.0.0.1 -j ACCEPT -m comment --comment "ACCEPT all outgoing on loopback"
 
+    echo "Limit SYN Flood"
+        iptables -A INPUT -p tcp --syn -m limit --limit 2/s -j ACCEPT -m comment --comment "Limit SYN to 2/second"
+
     echo "Dropping anything marked INVALID"
         iptables -A INPUT -m conntrack --ctstate INVALID -j DROP -m comment --comment "REJECT anything marked INVALID"
 
@@ -157,27 +160,26 @@ function firewallServer
         echo " - https     (IN)"
             iptables -A INPUT -p tcp --dport 443 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT incoming https"
 
-        echo " - smtp      (OUT)"
-            iptables -A OUTPUT -p tcp --dport 587 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outgoing smtp"
+        #echo " - ntp      (OUT)"
+            #iptables -A OUTPUT -p udp --dport 123 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outgoing ntp"
 
-        echo " - ntp       (OUT)"
-            iptables -A OUTPUT -p udp --dport 123 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outgoing ntp"
-
-    echo "Allowing Network Access Group"
-        iptables -A OUTPUT -m owner --gid-owner network-access -j ACCEPT -m comment --comment "ACCEPT outgoing Network Access Group"
-
+    echo "Allowing users"
+        USERS=( root _apt www-data )
+        for U in "${USERS[@]}"
+        do
+            echo " - http      $U         (OUT)"
+                iptables -A OUTPUT -p tcp --dport 80 -m owner --uid-owner $U -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outgoing http for $U"
+            echo " - https     $U         (OUT)"
+                iptables -A OUTPUT -p tcp --dport 443 -m owner --uid-owner $U -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outgoing https for $U"
+            echo " - dns       $U         (OUT)"
+                iptables -A OUTPUT -p tcp --dport 53 -m owner --uid-owner $U -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outgoing http for $U"
+        done
+        echo " - smtp      www-data         (OUT)"
+                iptables -A OUTPUT -p tcp --dport 587 -m owner --uid-owner www-data -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outgoing http for www-data"
 
     # echo "Allowing other boxes"
         # echo " - backup    (OUT)"
         # iptables -A OUTPUT -p tcp -d 0.0.0.0 --dport 22 -j ACCEPT -m comment --comment "ACCEPT outgoing backup (ssh)"
-
-    echo "Limit SYN Flood"
-        iptables -A INPUT -p tcp --syn -m limit --limit 5/s -j ACCEPT -m comment --comment "Limit SYN to 5/second"
-
-    echo "Gracefully rejecting everything else"
-        iptables -A INPUT -p udp -j REJECT --reject-with icmp-port-unreachable -m comment --comment "Graceful UDP REJECTs"
-        iptables -A INPUT -p tcp -j REJECT --reject-with tcp-rst -m comment --comment "Graceful TCP REJECTS"
-        iptables -A INPUT -j REJECT --reject-with icmp-proto-unreachable -m comment --comment "Graceful UNKNOWN REJECTs"
     
     echo "Setting default policy to DROP"
         iptables -P INPUT DROP
