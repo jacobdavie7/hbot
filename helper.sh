@@ -167,15 +167,18 @@ function firewallServer
         USERS=( root _apt www-data )
         for U in "${USERS[@]}"
         do
-            echo " - http      $U         (OUT)"
-                iptables -A OUTPUT -p tcp --dport 80 -m owner --uid-owner $U -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outgoing http for $U"
-            echo " - https     $U         (OUT)"
-                iptables -A OUTPUT -p tcp --dport 443 -m owner --uid-owner $U -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outgoing https for $U"
-            echo " - dns       $U         (OUT)"
-                iptables -A OUTPUT -p tcp --dport 53 -m owner --uid-owner $U -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outgoing http for $U"
+            echo " - ALL      $U         (OUT)"
+                iptables -A OUTPUT -m owner --uid-owner $U -j ACCEPT -m comment --comment "ACCEPT outgoing ALL for $U"
+
+            # echo " - http      $U         (OUT)"
+            #    iptables -A OUTPUT -p tcp --dport 80 -m owner --uid-owner $U -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outgoing http for $U"
+            # echo " - https     $U         (OUT)"
+            #    iptables -A OUTPUT -p tcp --dport 443 -m owner --uid-owner $U -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outgoing https for $U"
+            # echo " - dns       $U         (OUT)"
+            #    iptables -A OUTPUT -p tcp --dport 53 -m owner --uid-owner $U -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outgoing http for $U"
         done
-        echo " - smtp      www-data         (OUT)"
-                iptables -A OUTPUT -p tcp --dport 587 -m owner --uid-owner www-data -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outgoing http for www-data"
+        # echo " - smtp      www-data         (OUT)"
+        #   iptables -A OUTPUT -p tcp --dport 587 -m owner --uid-owner www-data -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outgoing http for www-data"
 
     # echo "Allowing other boxes"
         # echo " - backup    (OUT)"
@@ -215,6 +218,7 @@ function firewallWorkstation
     echo "Allowing services"
         echo " - SSH        (OUT)"
             sudo -i iptables -A OUTPUT -p tcp --dport 22 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outgoing ssh"
+
         echo " - HTTP       (OUT)"
             sudo -i iptables -A OUTPUT -p tcp --dport 80 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outgoing http"
 
