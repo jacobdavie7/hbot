@@ -99,28 +99,28 @@ function drawing ()
 function firewallReset
 {
     ELEV=$(id | grep root | cut -d' ' -f1)
-            if [ "$ELEV" == "uid=0(root)" ]; then
-                echo -e "\nReseting all Firewall Rules (Default Accept + Flush Chains)"
-                echo -e "Running as Root, commands will be run WITHOUT sudo"
-                    echo "Setting default policy to ALLOW"
-                        iptables -P INPUT ACCEPT
-                        iptables -P OUTPUT ACCEPT
-                        iptables -P FORWARD ACCEPT
+        if [ "$ELEV" == "uid=0(root)" ]; then
+            echo -e "\nReseting all Firewall Rules (Default Accept + Flush Chains)"
+            echo -e "Running as Root, commands will be run WITHOUT sudo"
+                echo "Setting default policy to ALLOW"
+                    iptables -P INPUT ACCEPT
+                    iptables -P OUTPUT ACCEPT
+                    iptables -P FORWARD ACCEPT
 
-                    echo "Flushing all chains"
-                        iptables -F
-            fi
-            if [ "$ELEV" != "uid=0(root)" ]; then
-                echo -e "\nReseting all Firewall Rules (Default Accept + Flush Chains)"
-                echo -e "Running as standerd user, commands will be run with sudo"
-                    echo "Setting default policy to ALLOW"
-                        sudo -i iptables -P INPUT ACCEPT
-                        sudo -i iptables -P OUTPUT ACCEPT
-                        sudo -i iptables -P FORWARD ACCEPT
+                echo "Flushing all chains"
+                    iptables -F
+        fi
+        if [ "$ELEV" != "uid=0(root)" ]; then
+            echo -e "\nReseting all Firewall Rules (Default Accept + Flush Chains)"
+            echo -e "Running as standerd user, commands will be run with sudo"
+                echo "Setting default policy to ALLOW"
+                    sudo -i iptables -P INPUT ACCEPT
+                    sudo -i iptables -P OUTPUT ACCEPT
+                    sudo -i iptables -P FORWARD ACCEPT
 
-                    echo "Flushing all chains"
-                        sudo -i iptables -F
-            fi
+                echo "Flushing all chains"
+                    sudo -i iptables -F
+        fi
 
 }
 
@@ -128,7 +128,13 @@ function firewallServer
 {
     echo -e "\nDeploying Server Firewall Rules"
 
-    firewallReset
+    echo "Flushing all chains"
+        sudo -i iptables -F
+
+    echo "Setting default policy to DROP"
+        sudo -i iptables -P FORWARD DROP
+        sudo -i iptables -P OUTPUT DROP
+        sudo -i iptables -P INPUT DROP
 
     echo "Allowing anything marked RELATED/ESTABLISHED"
         iptables -A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT -m comment --comment "ACCEPT incoming RELATED/ESTABLISHED"
@@ -181,7 +187,13 @@ function firewallWorkstation
 {
     echo -e "\nDeploying Workstation Firewall Rules"
 
-    firewallReset
+    echo "Flushing all chains"
+        sudo -i iptables -F
+
+    echo "Setting default policy to DROP"
+        sudo -i iptables -P FORWARD DROP
+        sudo -i iptables -P OUTPUT DROP
+        sudo -i iptables -P INPUT DROP
 
     echo "Allowing anything marked RELATED/ESTABLISHED"
         sudo -i iptables -A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT -m comment --comment "ACCEPT incoming RELATED/ESTABLISHED"
