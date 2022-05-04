@@ -74,6 +74,7 @@ function drawing ()
                 echo -e '\n\n# Gaomon S620\nSection "InputClass"\n\tIdentifier "GAOMON Gaomon Tablet"\n\tMatchUSBID  "256c:006d"\n\tMatchDevicePath "/dev/input/event*"\n\tDriver "wacom"\nEndSection' >> /usr/share/X11/xorg.conf.d/70-wacom.conf
                 sudo chmod 644 /usr/share/X11/xorg.conf.d/70-wacom.conf
                 echo -e "Need to Restart/Logout Before Continuing. Do so and Run Script Again"
+                exit
             fi
 
 	#Find Input ID's (used to map to single display)
@@ -126,7 +127,14 @@ function firewallReset
 
 function firewallServer
 {
-    echo -e "\nDeploying Server Firewall Rules"
+    ELEV=$(id | grep root | cut -d' ' -f1)
+    if [ "$ELEV" == "uid=0(root)" ]; then
+        echo -e "\nDeploying Server Firewall Rules"
+    fi
+    if [ "$ELEV" != "uid=0(root)" ]; then
+        echo -e "\nAssuming server does not have sudo installed. Please run as Root"
+        exit
+    fi
 
     echo "Flushing all chains"
         iptables -F
@@ -174,6 +182,7 @@ function firewallServer
             echo " - dns       $U         (OUT)"
                 iptables -A OUTPUT -p udp --dport 53 -m owner --uid-owner $U -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outgoing http for $U"
         done
+        
         echo " - smtp      www-data         (OUT)"
             iptables -A OUTPUT -p tcp --dport 587 -m owner --uid-owner www-data -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outgoing http for www-data"
 
@@ -314,8 +323,6 @@ while getopts "umdsfi" FLAG; do
             HELP=0
             install
             ;;
-        *)
-        #   echo -e "Usage: updater [OPTION]"
     esac
 done
 
