@@ -171,7 +171,14 @@ function firewallServer
         #echo " - ntp      (OUT)"
             #iptables -A OUTPUT -p udp --dport 123 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outgoing ntp"
 
-    echo "Allowing users"
+    # Allow Data Out -> All Handled on a per-user basis
+    echo "Allowing data out (per-user)"
+
+        # Root Only
+        echo " - ssh      root         (OUT)"
+            iptables -A OUTPUT -p tcp --dport 22 -m owner --uid-owner root -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outgoing ssh for root"
+        
+        # Loop for services enabled across multiple accounts
         USERS=( root _apt www-data )
         for U in "${USERS[@]}"
         do
@@ -182,9 +189,10 @@ function firewallServer
             echo " - dns       $U         (OUT)"
                 iptables -A OUTPUT -p udp --dport 53 -m owner --uid-owner $U -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outgoing http for $U"
         done
-        
+
+        # www-data only
         echo " - smtp      www-data         (OUT)"
-            iptables -A OUTPUT -p tcp --dport 587 -m owner --uid-owner www-data -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outgoing http for www-data"
+            iptables -A OUTPUT -p tcp --dport 587 -m owner --uid-owner www-data -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outgoing smtp for www-data"
 
     # echo "Allowing other boxes"
         # echo " - backup    (OUT)"
