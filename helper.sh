@@ -125,6 +125,62 @@ function firewallReset
 
 }
 
+function firewallWorkstation
+{
+    echo -e "\nDeploying Workstation Firewall Rules"
+
+    echo "Flushing all chains"
+        sudo -i iptables -F
+
+    echo "Setting default policy to DROP"
+        sudo -i iptables -P OUTPUT DROP
+        sudo -i iptables -P INPUT DROP
+        sudo -i iptables -P FORWARD DROP
+
+    echo "Allowing anything marked RELATED/ESTABLISHED"
+        sudo -i iptables -A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT -m comment --comment "ACCEPT incoming RELATED/ESTABLISHED"
+        sudo -i iptables -A OUTPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT -m comment --comment "ACCEPT outgoing RELATED/ESTABLISHED"
+    
+    echo "Allowing everything on loopback"
+        sudo -i iptables -A INPUT -s 127.0.0.1 -j ACCEPT -m comment --comment "ACCEPT all incoming on loopback"
+        sudo -i iptables -A OUTPUT -d 127.0.0.1 -j ACCEPT -m comment --comment "ACCEPT all outgoing on loopback"
+
+    echo "Dropping anything marked INVALID"
+        sudo -i iptables -A INPUT -m conntrack --ctstate INVALID -j DROP -m comment --comment "REJECT anything marked INVALID"
+
+    echo "Allowing ping OUT"
+        sudo -i iptables -A OUTPUT -p icmp --icmp-type 8 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outgoing ping request"
+    
+    # echo "Allowing ping IN"
+        # sudo -i iptables -A INPUT -p icmp --icmp-type 8 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT incoming ping request"
+        # ICMP Type 0 is echo-reply. If need to use in a rule, conntrack must ctstate must be RELATED,ESTABLISHED, not NEW. NEW needed if ICMP type 8 (echo-request)
+
+    echo "Allowing services"
+        echo " - SSH        (OUT)"
+            sudo -i iptables -A OUTPUT -p tcp --dport 22 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outgoing ssh"
+
+        echo " - HTTP       (OUT)"
+            sudo -i iptables -A OUTPUT -p tcp --dport 80 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outgoing http"
+
+        echo " - HTTPS      (OUT)"
+            sudo -i iptables -A OUTPUT -p tcp --dport 443 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outgoing https"
+
+        echo " - DNS        (OUT)"
+            sudo -i iptables -A OUTPUT -p udp --dport 53 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outdoing dns"
+        
+        echo " - CUPS       (OUT)"
+            sudo -i iptables -A OUTPUT -p tcp --dport 631 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outdoing cups"
+        
+        echo " - Meet RTC   (OUT)"
+            sudo -i iptables -A OUTPUT -p udp --dport 19302:19309 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outdoing RTC to Google Meet"
+        
+        echo " - Dis. RTC   (OUT)"
+            sudo -i iptables -A OUTPUT -p udp --dport 50000:50050 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outdoing RTC to Discord"
+
+        echo " - STUN RC    (OUT)"
+            sudo -i iptables -A OUTPUT -p udp --dport 3478 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outdoing STUN to RC Desktop"
+}
+
 function firewallServer
 {
     ELEV=$(id | grep root | cut -d' ' -f1)
@@ -154,10 +210,11 @@ function firewallServer
     echo "Dropping anything marked INVALID"
         iptables -A INPUT -m conntrack --ctstate INVALID -j DROP -m comment --comment "REJECT anything marked INVALID"
 
-    echo "Allowing ping"
-        iptables -A INPUT -p icmp --icmp-type 8 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT incoming ping request"
-        iptables -A OUTPUT -p icmp --icmp-type 0 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "ACCEPT outgoing ping reply"
-
+    # ping OUT is handled below on a per-user level (root only)    
+    # echo "Allowing ping IN"
+        # iptables -A INPUT -p icmp --icmp-type 8 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT incoming ping request"
+        # ICMP Type 0 is echo-reply. If need to use in a rule, conntrack must ctstate must be RELATED,ESTABLISHED, not NEW. NEW needed if ICMP type 8 (echo-request)
+    
     echo "Allowing services"
         echo " - ssh       (IN)"
             iptables -A INPUT -p tcp --dport 22 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT incoming ssh"
@@ -172,27 +229,29 @@ function firewallServer
             #iptables -A OUTPUT -p udp --dport 123 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outgoing ntp"
 
     # Allow Data Out -> All Handled on a per-user basis
-    echo "Allowing data out (per-user)"
+        echo "Allowing data out (per-user)"
 
-        # Root Only
-        echo " - ssh      root         (OUT)"
-            iptables -A OUTPUT -p tcp --dport 22 -m owner --uid-owner root -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outgoing ssh for root"
-        
-        # Loop for services enabled across multiple accounts
-        USERS=( root _apt www-data )
-        for U in "${USERS[@]}"
-        do
-            echo " - http      $U         (OUT)"
-                iptables -A OUTPUT -p tcp --dport 80 -m owner --uid-owner $U -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outgoing http for $U"
-            echo " - https     $U         (OUT)"
-                iptables -A OUTPUT -p tcp --dport 443 -m owner --uid-owner $U -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outgoing https for $U"
-            echo " - dns       $U         (OUT)"
-                iptables -A OUTPUT -p udp --dport 53 -m owner --uid-owner $U -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outgoing http for $U"
-        done
+            # Root Only
+                echo " - ssh       root         (OUT)"
+                    iptables -A OUTPUT -p tcp --dport 22 -m owner --uid-owner root -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outgoing ssh for root"
+                echo " - ping      root         (OUT)"
+                    iptables -A OUTPUT -p icmp --icmp-type 8 -m owner --uid-owner root -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outgoing ping request for root"
+            
+            # Loop for services enabled across multiple accounts
+                USERS=( root _apt www-data )
+                for U in "${USERS[@]}"
+                do
+                    echo " - http      $U         (OUT)"
+                        iptables -A OUTPUT -p tcp --dport 80 -m owner --uid-owner $U -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outgoing http for $U"
+                    echo " - https     $U         (OUT)"
+                        iptables -A OUTPUT -p tcp --dport 443 -m owner --uid-owner $U -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outgoing https for $U"
+                    echo " - dns       $U         (OUT)"
+                        iptables -A OUTPUT -p udp --dport 53 -m owner --uid-owner $U -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outgoing http for $U"
+                done
 
-        # www-data only
-        echo " - smtp      www-data         (OUT)"
-            iptables -A OUTPUT -p tcp --dport 587 -m owner --uid-owner www-data -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outgoing smtp for www-data"
+            # www-data only
+                echo " - smtp      www-data         (OUT)"
+                    iptables -A OUTPUT -p tcp --dport 587 -m owner --uid-owner www-data -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outgoing smtp for www-data"
 
     # echo "Allowing other boxes"
         # echo " - backup    (OUT)"
@@ -203,75 +262,24 @@ function firewallServer
         iptables -P OUTPUT DROP
         iptables -P FORWARD DROP
 }
-function firewallWorkstation
-{
-    echo -e "\nDeploying Workstation Firewall Rules"
-
-    echo "Flushing all chains"
-        sudo -i iptables -F
-
-    echo "Setting default policy to DROP"
-        sudo -i iptables -P OUTPUT DROP
-        sudo -i iptables -P INPUT DROP
-        sudo -i iptables -P FORWARD DROP
-
-    echo "Allowing anything marked RELATED/ESTABLISHED"
-        sudo -i iptables -A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT -m comment --comment "ACCEPT incoming RELATED/ESTABLISHED"
-        sudo -i iptables -A OUTPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT -m comment --comment "ACCEPT outgoing RELATED/ESTABLISHED"
-
-    echo "Allowing everything on loopback"
-        sudo -i iptables -A INPUT -s 127.0.0.1 -j ACCEPT -m comment --comment "ACCEPT all incoming on loopback"
-        sudo -i iptables -A OUTPUT -d 127.0.0.1 -j ACCEPT -m comment --comment "ACCEPT all outgoing on loopback"
-
-    echo "Dropping anything marked INVALID"
-        sudo -i iptables -A INPUT -m conntrack --ctstate INVALID -j DROP -m comment --comment "REJECT anything marked INVALID"
-
-    echo "Allowing ping"
-        sudo -i iptables -A OUTPUT -p icmp --icmp-type 0 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "ACCEPT outgoing ping reply"
-    
-    echo "Allowing services"
-        echo " - SSH        (OUT)"
-            sudo -i iptables -A OUTPUT -p tcp --dport 22 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outgoing ssh"
-
-        echo " - HTTP       (OUT)"
-            sudo -i iptables -A OUTPUT -p tcp --dport 80 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outgoing http"
-
-        echo " - HTTPS      (OUT)"
-            sudo -i iptables -A OUTPUT -p tcp --dport 443 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outgoing https"
-
-        echo " - DNS        (OUT)"
-            sudo -i iptables -A OUTPUT -p udp --dport 53 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outdoing dns"
-        
-        echo " - CUPS       (OUT)"
-            sudo -i iptables -A OUTPUT -p tcp --dport 631 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outdoing cups"
-        
-        echo " - Meet RTC   (OUT)"
-            sudo -i iptables -A OUTPUT -p udp --dport 19302:19309 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outdoing RTC to Google Meet"
-        
-        echo " - Dis. RTC   (OUT)"
-            sudo -i iptables -A OUTPUT -p udp --dport 50000:50050 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outdoing RTC to Discord"
-
-        echo " - STUN RC    (OUT)"
-            sudo -i iptables -A OUTPUT -p udp --dport 3478 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outdoing STUN to RC Desktop"
-}
 
 function firewallSelect ()
 {
     echo -e "What firewall ruleset do you want to deploy?"
-    echo -e "\ts\tServer"
     echo -e "\tw\tWorkstation"
+    echo -e "\ts\tServer"
     echo -e "\tr\tReset (Flush Chains + Accept All)"
 
     read ANS
-    
-    #Server Filewall Rule Set
-    if [ "$ANS" == "s" ]; then
-        firewallServer
-    fi
 
     #Workstation Filewall Rule Set
     if [ "$ANS" == "w" ]; then
         firewallWorkstation
+    fi
+
+    #Server Filewall Rule Set
+    if [ "$ANS" == "s" ]; then
+        firewallServer
     fi
 
     #Firewall Reset
