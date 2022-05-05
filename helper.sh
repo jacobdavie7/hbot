@@ -181,8 +181,13 @@ function firewallServer
     fi
 
     echo -e "\nFlushing all chains"
+    echo "   Includes IP's banned by Fail2Ban"
         iptables -F
-        #Change Policy to DROP at end of Server Ruleset. This prevents SSH session from freezing and needing to enter something to see output.
+    
+    echo -e "\nSetting default policy to DROP"
+        iptables -P INPUT DROP
+        iptables -P OUTPUT DROP
+        iptables -P FORWARD DROP
 
     echo -e "\nDROP bad packets"
         echo " - XMAS       (IN)"
@@ -274,11 +279,6 @@ function firewallServer
     #                iptables -A INPUT -p icmp --icmp-type 11  -m limit --limit 1/s --limit-burst 2 -j ACCEPT -m comment --comment "Limited ACCEPT ICMP IN Time Exce. (11)"
     #            echo " - Time Exce.         (OUT)"
     #                iptables -A OUTPUT -p icmp --icmp-type 11 -m limit --limit 1/s --limit-burst 2 -j ACCEPT -m comment --comment "Limited  ACCEPT ICMP OUT Time Exce. (11)"
-
-    echo -e "\nSetting default policy to DROP\n"
-        iptables -P INPUT DROP
-        iptables -P OUTPUT DROP
-        iptables -P FORWARD DROP
 }
 
 function firewallSelect ()
@@ -306,6 +306,32 @@ function firewallSelect ()
     fi
 }
 
+function firewallMonitor()
+{
+    ELEV=$(id | grep root | cut -d' ' -f1)
+    if [ "$ELEV" == "uid=0(root)" ]; then
+    while true; do
+            clear
+            iptables -L -v
+            echo -e "\n\n\e[91mCTRL + C to Cancel\e[39m"
+            echo -e "\t\e[31mUse CTRL + Shift + Plus and CTRL + Minus to Zoom\e[39m"
+            echo -e "\t\e[31mRun 'iptables -Z' to Zero-out counters (rules stay intact)\e[39m"
+            sleep 1
+    done
+    fi
+
+    if [ "$ELEV" != "uid=0(root)" ]; then
+    while true; do
+            clear
+            sudo -i iptables -L -v
+            echo -e "\n\n\e[91mCTRL + C to Cancel\e[39m"
+            echo -e "\t\e[31mUse CTRL + Shift + Plus and CTRL + Minus to Zoom\e[39m"
+            echo -e "\t\e[31mRun 'iptables -Z' to Zero-out counters (rules stay intact)\e[39m"
+            sleep 1
+    done
+    fi
+    #Two segments so we don't have to go though if statements every time
+}
 function install ()
 {
     echo -e "Run full install and setup script? (yes or n)"
@@ -331,7 +357,7 @@ function startup ()
 }
 
 HELP=1
-while getopts "umdsfi" FLAG; do
+while getopts "umdsfiw" FLAG; do
     case "$FLAG" in
         u)
             HELP=0
@@ -357,6 +383,11 @@ while getopts "umdsfi" FLAG; do
             HELP=0
             install
             ;;
+        w)
+            HELP=0
+            firewallMonitor
+            ;;
+        
     esac
 done
 
@@ -366,6 +397,7 @@ if [ $HELP -ne 0 ]; then
     echo -e "\t-m\tmonitors\tSetup display link adapter and arrange monitors"
     echo -e "\t-d\tdrawing\t\tSetup drawing tablet"
     echo -e "\t-f\tfirewall\tDeploy firewall rules"
+    echo -e "\t-w\twatch\t\tFirewall Monitor"
     echo -e "\t-s\tstartup\t\tRun Monitors, Drawing, Workstation Firewall"
     echo -e "\t-i\tinstall\t\tOverall Machine Setup"
 fi
