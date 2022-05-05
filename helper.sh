@@ -127,7 +127,7 @@ function firewallReset
 
 function firewallWorkstation
 {
-    echo -e "\nDeploying Workstation Firewall Rules"
+    echo "Deploying Workstation Firewall Rules"
 
     echo "Flushing all chains"
         sudo -i iptables -F
@@ -180,11 +180,11 @@ function firewallServer
         exit
     fi
 
-    echo "Flushing all chains"
+    echo -e "\nFlushing all chains"
         iptables -F
         #Change Policy to DROP at end of Server Ruleset. This prevents SSH session from freezing and needing to enter something to see output.
 
-    echo "DROP bad packets"
+    echo -e "\nDROP bad packets"
         echo " - XMAS       (IN)"
             iptables -A INPUT -p tcp --tcp-flags ALL ALL -j DROP -m comment --comment "DROP outgoing XMAS"
         echo " - NULL       (IN)"
@@ -198,7 +198,7 @@ function firewallServer
         echo " - SYN Flood  (IN)"
             iptables -A INPUT -p tcp --syn -m hashlimit --hashlimit-name synFlood --hashlimit-above 30/s -j DROP -m comment --comment "LIMIT SYN to 30/sec"
 
-    echo "ALLOW anything marked RELATED/ESTABLISHED"
+    echo -e "\nALLOW anything marked RELATED/ESTABLISHED"
         iptables -A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT -m comment --comment "ACCEPT incoming RELATED/ESTABLISHED"
         iptables -A OUTPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT -m comment --comment "ACCEPT outgoing RELATED/ESTABLISHED"
 
@@ -206,15 +206,13 @@ function firewallServer
         iptables -A INPUT -s 127.0.0.1 -j ACCEPT -m comment --comment "ACCEPT all incoming on loopback"
         iptables -A OUTPUT -d 127.0.0.1 -j ACCEPT -m comment --comment "ACCEPT all outgoing on loopback"
 
-    echo "ALLOW services IN"
+    echo -e "\nALLOW services IN"
         echo " - ssh       (IN)"
             iptables -A INPUT -p tcp --dport 22 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT incoming ssh"
         echo " - http      (IN)"
             iptables -A INPUT -p tcp --dport 80 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT incoming http"
         echo " - https     (IN)"
             iptables -A INPUT -p tcp --dport 443 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT incoming https"
-        echo " - ping      (IN)"
-            iptables -A INPUT -p icmp --icmp-type 8 -m conntrack --ctstate NEW -m limit --limit 1/s --limit-burst 2 -j ACCEPT -m comment --comment "ACCEPT incoming ping request limited"
         #echo " - ntp      (OUT)"
             #iptables -A OUTPUT -p udp --dport 123 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outgoing ntp"
 
@@ -242,8 +240,40 @@ function firewallServer
             # www-data only
                 echo " - smtp      www-data         (OUT)"
                     iptables -A OUTPUT -p tcp --dport 587 -m owner --uid-owner www-data -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outgoing smtp for www-data"
+            
+            # backup only
+                BACKUP_IP=192.168.1.2
+                     # ^^^ No Spaces
+                echo " - ssh       backup       (OUT)      $BACKUP_IP"
+                    iptables -A OUTPUT -p tcp -d $BACKUP_IP --dport 22 -m owner --uid-owner backup -j ACCEPT -m comment --comment "ACCEPT outgoing ssh to backup"
+                    BACKUP_LINE_NUM=$(iptables -L -v --line-numbers | grep "tcp dpt:ssh owner UID match backup" | cut -d' ' -f1)
+                    echo -e "\tUse 'iptables -D OUTPUT $BACKUP_LINE_NUM' to remove"
+    #    #Figure out if these need to go on input or output (exept for ping), for ones going out, look into what account needs to do so to use owner mod
+    #        echo "ALLOW ICMP"
+    #            #Allowed Above
+    #                echo " - ping               (IN)"
+    #                    iptables -A INPUT -p icmp --icmp-type 8 -m limit --limit 1/s --limit-burst 2 -j ACCEPT -m comment --comment "Limited ACCEPT ICMP IN Ping (8)"
+    #            #Allowed Above
+    #                echo " - ping               (OUT)"
+    #                    iptables -A OUTPUT -p icmp --icmp-type 8 -m limit --limit 1/s --limit-burst 2 -j ACCEPT -m comment --comment "Limited ACCEPT ICMP OUT Ping (8)"
+    #            echo " - Dest. unreachable  (IN)"
+    #                iptables -A INPUT -p icmp --icmp-type 3  -m limit --limit 1/s --limit-burst 2 -j ACCEPT -m comment --comment "Limited ACCEPT ICMP IN Dest. unreachable (3)"
+    #            echo " - Dest. unreachable  (OUT)"
+    #                iptables -A OUTPUT -p icmp --icmp-type 3 -m limit --limit 1/s --limit-burst 2 -j ACCEPT -m comment --comment "Limited ACCEPT ICMP OUT Dest. unreachable (3)"
+    #            echo " - Redirect           (IN)"
+    #                iptables -A INPUT -p icmp --icmp-type 5 -m limit --limit 1/s --limit-burst 2 -j ACCEPT -m comment --comment "Limited ACCEPT ICMP IN Redirect (5)"
+    #            echo " - Redirect           (OUT)"
+    #                iptables -A OUTPUT -p icmp --icmp-type 5 -m limit --limit 1/s --limit-burst 2 -j ACCEPT -m comment --comment "Limited ACCEPT ICMP OUT Redirect (5)"
+    #            echo " - Route Advert       (IN)"
+    #                iptables -A INPUT -p icmp --icmp-type 9 -m limit --limit 1/s --limit-burst 2 -j ACCEPT -m comment --comment "Limited ACCEPT ICMP IN Route Advert (9)"
+    #            echo " - Route Advert       (OUT)"
+    #                iptables -A OUTPUT -p icmp --icmp-type 9 -m limit --limit 1/s --limit-burst 2 -j ACCEPT -m comment --comment "Limited ACCEPT ICMP OUT Route Advert (9)"
+    #            echo " - Time Exce.         (IN)"
+    #                iptables -A INPUT -p icmp --icmp-type 11  -m limit --limit 1/s --limit-burst 2 -j ACCEPT -m comment --comment "Limited ACCEPT ICMP IN Time Exce. (11)"
+    #            echo " - Time Exce.         (OUT)"
+    #                iptables -A OUTPUT -p icmp --icmp-type 11 -m limit --limit 1/s --limit-burst 2 -j ACCEPT -m comment --comment "Limited  ACCEPT ICMP OUT Time Exce. (11)"
 
-    # echo "Allowing other boxes"
+    # echo "ALLOW trusted servers"
         # echo " - backup    (OUT)"
         # iptables -A OUTPUT -p tcp -d 0.0.0.0 --dport 22 -j ACCEPT -m comment --comment "ACCEPT outgoing backup (ssh)"
     
