@@ -137,46 +137,34 @@ function firewallWorkstation
         sudo -i iptables -P INPUT DROP
         sudo -i iptables -P FORWARD DROP
 
-    echo "Allowing anything marked RELATED/ESTABLISHED"
+    echo "ALLOW anything marked RELATED/ESTABLISHED"
         sudo -i iptables -A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT -m comment --comment "ACCEPT incoming RELATED/ESTABLISHED"
         sudo -i iptables -A OUTPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT -m comment --comment "ACCEPT outgoing RELATED/ESTABLISHED"
     
-    echo "Allowing everything on loopback"
+    echo "ALLOW everything on loopback"
         sudo -i iptables -A INPUT -s 127.0.0.1 -j ACCEPT -m comment --comment "ACCEPT all incoming on loopback"
         sudo -i iptables -A OUTPUT -d 127.0.0.1 -j ACCEPT -m comment --comment "ACCEPT all outgoing on loopback"
 
-    echo "Dropping anything marked INVALID"
+    echo "DROP anything marked INVALID"
         sudo -i iptables -A INPUT -m conntrack --ctstate INVALID -j DROP -m comment --comment "REJECT anything marked INVALID"
 
-    echo "Allowing ping OUT"
-        sudo -i iptables -A OUTPUT -p icmp --icmp-type 8 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outgoing ping request"
-    
-    # echo "Allowing ping IN"
-        # sudo -i iptables -A INPUT -p icmp --icmp-type 8 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT incoming ping request"
-        # ICMP Type 0 is echo-reply. If need to use in a rule, conntrack must ctstate must be RELATED,ESTABLISHED, not NEW. NEW needed if ICMP type 8 (echo-request)
-
-    echo "Allowing services"
+    echo "ALLOW services OUT"
         echo " - SSH        (OUT)"
             sudo -i iptables -A OUTPUT -p tcp --dport 22 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outgoing ssh"
-
         echo " - HTTP       (OUT)"
             sudo -i iptables -A OUTPUT -p tcp --dport 80 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outgoing http"
-
         echo " - HTTPS      (OUT)"
             sudo -i iptables -A OUTPUT -p tcp --dport 443 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outgoing https"
-
         echo " - DNS        (OUT)"
             sudo -i iptables -A OUTPUT -p udp --dport 53 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outdoing dns"
-        
+        echo " - PING       (OUT)"
+            sudo -i iptables -A OUTPUT -p icmp --icmp-type 8 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outgoing ping request"
         echo " - CUPS       (OUT)"
             sudo -i iptables -A OUTPUT -p tcp --dport 631 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outdoing cups"
-        
         echo " - Meet RTC   (OUT)"
             sudo -i iptables -A OUTPUT -p udp --dport 19302:19309 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outdoing RTC to Google Meet"
-        
         echo " - Dis. RTC   (OUT)"
             sudo -i iptables -A OUTPUT -p udp --dport 50000:50050 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outdoing RTC to Discord"
-
         echo " - STUN RC    (OUT)"
             sudo -i iptables -A OUTPUT -p udp --dport 3478 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outdoing STUN to RC Desktop"
 }
@@ -196,50 +184,42 @@ function firewallServer
         iptables -F
         #Change Policy to DROP at end of Server Ruleset. This prevents SSH session from freezing and needing to enter something to see output.
 
-    echo "Drop or limit bad packets"
-            echo " - Fragmented (IN)"
-            iptables -A INPUT -f -j DROP -m comment --comment "DROP Fragmented"
+    echo "DROP bad packets"
         echo " - XMAS       (IN)"
             iptables -A INPUT -p tcp --tcp-flags ALL ALL -j DROP -m comment --comment "DROP outgoing XMAS"
         echo " - NULL       (IN)"
             iptables -A INPUT -p tcp --tcp-flags ALL NONE -j DROP -m comment --comment "DROP outgoing NULL"
         echo " - INVALID    (IN)"
             iptables -A INPUT -m conntrack --ctstate INVALID -j DROP -m comment --comment "DROP anything marked INVALID"
+        echo " - Fragmented (IN)"
+            iptables -A INPUT -f -j DROP -m comment --comment "DROP Fragmented"
         echo " - NEW != SYN (IN)"
             iptables -A INPUT -p tcp ! --syn -m conntrack --ctstate NEW -j DROP -m comment --comment "DROP any NEW connections that do NOT start with SYN"
-
         echo " - SYN Flood  (IN)"
-            iptables -A INPUT -p tcp --syn -m limit --limit 10/s --limit-burst 20 -j ACCEPT -m comment --comment "Limit SYN to 10/sec, burst t0 20/sec"
+            iptables -A INPUT -p tcp --syn -m limit --limit 10/s --limit-burst 20 -j ACCEPT -m comment --comment "LIMIT SYN to 10/sec, burst t0 20/sec"
 
-
-    echo "Allowing anything marked RELATED/ESTABLISHED"
+    echo "ALLOW anything marked RELATED/ESTABLISHED"
         iptables -A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT -m comment --comment "ACCEPT incoming RELATED/ESTABLISHED"
         iptables -A OUTPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT -m comment --comment "ACCEPT outgoing RELATED/ESTABLISHED"
 
-    echo "Allowing everything on loopback"
+    echo "ALLOW everything on loopback"
         iptables -A INPUT -s 127.0.0.1 -j ACCEPT -m comment --comment "ACCEPT all incoming on loopback"
         iptables -A OUTPUT -d 127.0.0.1 -j ACCEPT -m comment --comment "ACCEPT all outgoing on loopback"
 
-    # ping OUT is handled below on a per-user level (root only)    
-    # echo "Allowing ping IN"
-        # iptables -A INPUT -p icmp --icmp-type 8 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT incoming ping request"
-        # ICMP Type 0 is echo-reply. If need to use in a rule, conntrack must ctstate must be RELATED,ESTABLISHED, not NEW. NEW needed if ICMP type 8 (echo-request)
-    
-    echo "Allowing services"
+    echo "ALLOW services IN"
         echo " - ssh       (IN)"
             iptables -A INPUT -p tcp --dport 22 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT incoming ssh"
-
         echo " - http      (IN)"
             iptables -A INPUT -p tcp --dport 80 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT incoming http"
-
         echo " - https     (IN)"
             iptables -A INPUT -p tcp --dport 443 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT incoming https"
-
+        echo " - ping      (IN)"
+            iptables -A INPUT -p icmp --icmp-type 8 -m conntrack --ctstate NEW -m limit --limit 1/s --limit-burst 2 -j ACCEPT -m comment --comment "ACCEPT incoming ping request limited"
         #echo " - ntp      (OUT)"
             #iptables -A OUTPUT -p udp --dport 123 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outgoing ntp"
 
     # Allow Data Out -> All Handled on a per-user basis
-        echo "Allowing data out (per-user)"
+        echo "ALLOW services OUT (per-user-basis)"
 
             # Root Only
                 echo " - ssh       root         (OUT)"
