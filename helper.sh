@@ -121,7 +121,7 @@ function firewallReset
             echo -e "\tFlushing all chains"
                 sudo -i iptables -F
     fi
-
+    echo -e "\n\e[31mDon't Forget About Edge Firewall!\e[39m\n"
 }
 
 function firewallWorkstation
@@ -175,9 +175,10 @@ function firewallServer
         echo -e "\nDeploying Server Firewall Rules"
     fi
     if [ "$ELEV" != "uid=0(root)" ]; then
-        echo "Assuming server does not have sudo installed. Please run as Root"
+        echo -e "\n\e[91mAssuming server does not have sudo installed. Please run as Root with 'su root -l'\e[39m\n"
         exit
     fi
+
 
     echo -e "\nFlushing all chains"
     echo "   Includes IP's banned by Fail2Ban"
@@ -278,6 +279,10 @@ function firewallServer
     #                iptables -A INPUT -p icmp --icmp-type 11  -m limit --limit 1/s --limit-burst 2 -j ACCEPT -m comment --comment "Limited ACCEPT ICMP IN Time Exce. (11)"
     #            echo " - Time Exce.         (OUT)"
     #                iptables -A OUTPUT -p icmp --icmp-type 11 -m limit --limit 1/s --limit-burst 2 -j ACCEPT -m comment --comment "Limited  ACCEPT ICMP OUT Time Exce. (11)"
+            
+    echo -e "\n\e[91mDon't Forget About Edge Firewall!\e[39m"
+    echo -e "\n\e[31mSSH should be alive, if frozen and not coming back, try SSHing in a new terminal\e[39m\n"
+
 }
 
 function firewallSelect ()
