@@ -99,29 +99,28 @@ function drawing ()
 
 function firewallReset
 {
+    echo -e "\n\e[91mReseting all Firewall Rules (Default Accept + Flush Chains)\e[39m"
     ELEV=$(id | grep root | cut -d' ' -f1)
         if [ "$ELEV" == "uid=0(root)" ]; then
-            echo -e "\nReseting all Firewall Rules (Default Accept + Flush Chains)"
-            echo -e "Running as Root, commands will be run WITHOUT sudo"
-                echo "Setting default policy to ALLOW"
-                    iptables -P INPUT ACCEPT
-                    iptables -P OUTPUT ACCEPT
-                    iptables -P FORWARD ACCEPT
+            echo -e "\tRunning as Root, commands will be run WITHOUT sudo"
+            echo -e "\tSetting default policy to ALLOW"
+                iptables -P INPUT ACCEPT
+                iptables -P OUTPUT ACCEPT
+                iptables -P FORWARD ACCEPT
 
-                echo "Flushing all chains"
-                    iptables -F
+            echo -e "\tFlushing all chains"
+                iptables -F
         fi
         if [ "$ELEV" != "uid=0(root)" ]; then
-            echo -e "\nReseting all Firewall Rules (Default Accept + Flush Chains)"
-            echo -e "Running as standerd user, commands will be run with sudo"
-                echo "Setting default policy to ALLOW"
-                    sudo -i iptables -P INPUT ACCEPT
-                    sudo -i iptables -P OUTPUT ACCEPT
-                    sudo -i iptables -P FORWARD ACCEPT
+            echo -e "\tRunning as standerd user, commands will be run with sudo"
+            echo -e "\tSetting default policy to ALLOW"
+                sudo -i iptables -P INPUT ACCEPT
+                sudo -i iptables -P OUTPUT ACCEPT
+                sudo -i iptables -P FORWARD ACCEPT
 
-                echo "Flushing all chains"
-                    sudo -i iptables -F
-        fi
+            echo -e "\tFlushing all chains"
+                sudo -i iptables -F
+    fi
 
 }
 
