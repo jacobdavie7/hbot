@@ -195,9 +195,8 @@ function firewallServer
             iptables -A INPUT -f -j DROP -m comment --comment "DROP Fragmented"
         echo " - NEW != SYN (IN)"
             iptables -A INPUT -p tcp ! --syn -m conntrack --ctstate NEW -j DROP -m comment --comment "DROP any NEW connections that do NOT start with SYN"
-        #SYN Flood accepts ALL TCP SYN traffic less than up to 20 packets / second
-            #echo " - SYN Flood  (IN)"
-                #iptables -A INPUT -p tcp --syn -m limit --limit 10/s --limit-burst 20 -j ACCEPT -m comment --comment "LIMIT SYN to 10/sec, burst t0 20/sec"
+        echo " - SYN Flood  (IN)"
+            iptables -A INPUT -p tcp --syn -m hashlimit --hashlimit-name synFlood --hashlimit-above 30/s -j DROP -m comment --comment "LIMIT SYN to 30/sec"
 
     echo "ALLOW anything marked RELATED/ESTABLISHED"
         iptables -A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT -m comment --comment "ACCEPT incoming RELATED/ESTABLISHED"
