@@ -197,16 +197,20 @@ function firewallServer
         #Change Policy to DROP at end of Server Ruleset. This prevents SSH session from freezing and needing to enter something to see output.
 
     echo "Drop or limit bad packets"
-        echo " - XMAS       (OUT)"
+            echo " - Fragmented (IN)"
+            iptables -A INPUT -f -j DROP -m comment --comment "DROP Fragmented"
+        echo " - XMAS       (IN)"
             iptables -A INPUT -p tcp --tcp-flags ALL ALL -j DROP -m comment --comment "DROP outgoing XMAS"
-        echo " - NULL       (OUT)"
+        echo " - NULL       (IN)"
             iptables -A INPUT -p tcp --tcp-flags ALL NONE -j DROP -m comment --comment "DROP outgoing NULL"
-        echo " - INVALID    (OUT)"
+        echo " - INVALID    (IN)"
             iptables -A INPUT -m conntrack --ctstate INVALID -j DROP -m comment --comment "DROP anything marked INVALID"
-        echo " - NEW != SYN (OUT)"
+        echo " - NEW != SYN (IN)"
             iptables -A INPUT -p tcp ! --syn -m conntrack --ctstate NEW -j DROP -m comment --comment "DROP any NEW connections that do NOT start with SYN"
-        echo " - SYN Flood  (OUT)"
-            iptables -A INPUT -p tcp --syn -m limit --limit 5/s -j ACCEPT -m comment --comment "Limit SYN to 5/second"
+
+        echo " - SYN Flood  (IN)"
+            iptables -A INPUT -p tcp --syn -m limit --limit 10/s --limit-burst 20 -j ACCEPT -m comment --comment "Limit SYN to 10/sec, burst t0 20/sec"
+
 
     echo "Allowing anything marked RELATED/ESTABLISHED"
         iptables -A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT -m comment --comment "ACCEPT incoming RELATED/ESTABLISHED"
