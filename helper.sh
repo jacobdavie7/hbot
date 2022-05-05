@@ -196,6 +196,18 @@ function firewallServer
         iptables -F
         #Change Policy to DROP at end of Server Ruleset. This prevents SSH session from freezing and needing to enter something to see output.
 
+    echo "Drop or limit bad packets"
+        echo " - XMAS       (OUT)"
+            iptables -A INPUT -p tcp --tcp-flags ALL ALL -j DROP -m comment --comment "DROP outgoing XMAS"
+        echo " - NULL       (OUT)"
+            iptables -A INPUT -p tcp --tcp-flags ALL NONE -j DROP -m comment --comment "DROP outgoing NULL"
+        echo " - INVALID    (OUT)"
+            iptables -A INPUT -m conntrack --ctstate INVALID -j DROP -m comment --comment "DROP anything marked INVALID"
+        echo " - NEW != SYN (OUT)"
+            iptables -A INPUT -p tcp ! --syn -m conntrack --ctstate NEW -j DROP -m comment --comment "DROP any NEW connections that do NOT start with SYN"
+        echo " - SYN Flood  (OUT)"
+            iptables -A INPUT -p tcp --syn -m limit --limit 5/s -j ACCEPT -m comment --comment "Limit SYN to 5/second"
+
     echo "Allowing anything marked RELATED/ESTABLISHED"
         iptables -A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT -m comment --comment "ACCEPT incoming RELATED/ESTABLISHED"
         iptables -A OUTPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT -m comment --comment "ACCEPT outgoing RELATED/ESTABLISHED"
@@ -203,12 +215,6 @@ function firewallServer
     echo "Allowing everything on loopback"
         iptables -A INPUT -s 127.0.0.1 -j ACCEPT -m comment --comment "ACCEPT all incoming on loopback"
         iptables -A OUTPUT -d 127.0.0.1 -j ACCEPT -m comment --comment "ACCEPT all outgoing on loopback"
-
-    echo "Limit SYN Flood"
-        iptables -A INPUT -p tcp --syn -m limit --limit 2/s -j ACCEPT -m comment --comment "Limit SYN to 2/second"
-
-    echo "Dropping anything marked INVALID"
-        iptables -A INPUT -m conntrack --ctstate INVALID -j DROP -m comment --comment "REJECT anything marked INVALID"
 
     # ping OUT is handled below on a per-user level (root only)    
     # echo "Allowing ping IN"
