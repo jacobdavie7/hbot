@@ -249,10 +249,10 @@ function firewallServer
             # backup only
                 BACKUP_IP=192.168.1.2
                      # ^^^ No Spaces
-                echo " - ssh       backup       (OUT)      $BACKUP_IP"
+                echo -e " - ssh       backup       (OUT)      \e[32m$BACKUP_IP\e[39m"
                     iptables -A OUTPUT -p tcp -d $BACKUP_IP --dport 22 -m owner --uid-owner backup -j ACCEPT -m comment --comment "ACCEPT new outgoing ssh to backup"
                     BACKUP_LINE_NUM=$(iptables -L -v --line-numbers | grep "tcp dpt:ssh owner UID match backup" | cut -d' ' -f1)
-                    echo -e "\tUse 'iptables -D OUTPUT $BACKUP_LINE_NUM' to remove"
+                    echo -e "\tUse '\e[31miptables -D OUTPUT $BACKUP_LINE_NUM\e[39m' to remove"
    
 
     #    #Figure out if these need to go on input or output (exept for ping), for ones going out, look into what account needs to do so to use owner mod
