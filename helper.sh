@@ -176,7 +176,7 @@ function firewallServer
         echo -e "\nDeploying Server Firewall Rules"
     fi
     if [ "$ELEV" != "uid=0(root)" ]; then
-        echo -e "\nAssuming server does not have sudo installed. Please run as Root"
+        echo "Assuming server does not have sudo installed. Please run as Root"
         exit
     fi
 
@@ -217,7 +217,7 @@ function firewallServer
             #iptables -A OUTPUT -p udp --dport 123 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT outgoing ntp"
 
     # Allow Data Out -> All Handled on a per-user basis
-        echo "ALLOW services OUT (per-user-basis)"
+        echo -e "\nALLOW services OUT (per-user basis)"
 
             # Root Only
                 echo " - ssh       root         (OUT)"
@@ -248,6 +248,8 @@ function firewallServer
                     iptables -A OUTPUT -p tcp -d $BACKUP_IP --dport 22 -m owner --uid-owner backup -j ACCEPT -m comment --comment "ACCEPT outgoing ssh to backup"
                     BACKUP_LINE_NUM=$(iptables -L -v --line-numbers | grep "tcp dpt:ssh owner UID match backup" | cut -d' ' -f1)
                     echo -e "\tUse 'iptables -D OUTPUT $BACKUP_LINE_NUM' to remove"
+   
+
     #    #Figure out if these need to go on input or output (exept for ping), for ones going out, look into what account needs to do so to use owner mod
     #        echo "ALLOW ICMP"
     #            #Allowed Above
@@ -273,11 +275,7 @@ function firewallServer
     #            echo " - Time Exce.         (OUT)"
     #                iptables -A OUTPUT -p icmp --icmp-type 11 -m limit --limit 1/s --limit-burst 2 -j ACCEPT -m comment --comment "Limited  ACCEPT ICMP OUT Time Exce. (11)"
 
-    # echo "ALLOW trusted servers"
-        # echo " - backup    (OUT)"
-        # iptables -A OUTPUT -p tcp -d 0.0.0.0 --dport 22 -j ACCEPT -m comment --comment "ACCEPT outgoing backup (ssh)"
-    
-    echo "Setting default policy to DROP"
+    echo -e "\nSetting default policy to DROP\n"
         iptables -P INPUT DROP
         iptables -P OUTPUT DROP
         iptables -P FORWARD DROP
