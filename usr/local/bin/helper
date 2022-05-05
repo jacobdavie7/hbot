@@ -401,7 +401,7 @@ while getopts "umdsfiw" FLAG; do
 done
 
 if [ $HELP -ne 0 ]; then
-    echo -e "Usage: updater [OPTION]"
+    echo -e "Usage: helper [OPTION]"
     echo -e "\t-u\tupdater\t\tUpdate from Multiple Package Managers"
     echo -e "\t-m\tmonitors\tSetup display link adapter and arrange monitors"
     echo -e "\t-d\tdrawing\t\tSetup drawing tablet"
