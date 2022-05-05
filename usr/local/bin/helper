@@ -168,7 +168,6 @@ function firewallWorkstation
             sudo -i iptables -A OUTPUT -p udp --dport 3478 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing STUN to RC Desktop"
         echo " - CLI Speed  (OUT)"
             sudo -i iptables -A OUTPUT -p tcp --dport 8080 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing Speedtest (8080)"
-    
 }
 
 function firewallServer
@@ -287,7 +286,6 @@ function firewallServer
             
     echo -e "\n\e[91mDon't Forget About Edge Firewall!\e[39m"
     echo -e "\n\e[31mSSH should be alive, if frozen and not coming back, try SSHing in a new terminal\e[39m\n"
-
 }
 
 function firewallSelect ()

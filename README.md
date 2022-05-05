@@ -14,11 +14,11 @@ helper [OPTION]
 ```
 ## Options
 ```
-	-u	updater		Update from Multiple Package Managers
-	-m	monitors	Setup display link adapter and arrange monitors
-	-d	drawing		Setup drawing tablet
-	-f	firewall	Deploy firewall rules
-	-w	watch		Firewall Monitor
-	-s	startup		Run Monitors, Drawing, Workstation Firewall
-	-i	install		Overall Machine Setup
+-u	updater		Update from Multiple Package Managers
+-m	monitors	Setup display link adapter and arrange monitors
+-d	drawing		Setup drawing tablet
+-f	firewall	Deploy firewall rules
+-w	watch		Firewall Monitor
+-s	startup		Run Monitors, Drawing, Workstation Firewall
+-i	install		Overall Machine Setup
   ```
