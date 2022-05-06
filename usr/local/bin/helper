@@ -2,36 +2,38 @@
 
 function updater ()
 {
-    echo -e "Executing 'Updater' Function"
-    # apt
+    echo -e "\n\e[44mExecuting 'Updater' Function\e[49m"
+        #apt
         echo -e "\n\e[95;4mapt\e[39;24m"
-        sudo apt update
-        echo -e "\n\e[4mApt Packages that can be Upgraded:\e[39;24m"
-        apt list --upgradeable
-
-        echo -e "\n\e[4mRun Apt Upgradeable? (y or n)\e[39;24m"
-        read ANS
-        if [ "$ANS" == "y" ]; then
-            sudo apt upgrade -y
-
-            echo -e "\n\e[4mRun Apt autoremove? (y or n)\e[39;24m"
-            read ANS
-            if [ "$ANS" == "y" ]; then
-                sudo apt autoremove -y
+            sudo apt update
+            UPGRADES=$(apt list --upgradeable | wc -l)
+            if [ "$UPGRADES" == "1" ]; then
+                echo -e "\n\e[4mApt Packages that can be Upgraded:\e[39;24m"
+                    apt list --upgradeable
+                echo -e "\n\e[4mRun Apt Upgradeable? (y or n)\e[39;24m"
+                    read ANS
+                    if [ "$ANS" == "y" ]; then
+                        sudo apt upgrade -y
+                        echo -e "\n\e[4mRun Apt autoremove? (y or n)\e[39;24m"
+                            read ANS
+                            if [ "$ANS" == "y" ]; then
+                                sudo apt autoremove -y
+                            fi
+                    fi
             fi
-        fi
-    # flatpak
-        echo -e "\n\e[95;4mflatpak\e[39;24m"
-        flatpak update
 
-    # snap
+        #flatpak
+        echo -e "\n\e[95;4mflatpak\e[39;24m"
+            flatpak update
+
+        #snap
         echo -e "\n\e[95;4msnap\e[39;24m"
-        sudo snap refresh
+            sudo snap refresh
 }
 
 function monitors ()
 {
-    echo -e "Executing 'Monitors' Function"
+    echo -e "\n\e[44mExecuting 'Monitors' Function\e[49m"
 
     #Clone GitHub Repo
         #git clone https://github.com/AdnanHodzic/displaylink-debian.git /tmp/displaylink-debian
@@ -42,30 +44,36 @@ function monitors ()
     # Provider 1: id: 0x138 cap: 0x2, Sink Output crtcs: 1 outputs: 1 associated providers: 0 name:modesetting
     # ...Goes to provider 4, looks like provider 1                                          ^ This 0 should change to 1 after the commands below
 
-    # Enable DisplayLink Adapter
+    echo "Setting output"
+    echo " - 1 to 0"
         xrandr --setprovideroutputsource 1 0
+    echo " - 2 to 0"
         xrandr --setprovideroutputsource 2 0
+    echo " - 3 to 0"
         xrandr --setprovideroutputsource 3 0
+    echo " - 4 to 0"
         xrandr --setprovideroutputsource 4 0
 
     #run xrandr to view adapter names (DVI-I-1-1, DP-0)
     
-    #Center Monitor (Primary)                                       #Need to use pos to correctly line up top monitor. If only use --pos for top monitor, all the monitors will be on the same x level. 
+    echo "Setting locations"
+    echo " - Center (Pri)"                                       #Need to use pos to correctly line up top monitor. If only use --pos for top monitor, all the monitors will be on the same x level. 
         xrandr --output HDMI-0 --primary --pos 1440x1080 --auto     #                   --pos 1440x1080
-    #Left Monitor
+    echo " - Left"
         xrandr --output DP-0 --pos 0x1080 --auto                    #--left-of HDMI-0   --pos 0x1080
-    #Right Monitor
+    echo " - Right"
         xrandr --output DVI-D-0 --pos 3120x1080 --auto              #--right-of HDMI-0  --pos 3120x1080
-    #Top Monitor
+    echo " - Top (TV)"
         xrandr --output DVI-I-1-1 --pos 1320x0 --auto               #--above HDMI-0     --pos 1320x0
 
-    echo -e "\tIf the monitor is still NOT functioning and drivers ARE installed (from GitHub), the USB DisplayLink adapter may need to be reseated."
+    echo -e "\e[91mIf the top monitor is still NOT functioning and drivers ARE installed (from GitHub), the USB DisplayLink adapter may need to be reseated.\e[39m"
     # https://github.com/AdnanHodzic/displaylink-debian/blob/master/post-install-guide.md
 }
 
+
 function drawing ()
 {
-    echo -e "Executing 'Drawing' Function"
+    echo -e "\n\e[44mExecuting 'Drawing' Function\e[49m"
 
     #Append 70-wacom.conf
         XORG_APPEND=$(cat /usr/share/X11/xorg.conf.d/70-wacom.conf | grep "S620" | cut -d' ' -f2,3 | sed 's/ //g')
@@ -81,15 +89,21 @@ function drawing ()
 		INPUT_ID_PEN=$(xsetwacom --list | grep "GAOMON Gaomon Tablet Pen stylus"| cut -f2 | cut -d' ' -f2)
 		INPUT_ID_PAD=$(xsetwacom --list | grep "GAOMON Gaomon Tablet Pad pad"| cut -f2 | cut -d' ' -f2)
 
-	#Map Wacom Input to Single Primary Display
-		xinput map-to-output $INPUT_ID_PEN HDMI-0
-		xinput map-to-output $INPUT_ID_PAD HDMI-0
+    echo "Mapping to display"
+        echo " - Pen"
+		    xinput map-to-output $INPUT_ID_PEN HDMI-0
+		echo " - Pad"
+            xinput map-to-output $INPUT_ID_PAD HDMI-0
 
-	#Key Mapping
-		xsetwacom --set 'GAOMON Gaomon Tablet Pad pad' Button 1 key "+ctrl +shift p -shift -ctrl"	#Pen
-		xsetwacom --set 'GAOMON Gaomon Tablet Pad pad' Button 2 key "+ctrl +shift h -shift -ctrl"	#Highlighter
-		xsetwacom --set 'GAOMON Gaomon Tablet Pad pad' Button 3 key "+ctrl z -ctrl"			        #Undo
-		xsetwacom --set 'GAOMON Gaomon Tablet Pad pad' Button 8 key "+ctrl y -ctrl"			        #Redo	#Yes, Button 8 is correct
+	echo "Mapping pad keys"
+        echo " - pen"
+            xsetwacom --set 'GAOMON Gaomon Tablet Pad pad' Button 1 key "+ctrl +shift p -shift -ctrl"	#Pen
+        echo " - highlighter"
+            xsetwacom --set 'GAOMON Gaomon Tablet Pad pad' Button 2 key "+ctrl +shift h -shift -ctrl"	#Highlighter
+        echo " - undo"
+            xsetwacom --set 'GAOMON Gaomon Tablet Pad pad' Button 3 key "+ctrl z -ctrl"			        #Undo
+        echo " - redo"    
+            xsetwacom --set 'GAOMON Gaomon Tablet Pad pad' Button 8 key "+ctrl y -ctrl"			        #Redo	#Yes, Button 8 is correct
 
     #Pen - Settings these will mess with program defualt hand + eraser behaviour
         # xsetwacom --set 'GAOMON Gaomon Tablet Pen stylus' Button 1 "KEYBINDINGHERE"   #Pen Tip
@@ -126,7 +140,7 @@ function firewallReset
 
 function firewallWorkstation
 {
-    echo "Deploying Workstation Firewall Rules"
+    echo -e "\n\e[44mDeploying Workstation Firewall Rules\e[49m"
 
     echo "Flushing all chains"
         sudo -i iptables -F
@@ -174,10 +188,10 @@ function firewallServer
 {
     ELEV=$(id | grep root | cut -d' ' -f1)
     if [ "$ELEV" == "uid=0(root)" ]; then
-        echo -e "\nDeploying Server Firewall Rules"
+        echo -e "\n\e[44mDeploying Server Firewall Rules\e[49m"
     fi
     if [ "$ELEV" != "uid=0(root)" ]; then
-        echo -e "\n\e[91mAssuming server does not have sudo installed. Please run as Root with 'su root -l'\e[39m\n"
+        echo -e "\n\e[91mAssuming server does not have sudo installed. Please run as Root with 'su -l root'\e[39m\n"
         exit
     fi
 
@@ -290,11 +304,11 @@ function firewallServer
 
 function firewallSelect ()
 {
-    echo -e "What firewall ruleset do you want to deploy?"
-    echo -e "\tw\tWorkstation"
-    echo -e "\ts\tServer"
-    echo -e "\tr\tReset (Flush Chains + Accept All)"
-
+    echo -e "\nWhat firewall ruleset do you want to deploy?"
+        echo -e "\tw\tWorkstation"
+        echo -e "\ts\tServer"
+        echo -e "\tr\tReset (Flush Chains + Accept All)"
+    
     read ANS
 
     #Workstation Filewall Rule Set
@@ -313,7 +327,7 @@ function firewallSelect ()
     fi
 }
 
-function firewallMonitor()
+function firewallWatch()
 {
     ELEV=$(id | grep root | cut -d' ' -f1)
     if [ "$ELEV" == "uid=0(root)" ]; then
@@ -321,8 +335,8 @@ function firewallMonitor()
             clear
             iptables -L -v
             echo -e "\n\n\e[91mCTRL + C to Cancel\e[39m"
-            echo -e "\t\e[31mUse CTRL + Shift + Plus and CTRL + Minus to Zoom\e[39m"
-            echo -e "\t\e[31mRun 'iptables -Z' to Zero-out counters (rules stay intact)\e[39m"
+                echo -e "\t\e[31mUse CTRL + Shift + Plus and CTRL + Minus to Zoom\e[39m"
+                echo -e "\t\e[31mRun 'iptables -Z' to Zero-out counters (rules stay intact)\e[39m"
             sleep 1
     done
     fi
@@ -332,8 +346,8 @@ function firewallMonitor()
             clear
             sudo -i iptables -L -v
             echo -e "\n\n\e[91mCTRL + C to Cancel\e[39m"
-            echo -e "\t\e[31mUse CTRL + Shift + Plus and CTRL + Minus to Zoom\e[39m"
-            echo -e "\t\e[31mRun 'iptables -Z' to Zero-out counters (rules stay intact)\e[39m"
+                echo -e "\t\e[31mUse CTRL + Shift + Plus and CTRL + Minus to Zoom\e[39m"
+                echo -e "\t\e[31mRun 'iptables -Z' to Zero-out counters (rules stay intact)\e[39m"
             sleep 1
     done
     fi
@@ -341,7 +355,7 @@ function firewallMonitor()
 }
 function install ()
 {
-    echo -e "Run full install and setup script? (yes or n)"
+    echo -e "\nRun full install and setup script? (yes or n)"
     read ANS
     if [ "$ANS" == "yes" ]; then
         echo -e "\nstuff"
@@ -360,7 +374,9 @@ function startup ()
     monitors
     drawing
     firewallWorkstation
-    updater
+    
+    # keep updater last
+        updater
 }
 
 HELP=1
@@ -392,19 +408,23 @@ while getopts "umdsfiw" FLAG; do
             ;;
         w)
             HELP=0
-            firewallMonitor
+            firewallWatch
             ;;
         
     esac
 done
 
 if [ $HELP -ne 0 ]; then
-    echo -e "Usage: helper [OPTION]"
-    echo -e "\t-u\tupdater\t\tUpdate from Multiple Package Managers"
-    echo -e "\t-m\tmonitors\tSetup display link adapter and arrange monitors"
-    echo -e "\t-d\tdrawing\t\tSetup drawing tablet"
-    echo -e "\t-f\tfirewall\tDeploy firewall rules"
-    echo -e "\t-w\twatch\t\tFirewall Monitor"
-    echo -e "\t-s\tstartup\t\tRun Monitors, Drawing, Workstation Firewall"
-    echo -e "\t-i\tinstall\t\tOverall Machine Setup"
+echo -e "   Usage: helper [OPTION]"
+    echo -e "       Popular"
+        echo -e "           -u  updater     Updates from apt, flatpak, and snap"
+    echo -e "       Config"
+        echo -e "           -m  monitors    Setup displaylink and arrange monitors"
+        echo -e "           -d  drawing     Setup drawing tablet"
+    echo -e "       Firewalls"
+        echo -e "           -f  firewall    Deploy firewall rules"
+        echo -e "           -w  watch       Watch firewall rule hits in packets and bytes"
+    echo -e "       Special"
+        echo -e "           -s  startup     good modules to run on startup"
+        echo -e "           -i  install     Overall Machine Setup"
 fi
