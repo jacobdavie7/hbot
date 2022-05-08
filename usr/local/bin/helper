@@ -12,6 +12,13 @@ source firewallReset.sh
 source install.sh
 source firewallWatcher.sh
 
+EVEVATE=$(id | grep root | cut -d' ' -f1)
+    if [ "$EVEVATE" == "uid=0(root)" ]; then
+        EVEVATE=root
+    else
+        EVEVATE=user
+    fi
+
 while getopts "umdsf:iw" FLAG; do
     case "$FLAG" in
         u)
