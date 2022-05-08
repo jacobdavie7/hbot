@@ -3,8 +3,7 @@
 function firewallReset
 {
     echo -e "\n\e[91mReseting all Firewall Rules (Default Accept + Flush Chains)\e[39m"
-    ELEV=$(id | grep root | cut -d' ' -f1)
-        if [ "$ELEV" == "uid=0(root)" ]; then
+        if [ "$EVEVATE" == "root" ]; then
             echo -e "Running as Root, commands will be run WITHOUT sudo"
             echo -e "Setting default policy to ALLOW"
                 iptables -P INPUT ACCEPT

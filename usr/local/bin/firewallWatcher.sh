@@ -2,8 +2,7 @@
 
 function firewallWatcher()
 {
-    ELEV=$(id | grep root | cut -d' ' -f1)
-    if [ "$ELEV" == "uid=0(root)" ]; then
+    if [ "$EVEVATE" == "root" ]; then
         while true; do
                 clear
                 iptables -L -v
@@ -29,8 +28,7 @@ function firewallWatcher()
 
 function firewallWatcherWATCHCOMMAND()
 {
-    ELEV=$(id | grep root | cut -d' ' -f1)
-    if [ "$ELEV" == "uid=0(root)" ]; then
+    if [ "$EVEVATE" == "root" ]; then
         watch -n 1 iptables -L -v
     else
         sudo -i watch -n 1 iptables -L -v
