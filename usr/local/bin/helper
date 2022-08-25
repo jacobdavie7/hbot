@@ -62,5 +62,3 @@ while getopts "umdsf:iw" FLAG; do
             ;;
     esac
 done
-
-help

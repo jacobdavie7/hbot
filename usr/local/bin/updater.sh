@@ -10,15 +10,11 @@ function updater ()
             if [ "$UPGRADES" != "1" ]; then
                 echo -e "\n\e[4mApt Packages that can be Upgraded:\e[39;24m"
                     apt list --upgradeable
-                echo -e "\n\e[4mRun Apt Upgradeable? (y or n)\e[39;24m"
+                echo -e "\n\e[4mRun Apt Upgradeable and Autoremove? (y or n)\e[39;24m"
                     read ANS
                     if [ "$ANS" == "y" ]; then
                         sudo apt upgrade -y
-                        echo -e "\n\e[4mRun Apt autoremove? (y or n)\e[39;24m"
-                            read ANS
-                            if [ "$ANS" == "y" ]; then
-                                sudo apt autoremove -y
-                            fi
+                        sudo apt autoremove -y
                     fi
             fi
 
