@@ -41,6 +41,7 @@ Firewall
  home    Firewall ruleset for home use
  web     Firewall ruleset for web server use
  backup  Firewall ruleset for backup server use
+ limited Firewall ruleset for limited home use
  reset   FLUSH ALL rules and ACCEPT by default !!DANGER!!
 ```
 ## Extra Notes
