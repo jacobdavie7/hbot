@@ -4,10 +4,10 @@ function firewallHome
 {
     echo -e "\n\e[44mDeploying Home Firewall Rules\e[49m"
 
-    echo "Flushing all chains"
+    echo -e "\nFlushing all chains"
         sudo -i iptables -F
 
-    echo "Setting default policy to DROP"
+    echo -e "\nSetting default policy to DROP"
         sudo -i iptables -P OUTPUT DROP
         sudo -i iptables -P INPUT DROP
         sudo -i iptables -P FORWARD DROP
@@ -26,7 +26,7 @@ echo -e "\nDROP bad packets"
         echo " - SYN Flood  (IN)"
             sudo -i iptables -A INPUT -p tcp --syn -m hashlimit --hashlimit-name synFlood --hashlimit-above 30/s -j DROP -m comment --comment "LIMIT SYN to 30/sec"
 
-    echo "ALLOW anything marked RELATED/ESTABLISHED"
+    echo -e "\nALLOW anything marked RELATED/ESTABLISHED"
         sudo -i iptables -A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT -m comment --comment "ACCEPT incoming RELATED/ESTABLISHED"
         sudo -i iptables -A OUTPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT -m comment --comment "ACCEPT outgoing RELATED/ESTABLISHED"
     
@@ -34,26 +34,26 @@ echo -e "\nDROP bad packets"
         sudo -i iptables -A INPUT -s 127.0.0.1 -j ACCEPT -m comment --comment "ACCEPT all incoming on loopback"
         sudo -i iptables -A OUTPUT -d 127.0.0.1 -j ACCEPT -m comment --comment "ACCEPT all outgoing on loopback"
 
-    echo "ALLOW services OUT"
-        echo " - SSH               (OUT)"
+    echo -e "\nALLOW services OUT"
+        echo " - SSH             (OUT)"
             sudo -i iptables -A OUTPUT -p tcp --dport 22 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing ssh"
-        echo " - HTTP              (OUT)"
+        echo " - HTTP            (OUT)"
             sudo -i iptables -A OUTPUT -p tcp --dport 80 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing http"
-        echo " - HTTPS             (OUT)"
+        echo " - HTTPS           (OUT)"
             sudo -i iptables -A OUTPUT -p tcp --dport 443 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing https"
-        echo " - DNS               (OUT)"
+        echo " - DNS             (OUT)"
             sudo -i iptables -A OUTPUT -p udp --dport 53 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing dns"
-        echo " - PING              (OUT)"
+        echo " - PING            (OUT)"
             sudo -i iptables -A OUTPUT -p icmp --icmp-type 8 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing ping request"
-        echo " - CUPS              (OUT)"
+        echo " - CUPS            (OUT)"
             sudo -i iptables -A OUTPUT -p tcp --dport 631 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing cups"
-        echo " - Google Meet RTC   (OUT)"
+        echo " - Google Meet RTC (OUT)"
             sudo -i iptables -A OUTPUT -p udp --dport 3478 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing WebRTC to Google Meet"
             sudo -i iptables -A OUTPUT -p udp --dport 19302:19309 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing WebRTC to Google Meet - fallback"
-        echo " - Google Meet STUN  (OUT)"
-            sudo -i iptables -A OUTPUT -p udp --dport 3478 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing WebRTC STUN for Google Meet"
-        echo " - Discord RTC       (OUT)"
+        echo " - VoIP STUN       (OUT)"
+            sudo -i iptables -A OUTPUT -p udp --dport 3478 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing WebRTC to Google Meet"
+        echo " - Discord RTC     (OUT)"
             sudo -i iptables -A OUTPUT -p udp --dport 50000:50050 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing RTC to Discord"
-        echo " - CLI Speed         (OUT)"
+        echo " - CLI Speed       (OUT)"
             sudo -i iptables -A OUTPUT -p tcp --dport 8080 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing Speedtest (8080)"
 }

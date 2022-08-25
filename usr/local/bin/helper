@@ -47,6 +47,8 @@ while getopts "umdsf:iw" FLAG; do
                 firewallBackupServer
             elif [ "$OPTARG" == "limited" ]; then
                 firewallHomeLimited
+            elif [ "$OPTARG" == "reset" ]; then
+                firewallReset
             else
                 echo -e "\n\e[31mSorry, but '$OPTARG' is not a valid argument. See valid Arugments for option 'firewall' below\e[39m"
                 help
@@ -63,3 +65,5 @@ while getopts "umdsf:iw" FLAG; do
             ;;
     esac
 done
+
+help #calls help function in help.sh file
