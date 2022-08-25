@@ -13,6 +13,7 @@ function help()
     echo -e "                   home    Firewall ruleset for home use"
     echo -e "                   web     Firewall ruleset for web server use"
     echo -e "                   backup  Firewall ruleset for backup server use"
+    echo -e "                   limited Firewall ruleset for limited home use"
     echo -e "                   reset   FLUSH ALL rules and ACCEPT by default !!DANGER!!\n"
     echo -e "           -w  watcher     Watch firewall rule hits in packets and bytes"
     echo -e "\n       Special"
