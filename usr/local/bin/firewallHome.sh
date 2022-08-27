@@ -1,7 +1,8 @@
 #!/bin/bash
 
 function firewallHome
-{
+{ 
+
     echo -e "\n\e[44mDeploying Home Firewall Rules\e[49m"
 
     echo -e "\nFlushing all chains"
@@ -47,20 +48,22 @@ echo -e "\nDROP bad packets"
             sudo -i iptables -A OUTPUT -p icmp --icmp-type 8 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing ping request"
         echo " - CUPS       (OUT)"
             sudo -i iptables -A OUTPUT -p tcp --dport 631 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing cups"
+        echo " - Wireguard"
+            sudo -i iptables -A OUTPUT -p udp --dport 51820 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new wireguard"
         echo " - CLI Speed  (OUT)"
             sudo -i iptables -A OUTPUT -p tcp --dport 8080 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing Speedtest (8080)"
         echo " - RTC        (OUT)"
             echo "   - VoIP STUN         (OUT)"
-                sudo -i iptables -A OUTPUT -p udp --dport 3478 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing WebRTC to Google Meet and other video conferencing"
+                sudo -i iptables -A OUTPUT -p udp --dport 3478 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing WebRTC to video conf."
             echo "   - Google Meet       (OUT)"
-                sudo -i iptables -A OUTPUT -p udp --dport 19302:19309 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing WebRTC to Google Meet - fallback"
+                sudo -i iptables -A OUTPUT -p udp --dport 19302:19309 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing WebRTC to G-Meet fallback"
             echo "   - Discord           (OUT)"
                 sudo -i iptables -A OUTPUT -p udp --dport 50000:50050 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing RTC to Discord"
         echo " - Steam      (OUT)"
             echo "   - Auth/Down/Client  (OUT)" 
-                sudo -i iptables -A OUTPUT -p udp --dport 27000:27100 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing to Steam for game traffic, authentication, downloads, client, P2P, and Voice Chat"
+                sudo -i iptables -A OUTPUT -p udp --dport 27000:27100 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing to Steam for game traffic, auth, downloads, client, P2P, and VC"
             echo "   - Auth/Down TCP     (OUT)"
-                sudo -i iptables -A OUTPUT -p tcp --dport 27015:27050 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing to Steam for authentication and downloads TCP backup"
+                sudo -i iptables -A OUTPUT -p tcp --dport 27015:27050 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing to Steam for auth and downloads TCP backup"
             echo "   - Client            (OUT)"
                 sudo -i iptables -A OUTPUT -p udp --dport 4380 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing to Steam for client"
             echo "   - Voice Chat/P2P    (OUT)"
