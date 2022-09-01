@@ -2,10 +2,8 @@
 
 function startup ()
 {
+    firewallHome
     monitors
     drawing
-    firewallHome
-    
-    # keep updater last
-        updater
+    updater        
 }
