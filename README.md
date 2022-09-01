@@ -21,8 +21,8 @@ Popular
 ```
 Config
 ```
-   -m  monitors    Setup displaylink and arrange monitors
    -d  drawing     Setup drawing tablet
+   -m  monitors    Setup displaylink and arrange monitors
 ```
 Firewalls
 ```
@@ -38,27 +38,44 @@ Special
 ## Arguments 
 Firewall
 ```
- home    Firewall ruleset for home use
+ 
  web     Firewall ruleset for web server use
  backup  Firewall ruleset for backup server use
- limited Firewall ruleset for limited home use
+ home    Firewall ruleset for home use
+ lax     Firewall ruleset for more lax home use
+ limited Firewall ruleset for more limited home use
  reset   FLUSH ALL rules and ACCEPT by default !!DANGER!!
 ```
 ## Extra Notes
+
+### Updater
+* Running the updater function will automatically update from apt and flatpak WITHOUT confirmation. Snap operates normally.
+
 ### Firewalls
-* The home ruleset requires sudo to be installed
-* The server rulesets does not work with sudo and must be run as root
-* The reset function will check if you are root and run with or without sudo depending on your UID
-<br><br>
 * Note that choosing reset will FLUSH ALL rules and ACCEPT by default. Effectively, you have no firewall. Use with caution!
 <br><br>
+* The home rulesets requires sudo to be installed
+* All home rulesets ONLY allow related/established traffic IN
+* The lax home ruleset will allow any traffic OUT
+* The limited home ruleset will only allow HTTP/HTTPS/DNS traffic OUT
+* The standard home ruleset will allow all nessesary ports needed for daily-driver computer usage OUT
+<br><br>
+* The server rulesets does not work with sudo and must be run as root
+* The webserver ruleset allows ssh, http, and https IN. Ports reqired for data out are allowed on a per-user basis.
+* The backup server only allows SSH in. Ports reqired for data out are allowed on a per-user basis.
+<br><br>
+* The reset function will check if you are root and run with or without sudo depending on your UID
+<br><br>
 * Yes, I am (now) aware the watch command exists, which can replace the watcher module. This module may be depricated in the future
+
+
+
 
 ## Installation
 ### Get the Debian package
 #### Download package - The reccomended way
-1. GUI - Download the latest .deb package from the Releases page
-2. CLI - Use wget with the .deb link from the Releases page
+1. GUI - Download the latest .deb package from the Releases page.
+2. CLI - Use wget with the link to the .deb package from the Releases page. Ensure you are using wget on the .deb package, not the tag under releases on the main page.
 #### Build package from source - The fun way
 1. Clone the git repo
 2. Run the build command with the directory name of the git repo (default is helper) ```dpkg-deb --build helper```
