@@ -65,6 +65,7 @@ Firewall
 * The backup server only allows SSH in. Ports reqired for data out are allowed on a per-user basis.
 <br><br>
 * The reset function will check if you are root and run with or without sudo depending on your UID
+* If iptables-persistent is installed, all firewall rulesets will now save themselves to /etc/iptables/rules.v4 Note that this WILL overwrite an existing saved ruleset with the same name. 
 <br><br>
 * Yes, I am (now) aware the watch command exists, which can replace the watcher module. This module may be depricated in the future
 
