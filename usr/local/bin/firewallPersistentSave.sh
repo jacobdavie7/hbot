@@ -10,12 +10,11 @@ function firewallPersistentSave
     else
         if [ "$EVEVATE" == "root" ]; then
             iptables-save > /etc/iptables/rules.v4
-            chmod 644 /etc/iptables/rules.v4
         else
             sudo chmod 666 /etc/iptables/rules.v4
             sudo -i iptables-save > /etc/iptables/rules.v4
             sudo chmod 644 /etc/iptables/rules.v4
         fi
+        echo -e "\niptables-persistent found! Ruleset saved and will be persistent on restart."
     fi
-    echo -e "\niptables-persistent found! Ruleset saved and will be persistent on restart."
 }
