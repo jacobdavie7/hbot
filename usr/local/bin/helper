@@ -1,17 +1,28 @@
 #!/bin/bash
 
-source help.sh
-source updater.sh
-source monitors.sh
-source drawing.sh
-source startup.sh
-source firewallHome.sh
-source firewallWeb.sh
-source firewallBackup.sh
-source firewallReset.sh
-source install.sh
-source firewallWatcher.sh
-source firewallHomeLimited.sh
+# config
+    source drawing.sh
+    source monitors.sh
+
+# firewalls
+    source firewallHome.sh
+    source firewallWeb.sh
+    source firewallBackup.sh
+    source firewallReset.sh
+    source firewallWatcher.sh
+    source firewallHomeLimited.sh
+    source firewallHomeLax.sh
+
+# popular
+    source updater.sh
+
+# special
+    source install.sh
+    source startup.sh
+
+# support
+    source usage.sh
+    source runSudo.sh
 
 EVEVATE=$(id | grep root | cut -d' ' -f1)
     if [ "$EVEVATE" == "uid=0(root)" ]; then
@@ -20,9 +31,10 @@ EVEVATE=$(id | grep root | cut -d' ' -f1)
         EVEVATE=user
     fi
 
-while getopts "umdsf:iw" FLAG; do
+while getopts "umdsf:iwav" FLAG; do
     case "$FLAG" in
         u)
+            runSudo
             updater
             exit
             ;;
@@ -31,6 +43,7 @@ while getopts "umdsf:iw" FLAG; do
             exit
             ;;
         d)
+            runSudo
             drawing
             exit
             ;;
@@ -40,15 +53,21 @@ while getopts "umdsf:iw" FLAG; do
             ;;
         f)
             if [ "$OPTARG" == "home" ]; then
+                runSudo
                 firewallHome
             elif [ "$OPTARG" == "web" ]; then
                 firewallWebServer
             elif [ "$OPTARG" == "backup" ]; then
                 firewallBackupServer
             elif [ "$OPTARG" == "limited" ]; then
+                runSudo
                 firewallHomeLimited
             elif [ "$OPTARG" == "reset" ]; then
+                runSudo
                 firewallReset
+            elif [ "$OPTARG" == "lax" ]; then
+                runSudo
+                firewallHomeLax
             else
                 echo -e "\n\e[31mSorry, but '$OPTARG' is not a valid argument. See valid Arugments for option 'firewall' below\e[39m"
                 help
@@ -66,4 +85,4 @@ while getopts "umdsf:iw" FLAG; do
     esac
 done
 
-help #calls help function in help.sh file
+usage #calls help function in help.sh file
