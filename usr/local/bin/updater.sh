@@ -2,12 +2,21 @@
 
 function updater ()
 {
+    echo -e "\n\e[44mUpdating Packages\e[49m"
 
-    sudo apt update
-    sudo apt upgrade
-    sudo apt autoremove
-
-    flatpak update
+    echo -e "\n\e[95;4mapt\e[39;24m"
+        echo -e "\n\e[96mupdate\e[39m"
+            sudo apt update
+        echo -e "\n\e[96mupgrade\e[39m"
+            sudo apt upgrade -y
+        echo -e "\n\e[96mautoremove\e[39m"
+            sudo apt autoremove
+        
+    echo -e "\n\e[95;4mflatpak\e[39;24m"
+        flatpak update -y
+    
+    echo -e "\n\e[95;4msnap\e[39;24m"
+        sudo snap refresh
 
 #    echo -e "\n\e[44mExecuting 'Updater' Function\e[49m"
 #        #apt
@@ -24,10 +33,6 @@ function updater ()
 #                        sudo apt autoremove -y
 #                    fi
 #            fi
-#
-#        #flatpak
-#        echo -e "\n\e[95;4mflatpak\e[39;24m"
-#            flatpak update
 #
 #        #snap
 #        echo -e "\n\e[95;4msnap\e[39;24m"
