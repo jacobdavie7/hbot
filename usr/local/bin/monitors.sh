@@ -3,15 +3,9 @@
 function monitors ()
 {
     echo -e "\n\e[44mExecuting 'Monitors' Function\e[49m"
-
-    #Clone GitHub Repo
-        #git clone https://github.com/AdnanHodzic/displaylink-debian.git /tmp/displaylink-debian
-        #./tmp/displaylink-debian/displaylink-debian.sh
-
-    # Run xrandr --listproviders to view monitor outputs. Provider 0 should be GPU, 1-4 should be the adapters.
-    # Should look like something below:
-    # Provider 1: id: 0x138 cap: 0x2, Sink Output crtcs: 1 outputs: 1 associated providers: 0 name:modesetting
-    # ...Goes to provider 4, looks like provider 1                                          ^ This 0 should change to 1 after the commands below
+    
+    echo -e "\nNvidia X Server: Force full composition pipeline"     #Helps with screen tearing. Must be run before setting outputs and locations
+        nvidia-settings --assign CurrentMetaMode="nvidia-auto-select +0+0 {ForceFullCompositionPipeline=On}"
 
     echo "Setting output"
     echo " - 1 to 0"
@@ -23,7 +17,7 @@ function monitors ()
     echo " - 4 to 0"
         xrandr --setprovideroutputsource 4 0
 
-    #run xrandr to view adapter names (DVI-I-1-1, DP-0)
+    # run xrandr to view adapter names (DVI-I-1-1, DP-0)
     
     echo "Setting locations"
     echo " - Center (Pri)"                                       #Need to use pos to correctly line up top monitor. If only use --pos for top monitor, all the monitors will be on the same x level. 
@@ -35,6 +29,8 @@ function monitors ()
     echo " - Top (TV)"
         xrandr --output DVI-I-1-1 --pos 1320x0 --auto               #--above HDMI-0     --pos 1320x0
 
-    echo -e "\e[91mIf the top monitor is still NOT functioning and drivers ARE installed (from GitHub), the USB DisplayLink adapter may need to be reseated.\e[39m"
+    echo -e "\n\e[91mIf the top monitor is still NOT functioning and drivers ARE installed (from GitHub), the USB DisplayLink adapter may need to be reseated.\e[39m"
+    
+    # https://github.com/AdnanHodzic/displaylink-debian.git
     # https://github.com/AdnanHodzic/displaylink-debian/blob/master/post-install-guide.md
 }

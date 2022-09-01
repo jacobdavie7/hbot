@@ -9,15 +9,15 @@ function firewallBackupServer
         exit
     fi
 
-    echo -e "\nFlushing all chains"
-    echo "   Includes IP's banned by Fail2Ban"
-        iptables -F
-    
     echo -e "\nSetting default policy to DROP"
         iptables -P INPUT DROP
         iptables -P OUTPUT DROP
         iptables -P FORWARD DROP
 
+    echo -e "\nFlushing all chains"
+    echo "   Includes IP's banned by Fail2Ban"
+        iptables -F
+    
     echo -e "\nDROP bad packets"
         echo " - XMAS       (IN)"
             iptables -A INPUT -p tcp --tcp-flags ALL ALL -j DROP -m comment --comment "DROP outgoing XMAS"
