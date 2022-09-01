@@ -48,7 +48,7 @@ function install ()
                                                                           # |     |            |              |        .- draw ibus windows
                                                                           # |     |            |              |        |
         # apt                                                             # *     *            *              *        * 
-            UTILITIES=( git tree htop dnsutils whois iptables curl ffmpeg ranger ncdu fonts-unfonts-core ibus-hangul zenity )
+            UTILITIES=( git tree htop dnsutils whois iptables curl ffmpeg ranger ncdu fonts-unfonts-core ibus-hangul zenity galculator speedcrunch iptables-persistent )
             for U in "${UTILITIES[@]}"
             do
                 apt install -y $U
@@ -95,3 +95,13 @@ function install ()
     # setup firewall
         firewallHome
 }
+
+
+   #Clone GitHub Repo
+        #git clone https://github.com/AdnanHodzic/displaylink-debian.git /tmp/displaylink-debian
+        #./tmp/displaylink-debian/displaylink-debian.sh
+
+    # Run xrandr --listproviders to view monitor outputs. Provider 0 should be GPU, 1-4 should be the adapters.
+    # Should look like something below:
+    # Provider 1: id: 0x138 cap: 0x2, Sink Output crtcs: 1 outputs: 1 associated providers: 0 name:modesetting
+    # ...Goes to provider 4, looks like provider 1                                          ^ This 0 should change to 1 after the commands below
