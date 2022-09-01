@@ -22,5 +22,8 @@ function firewallReset
             echo -e "Flushing all chains"
                 sudo -i iptables -F
         fi
+
+    firewallPersistentSave
+
     echo -e "\n\e[31mDon't Forget About Edge Firewall!\e[39m\n"
 }

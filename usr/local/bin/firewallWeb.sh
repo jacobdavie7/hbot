@@ -131,6 +131,8 @@ function firewallWebServer
     #            echo " - Time Exce.         (OUT)"
     #                iptables -A OUTPUT -p icmp --icmp-type 11 -m limit --limit 1/s --limit-burst 2 -j ACCEPT -m comment --comment "Limited  ACCEPT ICMP OUT Time Exce. (11)"
             
+    firewallPersistentSave
+
     echo -e "\n\e[91mDon't Forget About Edge Firewall!\e[39m"
     echo -e "\n\e[31mSSH should be alive, if frozen and not coming back, try SSHing in a new terminal\e[39m\n"
 }

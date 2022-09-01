@@ -68,4 +68,6 @@ function firewallHome
             echo "   - Voice Chat/P2P    (OUT)"
                 sudo -i iptables -A OUTPUT -p udp --dport 3478 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing to Steam for Voice Chat and P2P"
                 sudo -i iptables -A OUTPUT -p udp --dport 4379:4380 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing to Steam for Voice Chat and P2P"
-    }
+    
+    firewallPersistentSave
+}

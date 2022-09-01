@@ -23,6 +23,7 @@
 # support
     source usage.sh
     source runSudo.sh
+    source firewallPersistentSave.sh
 
 EVEVATE=$(id | grep root | cut -d' ' -f1)
     if [ "$EVEVATE" == "uid=0(root)" ]; then

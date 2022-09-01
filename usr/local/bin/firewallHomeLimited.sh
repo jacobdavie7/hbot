@@ -37,4 +37,6 @@ function firewallHomeLimited
             sudo -i iptables -A OUTPUT -p tcp --dport 443 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing https"
         echo " - DNS               (OUT)"
             sudo -i iptables -A OUTPUT -p udp --dport 53 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing dns"
+    
+    firewallPersistentSave
 }

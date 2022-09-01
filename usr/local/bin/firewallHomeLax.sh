@@ -23,4 +23,6 @@ function firewallHomeLax
             sudo -i iptables -A OUTPUT -d 127.0.0.1 -j ACCEPT -m comment --comment "ACCEPT all outgoing on loopback"
 
     echo -e "\n\e[31mDon't Forget About Edge Firewall!\e[39m\n"
+
+    firewallPersistentSave
 }
