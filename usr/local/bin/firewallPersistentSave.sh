@@ -15,6 +15,6 @@ function firewallPersistentSave
             sudo -i iptables-save > /etc/iptables/rules.v4
             sudo chmod 644 /etc/iptables/rules.v4
         fi
-        echo -e "\niptables-persistent found! Ruleset saved and will be persistent on restart."
+        echo -e "\n\e[32miptables-persistent found! Ruleset saved and will be persistent on restart.\e[39m\n"
     fi
 }
