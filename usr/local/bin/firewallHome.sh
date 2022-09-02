@@ -47,7 +47,7 @@ function firewallHome
             sudo -i iptables -A OUTPUT -p icmp --icmp-type 8 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing ping request"
         echo " - CUPS       (OUT)"
             sudo -i iptables -A OUTPUT -p tcp --dport 631 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing cups"
-        echo " - Wireguard"
+        echo " - Wireguard  (OUT)"
             sudo -i iptables -A OUTPUT -p udp --dport 51820 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new wireguard"
         echo " - CLI Speed  (OUT)"
             sudo -i iptables -A OUTPUT -p tcp --dport 8080 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing Speedtest (8080)"
