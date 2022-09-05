@@ -49,6 +49,7 @@ while getopts "umdsf:iwav" FLAG; do
             exit
             ;;
         s)
+            runSudo
             startup
             exit
             ;;
