@@ -12,6 +12,7 @@
     source firewallWatcher.sh
     source firewallHomeLimited.sh
     source firewallHomeLax.sh
+    source firewallLocal.sh
 
 # popular
     source updater.sh
@@ -70,6 +71,9 @@ while getopts "umdsf:iwav" FLAG; do
             elif [ "$OPTARG" == "lax" ]; then
                 runSudo
                 firewallHomeLax
+            elif [ "$OPTARG" == "local" ]; then
+                runSudo
+                firewallLocal
             else
                 echo -e "\n\e[31mSorry, but '$OPTARG' is not a valid argument. See valid Arugments for option 'firewall' below\e[39m"
                 help
