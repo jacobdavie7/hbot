@@ -42,8 +42,9 @@ Firewall
  web     Firewall ruleset for web server use
  backup  Firewall ruleset for backup server use
  home    Firewall ruleset for home use
- lax     Firewall ruleset for more lax home use
- limited Firewall ruleset for more limited home use
+ lax     Firewall ruleset for more lax home use - Allow all Out
+ limited Firewall ruleset for more limited home use - Internet Only
+ local   Firewall ruleset for 1337 hax - No Internet
  reset   FLUSH ALL rules and ACCEPT by default !!DANGER!!
 ```
 ## Extra Notes
@@ -59,6 +60,7 @@ Firewall
 * The lax home ruleset will allow any traffic OUT
 * The limited home ruleset will only allow HTTP/HTTPS/DNS traffic OUT
 * The standard home ruleset will allow all nessesary ports needed for daily-driver computer usage OUT
+* The local home ruleset will only allow all private IP's and localhost, NO internet access. Great for  
 <br><br>
 * The server rulesets does not work with sudo and must be run as root
 * The webserver ruleset allows ssh, http, and https IN. Ports reqired for data out are allowed on a per-user basis.
