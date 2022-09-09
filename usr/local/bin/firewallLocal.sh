@@ -28,16 +28,11 @@ function firewallLocal
         echo " - Class C"
             sudo -i iptables -A OUTPUT -d 192.168.0.0/16 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new to Private Class C"
         echo " - Class B"
-            I=16
-            until [ $I -gt 31 ]
-            do
-                sudo -i iptables -A OUTPUT -d 172.$I.0.0/16 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new to Private Class B - 2nd Octect of $I"
-                ((I=I+1))
-            done      
+                sudo -i iptables -A OUTPUT -d 172.16.0.0/12 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new to Private Class B"
         echo " - Class A"
             sudo -i iptables -A OUTPUT -d 10.0.0.0/8 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new to Private Class A"
         echo " - Localhost"
-            sudo -i iptables -A OUTPUT -d 127.0.0.0/8 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new to Private Class A"            
+            sudo -i iptables -A OUTPUT -d 127.0.0.1 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new to Loopback"            
 
     echo -e "\n\e[91mFirewall Ruleset Updated - NOT Persistant - Will be Cleared on Restart\e[39m"
 }
