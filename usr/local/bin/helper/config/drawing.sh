@@ -1,15 +1,15 @@
 #!/bin/bash
 
-function drawing ()
+function drawing
 {
     echo -e "\n\e[44mExecuting 'Drawing' Function\e[49m"
 
     #Append 70-wacom.conf
         XORG_APPEND=$(cat /usr/share/X11/xorg.conf.d/70-wacom.conf | grep "S620" | cut -d' ' -f2,3 | sed 's/ //g')
             if [ "$XORG_APPEND" != "GaomonS620" ]; then
-                sudo chmod 664 /usr/share/X11/xorg.conf.d/70-wacom.conf
+                chmod 664 /usr/share/X11/xorg.conf.d/70-wacom.conf #Requires root
                 echo -e '\n\n# Gaomon S620\nSection "InputClass"\n\tIdentifier "GAOMON Gaomon Tablet"\n\tMatchUSBID  "256c:006d"\n\tMatchDevicePath "/dev/input/event*"\n\tDriver "wacom"\nEndSection' >> /usr/share/X11/xorg.conf.d/70-wacom.conf
-                sudo chmod 644 /usr/share/X11/xorg.conf.d/70-wacom.conf
+                chmod 644 /usr/share/X11/xorg.conf.d/70-wacom.conf #Requires root
                 echo -e "Need to Restart/Logout Before Continuing. Do so and Run Script Again"
                 exit
             else

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-function startup ()
+function startup
 {
     firewallHome
     monitors

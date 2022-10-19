@@ -1,15 +1,7 @@
 #!/bin/bash
 
-function install ()
+function install
 {
-    # checks
-    if [ "$EVEVATE" == "root" ]; then
-        echo -e "\n\e[44mDeploying Web Server Firewall Rules\e[49m"
-    else
-        echo -e "\n\e[91mPlease run as Root with 'su -l root'\e[39m\n"
-        exit
-    fi
-
     echo -e "\nRun full install and setup script? (yes or n)"
     read ANS
     if [ "$ANS" != "yes" ]; then
@@ -41,20 +33,14 @@ function install ()
     # install packages
     echo -e "\n Install apt Packages\n"
 
-                                                                          # .-------------------------------------------- terminal file explorer
-                                                                          # |     .-------------------------------------- file sizes
-                                                                          # |     |            .------------------------- display more languges
-                                                                          # |     |            |              .---------- input Korean
-                                                                          # |     |            |              |        .- draw ibus windows
-                                                                          # |     |            |              |        |
-        # apt                                                             # *     *            *              *        * 
-            UTILITIES=( git tree htop dnsutils whois iptables curl ffmpeg ranger ncdu fonts-unfonts-core ibus-hangul zenity galculator speedcrunch iptables-persistent )
+        # apt            # package usage listed below
+            UTILITIES=( git tree htop dnsutils whois iptables curl ffmpeg ranger ncdu fonts-unfonts-core ibus-hangul zenity iptables-persistent sudo apt install network-manager-gnome )
             for U in "${UTILITIES[@]}"
             do
                 apt install -y $U
             done
 
-            APPLICATIONS=( gparted qdirstat vlc keepassxc flameshot pulseeffects gimp kdenlive libreoffice libreoffice-gtk3 )
+            APPLICATIONS=( gparted qdirstat vlc keepassxc flameshot pulseeffects gimp kdenlive libreoffice libreoffice-gtk3 galculator speedcrunch steghide )
             for A in "${APPLICATIONS[@]}"
             do
                 apt install -y $A
@@ -105,3 +91,29 @@ function install ()
     # Should look like something below:
     # Provider 1: id: 0x138 cap: 0x2, Sink Output crtcs: 1 outputs: 1 associated providers: 0 name:modesetting
     # ...Goes to provider 4, looks like provider 1                                          ^ This 0 should change to 1 after the commands below
+
+
+
+# ranger                terminal file explorer
+# ncdu                  file sizes
+# fonts-unfonts-core    display more lanuages
+# ibus-hangul           input korean
+# zenity                draw windows for ibus
+# galculator            simple calculator
+# speedcrunch           advanced calculator
+# libreoffice-gtk3      make libreoffice look better
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#

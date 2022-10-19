@@ -1,6 +1,6 @@
 #!/bin/bash
 
-function runSudo ()
+function runSudo
 {
     runSudo=$(sudo whoami)
 }

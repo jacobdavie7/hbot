@@ -2,13 +2,6 @@
 
 function firewallBackupServer
 {
-    if [ "$EVEVATE" == "root" ]; then
-        echo -e "\n\e[44mDeploying Backup Server Firewall Rules\e[49m\n"
-    else
-        echo -e "\n\e[91mAssuming server does not have sudo installed. Please run as Root with 'su -l root'\e[39m\n"
-        exit
-    fi
-
     echo -e "\nSetting default policy to DROP"
         iptables -P INPUT DROP
         iptables -P OUTPUT DROP

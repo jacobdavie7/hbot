@@ -2,34 +2,6 @@
 
 function firewallWebServer
 {
-    if [ "$EVEVATE" == "root" ]; then
-        echo -e "\n\e[44mDeploying Web Server Firewall Rules\e[49m"
-    else
-        echo -e "\n\e[91mAssuming server does not have sudo installed. Please run as Root with 'su -l root'\e[39m\n"
-        exit
-    fi
-
-    # echo -e "\n\e[4mAllow backup server (OUT) for rsync (SSH) (y or n)\e[39;24m"
-    #     read ADD_BACKUP
-    #         if [ "$ADD_BACKUP" == "y" ]; then
-    #             echo -e "\n\e[4mWhat is the IP of the backup server?\e[39;24m"
-    #             read BACKUP_IP
-    #        #         if [[ $BACKUP_IP =~ [\d{3}\.\d{3}\.\d{3}\.\d{3}] ]]; then #matching on asd + checking logic not working
-    #                     ADD_BACKUP=good #need to still allow backup function to run
-    #        #             echo "GOOD IP"
-    #        #             echo -e "IP Entered: $BACKUP_IP"
-    #        #         else
-    #        #             echo "BAD IP"
-    #        #             echo -e "IP Address '$BACKUP_IP' is non-compliant. Note that iptables does not work domains. Enter"
-    #        #             echo -e " (c)ontinue without backup rule"
-    #        #             echo -e " (q)uit"
-    #        #                 read ADD_BACKUP
-    #        #                 if [ "$ADD_BACKUP)" != "c" ]; then 
-    #        #                     exit
-    #        #                 fi
-    #        #         fi
-    #         fi
-    
     echo -e "\nSetting default policy to DROP"
         iptables -P INPUT DROP
         iptables -P OUTPUT DROP
@@ -98,22 +70,8 @@ function firewallWebServer
                 echo " - smtp      www-data         (OUT)"
                     iptables -A OUTPUT -p tcp --dport 587 -m owner --uid-owner www-data -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing smtp for www-data"
             
-        #    # backup only
-        #    if [ "$ADD_BACKUP" == "good" ]; then
-        #        echo -e " - ssh       backup       (OUT)      \e[32m$BACKUP_IP\e[39m"
-        #            iptables -A OUTPUT -p tcp -d $BACKUP_IP --dport 22 -m owner --uid-owner backup -j ACCEPT -m comment --comment "ACCEPT new outgoing ssh to backup"
-        #            BACKUP_LINE_NUM=$(iptables -L -v --line-numbers | grep "tcp dpt:ssh owner UID match backup" | cut -d' ' -f1)
-        #            echo -e "\tUse '\e[31miptables -D OUTPUT $BACKUP_LINE_NUM\e[39m' to remove"
-        #    fi
-
     #    #Figure out if these need to go on input or output (exept for ping), for ones going out, look into what account needs to do so to use owner mod
     #        echo "ALLOW ICMP"
-    #            #Allowed Above
-    #                echo " - ping               (IN)"
-    #                    iptables -A INPUT -p icmp --icmp-type 8 -m limit --limit 1/s --limit-burst 2 -j ACCEPT -m comment --comment "Limited ACCEPT ICMP IN Ping (8)"
-    #            #Allowed Above
-    #                echo " - ping               (OUT)"
-    #                    iptables -A OUTPUT -p icmp --icmp-type 8 -m limit --limit 1/s --limit-burst 2 -j ACCEPT -m comment --comment "Limited ACCEPT ICMP OUT Ping (8)"
     #            echo " - Dest. unreachable  (IN)"
     #                iptables -A INPUT -p icmp --icmp-type 3  -m limit --limit 1/s --limit-burst 2 -j ACCEPT -m comment --comment "Limited ACCEPT ICMP IN Dest. unreachable (3)"
     #            echo " - Dest. unreachable  (OUT)"
