@@ -1,34 +1,33 @@
 #!/bin/bash
 
 # config
-    source config/drawing.sh
-    source config/monitors.sh
+    source /usr/local/bin/helperModules/config/drawing.sh
+    source /usr/local/bin/helperModules/config/monitors.sh
 
 # firewalls
-    source firewalls/firewallWatcher.sh
-    source firewalls/firewallPersistentSave.sh
+    source /usr/local/bin/helperModules/firewalls/firewallWatcher.sh
+    source /usr/local/bin/helperModules/firewalls/firewallPersistentSave.sh
     # rulesets
-        source firewalls/rulesets/firewallHome.sh
-        source firewalls/rulesets/firewallWeb.sh
-        source firewalls/rulesets/firewallBackup.sh
-        source firewalls/rulesets/firewallReset.sh
-        source firewalls/rulesets/firewallHomeLimited.sh
-        source firewalls/rulesets/firewallHomeLax.sh
-        source firewalls/rulesets/firewallLocal.sh
+        source /usr/local/bin/helperModules/firewalls/rulesets/firewallHome.sh
+        source /usr/local/bin/helperModules/firewalls/rulesets/firewallWeb.sh
+        source /usr/local/bin/helperModules/firewalls/rulesets/firewallBackup.sh
+        source /usr/local/bin/helperModules/firewalls/rulesets/firewallReset.sh
+        source /usr/local/bin/helperModules/firewalls/rulesets/firewallHomeLimited.sh
+        source /usr/local/bin/helperModules/firewalls/rulesets/firewallHomeLax.sh
+        source /usr/local/bin/helperModules/firewalls/rulesets/firewallLocal.sh
     
 # popular
-    source popular/updater.sh
+    source /usr/local/bin/helperModules/popular/updater.sh
 
 # special
-    source special/install.sh
-    source special/startup.sh
+    source /usr/local/bin/helperModules/special/install.sh
+    source /usr/local/bin/helperModules/special/startup.sh
 
 # support
-    source support/usage.sh
-    source support/runSudo.sh
-    source support/elevateCheck.sh
+    source /usr/local/bin/helperModules/support/usage.sh
+    source /usr/local/bin/helperModules/support/runSudo.sh
+    source /usr/local/bin/helperModules/support/elevateCheck.sh
     
-
 while getopts "umdsf:iwav" FLAG; do
     case "$FLAG" in
         u)
