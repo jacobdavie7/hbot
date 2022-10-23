@@ -15,7 +15,7 @@ helper [OPTION] [ARGUMENT]
 ```
 ## Options
 
-Popular
+General
 ```
    -u  updater     Updates from apt, flatpak, and snap
 ```

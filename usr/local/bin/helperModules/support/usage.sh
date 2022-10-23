@@ -3,7 +3,7 @@
 function usage
 {
     echo -e "\n   Usage: helper [OPTION] [ARGUMENT]"
-    echo -e "\n       Popular"
+    echo -e "\n       General"
     echo -e "           -u  updater     Updates from apt, flatpak, and snap"
     echo -e "\n       Config"
     echo -e "           -d  drawing     Setup drawing tablet"

@@ -16,8 +16,8 @@
         source /usr/local/bin/helperModules/firewalls/rulesets/firewallHomeLax.sh
         source /usr/local/bin/helperModules/firewalls/rulesets/firewallLocal.sh
     
-# popular
-    source /usr/local/bin/helperModules/popular/updater.sh
+# general
+    source /usr/local/bin/helperModules/general/updater.sh
 
 # special
     source /usr/local/bin/helperModules/special/install.sh
