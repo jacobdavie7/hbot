@@ -1,0 +1,90 @@
+#!/bin/bash
+
+MAIN_DIR=/usr/local/bin/helper_package/helperModules
+
+# config
+    source $MAIN_DIR/config/drawing.sh
+    source $MAIN_DIR/config/monitors.sh
+
+# firewalls
+    source $MAIN_DIR/firewalls/firewallWatcher.sh
+    source $MAIN_DIR/firewalls/firewallPersistentSave.sh
+    # rulesets
+        source $MAIN_DIR/firewalls/rulesets/firewallHome.sh
+        source $MAIN_DIR/firewalls/rulesets/firewallWeb.sh
+        source $MAIN_DIR/firewalls/rulesets/firewallBackup.sh
+        source $MAIN_DIR/firewalls/rulesets/firewallReset.sh
+        source $MAIN_DIR/firewalls/rulesets/firewallHomeLimited.sh
+        source $MAIN_DIR/firewalls/rulesets/firewallHomeLax.sh
+        source $MAIN_DIR/firewalls/rulesets/firewallLocal.sh
+    
+# general
+    source $MAIN_DIR/general/updater.sh
+
+# special
+    source $MAIN_DIR/special/install.sh
+    source $MAIN_DIR/special/startup.sh
+
+# support
+    source $MAIN_DIR/support/usage.sh
+    source $MAIN_DIR/support/runSudo.sh
+    source $MAIN_DIR/support/elevateCheck.sh
+    
+while getopts "umdsf:iwav" FLAG; do
+    case "$FLAG" in
+        u)
+            elevateCheck
+            updater
+            exit
+            ;;
+        m)
+            monitors
+            exit
+            ;;
+        d)
+            elevateCheck
+            drawing
+            exit
+            ;;
+        s)
+            elevateCheck
+            startup
+            exit
+            ;;
+        f)
+            elevateCheck
+            if [ "$OPTARG" == "home" ]; then
+                firewallHome
+            elif [ "$OPTARG" == "web" ]; then
+                firewallWebServer
+            elif [ "$OPTARG" == "backup" ]; then
+                firewallBackupServer
+            elif [ "$OPTARG" == "limited" ]; then
+                firewallHomeLimited
+            elif [ "$OPTARG" == "reset" ]; then
+                firewallReset
+            elif [ "$OPTARG" == "lax" ]; then
+                firewallHomeLax
+            elif [ "$OPTARG" == "local" ]; then
+                firewallLocal
+            else
+                echo -e "\n\e[31mSorry, but '$OPTARG' is not a valid argument. See valid Arugments for option 'firewall' below\e[39m"
+                usage
+            fi
+            exit
+            ;;
+
+        i)
+            install
+            exit
+            ;;
+            
+        w)
+            elevateCheck
+            firewallWatcher
+            exit
+            ;;
+    esac
+done
+
+usage #calls help function in help.sh file
