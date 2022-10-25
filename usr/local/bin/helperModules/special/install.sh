@@ -34,7 +34,7 @@ function install
     echo -e "\n Install apt Packages\n"
 
         # apt            # package usage listed below
-            UTILITIES=( git tree htop dnsutils whois iptables curl ffmpeg ranger ncdu fonts-unfonts-core ibus-hangul zenity iptables-persistent sudo apt install network-manager-gnome )
+            UTILITIES=( git tree htop dnsutils whois iptables curl ffmpeg ranger ncdu gzip unzip fonts-unfonts-core ibus-hangul zenity iptables-persistent network-manager-gnome )
             for U in "${UTILITIES[@]}"
             do
                 apt install -y $U
