@@ -49,6 +49,8 @@ function firewallHome
             iptables -A OUTPUT -p tcp --dport 631 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing cups"
         echo " - Wireguard  (OUT)"
             iptables -A OUTPUT -p udp --dport 51820 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new wireguard"
+        echo " - HTTP Dev   (OUT)"
+            iptables -A OUTPUT -p tcp --dport 8080 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new HTTP Dev on 8080 (speedtest)"
         echo " - RTC        (OUT)"
             echo "   - VoIP STUN         (OUT)"
                 iptables -A OUTPUT -p udp --dport 3478 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing WebRTC to video conf."
