@@ -1,6 +1,7 @@
 #!/bin/bash
 
-MAIN_DIR=/usr/local/bin/helper_package/helperModules
+#MAIN_DIR=/usr/local/bin/helper_package/helperModules
+MAIN_DIR=/home/jacob/Documents/git/helper/usr/local/bin/helper_package/helperModules
 
 # config
     source $MAIN_DIR/config/drawing.sh
@@ -17,7 +18,7 @@ MAIN_DIR=/usr/local/bin/helper_package/helperModules
         source $MAIN_DIR/firewalls/rulesets/firewallHomeLimited.sh
         source $MAIN_DIR/firewalls/rulesets/firewallHomeLax.sh
         source $MAIN_DIR/firewalls/rulesets/firewallLocal.sh
-    
+        source $MAIN_DIR/firewalls/rulesets/firewallSecure.sh
 # general
     source $MAIN_DIR/general/updater.sh
 
@@ -67,6 +68,8 @@ while getopts "umdsf:iwav" FLAG; do
                 firewallHomeLax
             elif [ "$OPTARG" == "local" ]; then
                 firewallLocal
+            elif [ "$OPTARG" == "secure" ]; then
+                firewallHomeSecure
             else
                 echo -e "\n\e[31mSorry, but '$OPTARG' is not a valid argument. See valid Arugments for option 'firewall' below\e[39m"
                 usage
@@ -75,6 +78,7 @@ while getopts "umdsf:iwav" FLAG; do
             ;;
 
         i)
+            elevateCheck
             install
             exit
             ;;
