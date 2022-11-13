@@ -8,75 +8,98 @@ function install
         exit
     fi
 
-    # read in info
-    echo -e "\n\e[4mWhat is your user account name?\e[39;24m"
-    read USER_ACCOUNT_NAME
-
-    echo -e "\nUpdate sources.list file"
-        echo -e 'deb https://repo.ialab.dsu.edu/debian/ bullseye main contrib non-free \ndeb-src https://repo.ialab.dsu.edu/debian/ bullseye main contrib non-free \n\ndeb https://security.debian.org/debian-security bullseye-security main contrib non-free \ndeb-src https://security.debian.org/debian-security bullseye-security main contrib non-free \n\ndeb https://repo.ialab.dsu.edu/debian/ bullseye-updates main contrib non-free \ndeb-src https://repo.ialab.dsu.edu/debian/ bullseye-updates main contrib non-free' >> /etc/apt/sources.list
     # updates
-    echo -e "\nRunning Updates"
-        echo " - update"
-            apt update
-        echo " - upgrade"
-            apt upgrade
-        echo " - autoremove"
-            apt autoremove
+        updater
 
-   # sudo 
-    echo -e "\nSudo Group"
-        echo " - installing sudo"
-            apt install sudo
-        echo " - Adding $USER_ACCOUNT_NAME to the sudo group"
-            usermod -a -G sudo $USER_ACCOUNT_NAME
+    # sudo 
+        echo -e "\n Sudo Group"
+                USER_ACCOUNT_NAME=$(id -n -u)
+            echo " - installing sudo"
+                apt install sudo
+            echo " - Adding $USER_ACCOUNT_NAME to the sudo group"
+                usermod -a -G sudo $USER_ACCOUNT_NAME
     
     # install packages
-    echo -e "\n Install apt Packages\n"
 
         # apt            # package usage listed below
-            UTILITIES=( git tree htop dnsutils whois iptables curl ffmpeg ranger ncdu gzip unzip fonts-unfonts-core ibus-hangul zenity iptables-persistent network-manager-gnome )
-            for U in "${UTILITIES[@]}"
-            do
-                apt install -y $U
-            done
+            echo -e "\n Install APT Packages\n"
+                UTILITIES=( git tree htop dnsutils whois iptables curl ffmpeg ranger ncdu gzip unzip fonts-unfonts-core ibus-hangul zenity iptables-persistent network-manager-gnome v4l2loopback-dkms )
+                for U in "${UTILITIES[@]}"
+                do
+                    apt install -y $U
+                done
 
-            APPLICATIONS=( gparted qdirstat vlc keepassxc flameshot pulseeffects gimp kdenlive libreoffice libreoffice-gtk3 galculator speedcrunch steghide )
-            for A in "${APPLICATIONS[@]}"
-            do
-                apt install -y $A
-            done
+                APPLICATIONS=( gparted qdirstat vlc keepassxc flameshot pulseeffects gimp kdenlive libreoffice libreoffice-gtk3 galculator speedcrunch steghide )
+                for A in "${APPLICATIONS[@]}"
+                do
+                    apt install -y $A
+                done
 
-            PACKAGE_MANAGERS=( flatpak snapd )
-            for P in "${PACKAGE_MANAGERS[@]}"
-            do
-                apt install -y $P
-            done
+                PACKAGE_MANAGERS=( flatpak snapd )
+                for P in "${PACKAGE_MANAGERS[@]}"
+                do
+                    apt install -y $P
+                done
 
-            FUN=( cmatrix hollywood neofetch )
-            for F in "${FUN[@]}"
-            do
-                apt install -y $F
-            done
+                FUN=( cmatrix hollywood neofetch )
+                for F in "${FUN[@]}"
+                do
+                    apt install -y $F
+                done
 
         # flatpak
-            # add flathub repo
-                flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+            echo -e "\n Install FLATPAK Packages\n"
 
-            FLATPAK=( org.mozilla.firefox com.spotify.Client com.discordapp.Discord com.slack.Slack com.visualstudio.code com.github.xournalpp.xournalpp com.valvesoftware.Steam com.obsproject.Studio )
-            for F in "${FLATPAK[@]}"
-            do
-                flatpak install flathub $F
-            done
+                # add flathub repo
+                    flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+
+                FLATPAK=( com.github.xournalpp.xournalpp com.obsproject.Studio )
+                for F in "${FLATPAK[@]}"
+                do
+                    flatpak install flathub $F
+                done
 
         # snap
+            echo -e "\n Install SNAP Packages\n"
+
             SNAP=( cpufetch )
             for S in "${SNAP[@]}"
             do
                 snap install $S
             done
 
+        # local
+            echo -e "\n Install LOCAL APT Packages\n"
+
+            # steam
+                wget https://cdn.akamai.steamstatic.com/client/installer/steam.deb -P /tmp/packages
+                apt install /tmp/packages/./steam.deb
+
+            # discord
+                wget -O /tmp/packages/discord.deb "https://discordapp.com/api/download?platform=linux&format=deb" # -O used to put into file, page does not give .deb file
+                apt install /tmp/packages/./discord.deb
+
+            # slack
+                wget https://downloads.slack-edge.com/releases/linux/4.28.184/prod/x64/slack-desktop-4.28.184-amd64.deb -P /tmp/packages
+                apt install /tmp/packages/./slack-desktop-4.28.184-amd64.deb
+                echo "deb https://packagecloud.io/slacktechnologies/slack/debian/ jessie main" | sudo tee /etc/apt/sources.list.d/slack.list
+                /etc/cron.daily/./slack
+                apt upgrade -y
+                apt autoremove -y
+            
+            # visual studio
+                wget -O /tmp/packages/vscode.deb https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64 -P /tmp/packages # -O used to put into file, page does not give .deb file
+                apt install /tmp/packages/./vscode.deb
+
+            #spotify
+                curl -sS https://download.spotify.com/debian/pubkey_5E3C45D7B312C643.gpg | sudo apt-key add - 
+                echo "deb http://repository.spotify.com stable non-free" | sudo tee /etc/apt/sources.list.d/spotify.list
+                sudo apt-get update && sudo apt-get install spotify-client
+
     # update DNS servers
-        echo -e '9.9.9.9\n1.1.1.1\n8.8.8.8' >> /etc/resolv.conf
+        echo -e "\n Update DNS Servers\n"
+
+            echo -e '9.9.9.9\n1.1.1.1\n8.8.8.8' >> /etc/resolv.conf
 
     # setup firewall
         firewallHome
@@ -102,7 +125,7 @@ function install
 # galculator            simple calculator
 # speedcrunch           advanced calculator
 # libreoffice-gtk3      make libreoffice look better
-#
+#v4l2loopback-dkms      video loopback device - needed for obs
 #
 #
 #
