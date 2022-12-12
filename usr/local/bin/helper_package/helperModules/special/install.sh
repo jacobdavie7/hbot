@@ -23,13 +23,13 @@ function install
 
         # apt            # package usage listed below
             echo -e "\n Install APT Packages\n"
-                UTILITIES=( git tree htop dnsutils whois iptables curl ffmpeg ranger ncdu gzip unzip fonts-unfonts-core ibus-hangul zenity iptables-persistent network-manager-gnome v4l2loopback-dkms )
+                UTILITIES=( git tree htop dnsutils whois iptables curl ffmpeg ranger ncdu gzip unzip fonts-unfonts-core ibus-hangul zenity iptables-persistent network-manager-gnome v4l2loopback-dkms software-properties-common )
                 for U in "${UTILITIES[@]}"
                 do
                     apt install -y $U
                 done
 
-                APPLICATIONS=( gparted qdirstat vlc keepassxc flameshot pulseeffects gimp kdenlive libreoffice libreoffice-gtk3 galculator speedcrunch steghide )
+                APPLICATIONS=( gparted qdirstat vlc keepassxc flameshot pulseeffects libreoffice libreoffice-gtk3 galculator speedcrunch steghide screen lutris )
                 for A in "${APPLICATIONS[@]}"
                 do
                     apt install -y $A
@@ -41,7 +41,7 @@ function install
                     apt install -y $P
                 done
 
-                FUN=( cmatrix hollywood neofetch )
+                FUN=( cmatrix hollywood neofetch cowsay lolcat fortune rig )
                 for F in "${FUN[@]}"
                 do
                     apt install -y $F
@@ -103,6 +103,12 @@ function install
 
     # setup firewall
         firewallHome
+
+    # set hostname
+        
+
+
+
 }
 
 
@@ -126,9 +132,7 @@ function install
 # speedcrunch           advanced calculator
 # libreoffice-gtk3      make libreoffice look better
 #v4l2loopback-dkms      video loopback device - needed for obs
-#
-#
-#
+#rig                    generate random fake id
 #
 #
 #
