@@ -3,7 +3,11 @@
 function startup
 {
     firewallHome
+    vpnLowRisk
     monitors
+    xfceFix
     drawing
-    updater        
+    
+    sleep 2 # time for vpn to connect
+        updater        
 }
