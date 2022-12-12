@@ -1,15 +1,17 @@
 #!/bin/bash
 
-#MAIN_DIR=/usr/local/bin/helper_package/helperModules
-MAIN_DIR=/home/jacob/Documents/git/helper/usr/local/bin/helper_package/helperModules
+MAIN_DIR=/usr/local/bin/helper_package/helperModules
+#MAIN_DIR=/home/jacob/Documents/git/helper/usr/local/bin/helper_package/helperModules
 
 # config
     source $MAIN_DIR/config/drawing.sh
     source $MAIN_DIR/config/monitors.sh
+    source $MAIN_DIR/config/vpnLowRisk.sh
 
 # firewalls
     source $MAIN_DIR/firewalls/firewallWatcher.sh
     source $MAIN_DIR/firewalls/firewallPersistentSave.sh
+    
     # rulesets
         source $MAIN_DIR/firewalls/rulesets/firewallHome.sh
         source $MAIN_DIR/firewalls/rulesets/firewallWeb.sh
@@ -19,8 +21,10 @@ MAIN_DIR=/home/jacob/Documents/git/helper/usr/local/bin/helper_package/helperMod
         source $MAIN_DIR/firewalls/rulesets/firewallHomeLax.sh
         source $MAIN_DIR/firewalls/rulesets/firewallLocal.sh
         source $MAIN_DIR/firewalls/rulesets/firewallSecure.sh
+
 # general
     source $MAIN_DIR/general/updater.sh
+    source $MAIN_DIR/general/xfceFix.sh
 
 # special
     source $MAIN_DIR/special/install.sh
@@ -31,7 +35,7 @@ MAIN_DIR=/home/jacob/Documents/git/helper/usr/local/bin/helper_package/helperMod
     source $MAIN_DIR/support/runSudo.sh
     source $MAIN_DIR/support/elevateCheck.sh
     
-while getopts "umdsf:iwav" FLAG; do
+while getopts "umdsf:iwavx" FLAG; do
     case "$FLAG" in
         u)
             elevateCheck
@@ -86,6 +90,15 @@ while getopts "umdsf:iwav" FLAG; do
         w)
             elevateCheck
             firewallWatcher
+            exit
+            ;;
+
+        x)
+            xfceFix
+            exit
+            ;;
+        v)
+            vpnLowRisk
             exit
             ;;
     esac
