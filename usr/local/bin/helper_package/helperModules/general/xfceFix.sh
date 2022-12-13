@@ -2,11 +2,14 @@
 
 function xfceFix
 {
-    #restart panel
-        xfce4-panel -r
+    echo "currently broke. Does nothing"
+    # restart panel
+        #su jacob -c xfce4-panel -r
 
-    #pulse
-    #BREAKS OUTPUT, WILL NOT SHOW ANY DEVICES
+    # lightdm - will fix xfce if panel restart breaks everything
+        #systemctl restart lightdm
+   
+    #pulse BREAKS OUTPUT, WILL NOT SHOW ANY DEVICES
         #systemctl --user restart pulseaudio.service
         #sleep 3
         #systemctl --user restart pulseaudio.socket
