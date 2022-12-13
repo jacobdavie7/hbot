@@ -26,7 +26,7 @@ Config
 ```
    -d  drawing     Setup drawing tablet
    -m  monitors    Setup displaylink and arrange monitors
-   -v  vpn         Setup Mullvad VPN
+   -v  vpn         Setup Mullvad VPN - REQUIRES ARGUMENT - See VPN section of Arguments below
 ```
 Firewalls
 ```
@@ -61,6 +61,12 @@ eastern  America/New_York"
 arizona  America/Phoenix"
 korea    Asia/Seoul"
 auto     GeoClue"
+```
+
+VPN
+```
+low   standard vpn config
+high  vpn config for higher risk sitiations + deploy limited firewall ruleset
 ```
 ## Extra Notes
 
