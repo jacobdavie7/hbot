@@ -3,6 +3,11 @@
 MAIN_DIR=/usr/local/bin/helper_package/helperModules
 #MAIN_DIR=/home/jacob/Documents/git/helper/usr/local/bin/helper_package/helperModules
 
+# general
+    source $MAIN_DIR/general/updater.sh
+    source $MAIN_DIR/general/xfceFix.sh
+    source $MAIN_DIR/general/clean.sh
+
 # config
     source $MAIN_DIR/config/drawing.sh
     source $MAIN_DIR/config/monitors.sh
@@ -22,10 +27,6 @@ MAIN_DIR=/usr/local/bin/helper_package/helperModules
         source $MAIN_DIR/firewalls/rulesets/firewallLocal.sh
         source $MAIN_DIR/firewalls/rulesets/firewallSecure.sh
 
-# general
-    source $MAIN_DIR/general/updater.sh
-    source $MAIN_DIR/general/xfceFix.sh
-
 # special
     source $MAIN_DIR/special/install.sh
     source $MAIN_DIR/special/startup.sh
@@ -35,7 +36,7 @@ MAIN_DIR=/usr/local/bin/helper_package/helperModules
     source $MAIN_DIR/support/runSudo.sh
     source $MAIN_DIR/support/elevateCheck.sh
     
-while getopts "umdsf:iwavx" FLAG; do
+while getopts "umdsf:iwavxc" FLAG; do
     case "$FLAG" in
         u)
             elevateCheck
@@ -97,8 +98,15 @@ while getopts "umdsf:iwavx" FLAG; do
             xfceFix
             exit
             ;;
+
         v)
             vpnLowRisk
+            exit
+            ;;
+
+        c)
+            elevateCheck
+            clean
             exit
             ;;
     esac
