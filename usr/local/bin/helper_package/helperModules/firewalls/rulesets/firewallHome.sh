@@ -34,6 +34,13 @@ function firewallHome
         iptables -A INPUT -s 127.0.0.1 -j ACCEPT -m comment --comment "ACCEPT all incoming on loopback"
         iptables -A OUTPUT -d 127.0.0.1 -j ACCEPT -m comment --comment "ACCEPT all outgoing on loopback"
 
+#USERS=( jacob root _apt www-data )
+#for U in "${USERS[@]}"
+#do
+#    echo " - SERVICE      $U         (OUT)"
+#        iptables -A OUTPUT -p PROTOCOL --dport PORT -m owner --uid-owner $U -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing SERVICE for $U"
+#done
+
     echo -e "\nALLOW services OUT"
         echo " - SSH        (OUT)"
             iptables -A OUTPUT -p tcp --dport 22 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing ssh"
@@ -45,8 +52,6 @@ function firewallHome
             iptables -A OUTPUT -p udp --dport 53 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing dns"
         echo " - PING       (OUT)"
             iptables -A OUTPUT -p icmp --icmp-type 8 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing ping request"
-        echo " - CUPS       (OUT)"
-            iptables -A OUTPUT -p tcp --dport 631 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing cups"
         echo " - Wireguard  (OUT)"
             iptables -A OUTPUT -p udp --dport 51820 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new wireguard"
         echo " - HTTP Dev   (OUT)"
