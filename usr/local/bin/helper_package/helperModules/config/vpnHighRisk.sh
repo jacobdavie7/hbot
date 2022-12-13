@@ -9,7 +9,7 @@ function vpnHighRisk ()
 
     # Keys
         echo -e "\nSet Wireguard Key Regen to 8 hours"
-            mullvad tunnel wireguard key rotation-interval set 8
+            mullvad tunnel wireguard key rotation-interval set 12
 
         echo -e "\nRegen Wireguard Key"
             mullvad tunnel wireguard key regenerate
