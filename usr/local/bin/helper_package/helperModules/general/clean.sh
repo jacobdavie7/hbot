@@ -2,24 +2,24 @@
 
 function clean
 {
-    echo -e "\napt autoremove (dependencies)"
+    echo -e "\nRemoving unused apt dependencies (autoremove)"
         apt autoremove -y
     
-    echo -e "\napt clean (cache)"
+    echo -e "\nRemoving apt cache (clean)"
         apt clean
     
-    echo -e "\nflatpak (runtimes)"
+    echo -e "\nRemoving unused flatpak runtimes"
         flatpak uninstall --unused -y
 
-    echo -e "\nGUI Trash"
+    echo -e "\nEmptying GUI trashcan"
         rm -r /home/jacob/.local/share/Trash/*
 
-    echo -e "\nthumbnails"
+    echo -e "\nRemoving GUI thumbnails"
         rm -r /home/jacob/.cache/thumbnails/*
 
-    echo -e "\ntmp"
+    echo -e "\nEmptying tmp"
         rm -r /tmp/*
 
-    echo -e "\njournalctl logs"
+    echo -e "\nVacuuming journalctl logs over 3 days"
         journalctl --vacuum-time=3d
 }
