@@ -12,6 +12,7 @@ MAIN_DIR=/usr/local/bin/helper_package/helperModules
     source $MAIN_DIR/config/drawing.sh
     source $MAIN_DIR/config/monitors.sh
     source $MAIN_DIR/config/vpnLowRisk.sh
+    source $MAIN_DIR/config/vpnHighRisk.sh
     source $MAIN_DIR/config/timezone.sh
 
 # firewalls
@@ -37,7 +38,7 @@ MAIN_DIR=/usr/local/bin/helper_package/helperModules
     source $MAIN_DIR/support/runSudo.sh
     source $MAIN_DIR/support/elevateCheck.sh
     
-while getopts "umdsf:iwavxct:" FLAG; do
+while getopts "umdsf:iwav:xct:" FLAG; do
     case "$FLAG" in
         u)
             elevateCheck
@@ -101,7 +102,12 @@ while getopts "umdsf:iwavxct:" FLAG; do
             ;;
 
         v)
-            vpnLowRisk
+            if [ "$OPTARG" == "low" ]; then
+                vpnLowRisk
+            exit
+            elif [ "$OPTARG" == "high" ]; then
+                vpnHighRisk
+            fi
             exit
             ;;
 
