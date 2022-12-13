@@ -12,6 +12,7 @@ MAIN_DIR=/usr/local/bin/helper_package/helperModules
     source $MAIN_DIR/config/drawing.sh
     source $MAIN_DIR/config/monitors.sh
     source $MAIN_DIR/config/vpnLowRisk.sh
+    source $MAIN_DIR/config/timezone.sh
 
 # firewalls
     source $MAIN_DIR/firewalls/firewallWatcher.sh
@@ -36,7 +37,7 @@ MAIN_DIR=/usr/local/bin/helper_package/helperModules
     source $MAIN_DIR/support/runSudo.sh
     source $MAIN_DIR/support/elevateCheck.sh
     
-while getopts "umdsf:iwavxc" FLAG; do
+while getopts "umdsf:iwavxct:" FLAG; do
     case "$FLAG" in
         u)
             elevateCheck
@@ -109,6 +110,36 @@ while getopts "umdsf:iwavxc" FLAG; do
             clean
             exit
             ;;
+        t)
+            elevateCheck
+            if [ "$OPTARG" == "pacific" ]; then
+                timezonePacific
+            exit
+            elif [ "$OPTARG" == "mountain" ]; then
+                timezoneMountain
+            exit
+            elif [ "$OPTARG" == "central" ]; then
+                timezoneCentral
+            exit
+            elif [ "$OPTARG" == "eastern" ]; then
+                timezoneEastern
+            exit
+            elif [ "$OPTARG" == "arizona" ]; then
+                timezoneArizona
+            exit
+            elif [ "$OPTARG" == "korea" ]; then
+                timezoneKorea
+            exit
+            elif [ "$OPTARG" == "auto" ]; then
+                timezoneAuto
+            exit
+            else
+                echo -e "\n\e[31mSorry, but '$OPTARG' is not a valid argument. See valid Arugments for option 'timezone' below\e[39m"
+                usage
+            fi
+            exit
+            ;;
+
     esac
 done
 
