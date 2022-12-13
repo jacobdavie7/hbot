@@ -19,8 +19,8 @@ General
 ```
    -u  updater     Updates from apt, flatpak, and snap
    -x  xfce fixer  Basic xfce fixes for when it breaks
-   -c  clean       Delete stuff for bounus space! (apt, fp, trash, thumbnails, tmp, logs)" 
-
+   -c  clean       Delete stuff for bounus space! (apt, fp, trash, thumbnails, tmp, logs)
+   -t  timezone    temporarily change timezone - REQUIRES ARGUMENT - See Timezone section of Arguments below
 ```
 Config
 ```
@@ -50,7 +50,17 @@ limited limited home use - Internet Only (HTTP, HTTPS, DNS)
 secure  encrypted internt only (HTTPS, DoH, DoT) - HTTP and DNS will NOT work
 local   no internet, use when doing 1337 hax"
 reset   FLUSH ALL rules and ACCEPT by default !!DANGER!!
+```
 
+Timezone
+```
+pacific  America/Los_Angeles"
+mountain America/Denver"
+central  America/Chicago"
+eastern  America/New_York"
+arizona  America/Phoenix"
+korea    Asia/Seoul"
+auto     GeoClue"
 ```
 ## Extra Notes
 
