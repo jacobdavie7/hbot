@@ -106,6 +106,7 @@ while getopts "umdsf:iwav:xct:" FLAG; do
                 vpnLowRisk
             exit
             elif [ "$OPTARG" == "high" ]; then
+                elevateCheck
                 vpnHighRisk
             fi
             exit
