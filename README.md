@@ -19,6 +19,8 @@ General
 ```
    -u  updater     Updates from apt, flatpak, and snap
    -x  xfce fixer  Basic xfce fixes for when it breaks
+   -c  clean       Delete stuff for bounus space! (apt, fp, trash, thumbnails, tmp, logs)" 
+
 ```
 Config
 ```
@@ -34,7 +36,7 @@ Firewalls
 
 Special
 ```
-   -s  startup     good modules to run on startup
+   -s  startup     Good modules to run on startup
    -i  install     Overall Machine Setup
 ```
 ## Arguments 
