@@ -65,8 +65,8 @@ auto     GeoClue"
 
 VPN
 ```
-low   standard vpn config
-high  vpn config for higher risk sitiations + deploy limited firewall ruleset
+low   standard vpn config + deploy home firewall ruleset
+high  vpn config for higher risk sitiations + deploy limitedVPN firewall ruleset WITH port 51820 for wireguard
 ```
 ## Extra Notes
 
