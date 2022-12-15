@@ -5,7 +5,7 @@ function vpnHighRisk ()
 
     # Deploy Limited Firewall Ruleset
         echo -e "\nCall the Home Limited Firewall Ruleset"
-            firewallHomeLimited
+            firewallHomeLimitedVPN
 
     # Keys
         echo -e "\nSet Wireguard Key Regen to 24 hours"
@@ -35,9 +35,9 @@ function vpnHighRisk ()
         echo -e "\nObfuscation On UDP 2 TCP"
             mullvad obfuscation set mode udp2tcp
 
-    #Quantum Resistance is highly experimental. Currently it is too buggy to be reliable. Note I WILL need to specify EXACT server that supports Quantum
-        #echo -e "\nEnable Quantum Resistance"
-            #mullvad tunnel wireguard quantum-resistant-tunnel set on
+    # Figure out what port this needs
+    #    echo -e "\nEnable Quantum Resistance"
+    #        mullvad tunnel wireguard quantum-resistant-tunnel set on
 
         echo -e "\nEnable MultiHop (Entry in Sweden)"
             mullvad relay set tunnel wireguard --entry-location se
