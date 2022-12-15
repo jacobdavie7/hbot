@@ -25,6 +25,7 @@ MAIN_DIR=/usr/local/bin/helper_package/helperModules
         source $MAIN_DIR/firewalls/rulesets/firewallBackup.sh
         source $MAIN_DIR/firewalls/rulesets/firewallReset.sh
         source $MAIN_DIR/firewalls/rulesets/firewallHomeLimited.sh
+        source $MAIN_DIR/firewalls/rulesets/firewallHomeLimitedVPN.sh
         source $MAIN_DIR/firewalls/rulesets/firewallHomeLax.sh
         source $MAIN_DIR/firewalls/rulesets/firewallLocal.sh
         source $MAIN_DIR/firewalls/rulesets/firewallSecure.sh
@@ -102,12 +103,15 @@ while getopts "umdsf:iwav:xct:" FLAG; do
             ;;
 
         v)
+            elevateCheck
             if [ "$OPTARG" == "low" ]; then
                 vpnLowRisk
             exit
             elif [ "$OPTARG" == "high" ]; then
-                elevateCheck
                 vpnHighRisk
+            else
+                echo -e "\n\e[31mSorry, but '$OPTARG' is not a valid argument. See valid Arugments for option 'vpn' below\e[39m"
+                usage
             fi
             exit
             ;;
