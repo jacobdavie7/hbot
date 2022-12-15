@@ -2,6 +2,11 @@
 
 function vpnLowRisk ()
 {
+
+    # Deploy Home Firewall Ruleset
+        echo -e "\nCall the Home Limited Firewall Ruleset"
+            firewallHome
+
     # Keys
         echo -e "\nSet Wireguard Key Regen to 72 hours"
             mullvad tunnel wireguard key rotation-interval set 72
@@ -25,7 +30,7 @@ function vpnLowRisk ()
        
     # Wireguard Settings
         echo -e "\nSet Port"
-            mullvad relay set tunnel wireguard --port 51820
+            mullvad relay set tunnel wireguard --port 53
 
         echo -e "\nObfuscation Auto"
             mullvad obfuscation set mode auto
