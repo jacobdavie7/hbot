@@ -22,5 +22,6 @@ function firewallHomeLax
             iptables -A INPUT -s 127.0.0.1 -j ACCEPT -m comment --comment "ACCEPT all incoming on loopback"
             iptables -A OUTPUT -d 127.0.0.1 -j ACCEPT -m comment --comment "ACCEPT all outgoing on loopback"
 
+    firewallv6Basic
     firewallPersistentSave
 }

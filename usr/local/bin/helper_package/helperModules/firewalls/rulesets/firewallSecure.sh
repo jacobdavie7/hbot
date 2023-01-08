@@ -40,5 +40,6 @@ function firewallHomeSecure
         echo " - DNS over TLS      (OUT)"
             iptables -A OUTPUT -p tcp --dport 853 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing dns over tls"
    
+   firewallv6Basic
    firewallPersistentSave
 }

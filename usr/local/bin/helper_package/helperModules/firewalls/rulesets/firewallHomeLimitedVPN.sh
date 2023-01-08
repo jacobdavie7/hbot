@@ -46,8 +46,6 @@ function firewallHomeLimitedVPN
         echo " - PING       (OUT)"   # needed to locate server
             iptables -A OUTPUT -p icmp --icmp-type 8 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing ping request"
     
+    firewallv6Basic
     firewallPersistentSave
 }
-
-
-

@@ -3,13 +3,19 @@
 function firewallWebServer
 {
     echo -e "\nSetting default policy to DROP"
-        iptables -P INPUT DROP
         iptables -P OUTPUT DROP
+        ip6tables -P OUTPUT DROP
+
+        iptables -P INPUT DROP
+        ip6tables -P INPUT DROP
+
         iptables -P FORWARD DROP
+        ip6tables -P FORWARD DROP
     
     echo -e "\nFlushing all chains"
     echo "   Includes IP's banned by Fail2Ban"
         iptables -F
+        ip6tables -F
 
     echo -e "\nDROP bad packets"
         echo " - XMAS       (IN)"

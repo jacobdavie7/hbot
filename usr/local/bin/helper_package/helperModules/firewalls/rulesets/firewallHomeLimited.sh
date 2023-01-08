@@ -42,5 +42,6 @@ function firewallHomeLimited
         echo " - DNS        (OUT)"
             iptables -A OUTPUT -p udp --dport 53 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing dns"
     
+    firewallv6Basic
     firewallPersistentSave
 }

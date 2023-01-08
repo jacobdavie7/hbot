@@ -29,6 +29,7 @@ MAIN_DIR=/usr/local/bin/helper_package/helperModules
         source $MAIN_DIR/firewalls/rulesets/firewallHomeLax.sh
         source $MAIN_DIR/firewalls/rulesets/firewallLocal.sh
         source $MAIN_DIR/firewalls/rulesets/firewallSecure.sh
+        source $MAIN_DIR/firewalls/rulesets/firewallv6Basic.sh
 
 # special
     source $MAIN_DIR/special/install.sh

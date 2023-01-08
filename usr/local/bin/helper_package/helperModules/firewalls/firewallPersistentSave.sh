@@ -9,6 +9,7 @@ function firewallPersistentSave
         echo -e "\e[31mUpon install, only the current ruleset will be saved. Changes to rules outside of the script will not be saved.\e[39m"
     else
         iptables-save > /etc/iptables/rules.v4
+        ip6tables-save > /etc/iptables/rules.v6
         echo -e "\n\e[32miptables-persistent found! Ruleset saved and will be persistent on restart.\e[39m\n"
     fi
 }

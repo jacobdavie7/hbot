@@ -3,13 +3,19 @@
 function firewallReset
 {
     echo -e "\n\e[91mReseting all Firewall Rules (Default Accept + Flush Chains)\e[39m"
-        echo -e "Setting default policy to ALLOW"
-            iptables -P INPUT ACCEPT
-            iptables -P OUTPUT ACCEPT
-            iptables -P FORWARD ACCEPT
+    echo -e "\nSetting default policy to ALLOW"
+        iptables -P OUTPUT ALLOW
+        ip6tables -P OUTPUT ALLOW
 
-        echo -e "Flushing all chains"
-            iptables -F
+        iptables -P INPUT ALLOW
+        ip6tables -P INPUT ALLOW
+
+        iptables -P FORWARD ALLOW
+        ip6tables -P FORWARD ALLOW
+
+    echo -e "\nFlushing all chains"
+        iptables -F
+        ip6tables -F
 
     firewallPersistentSave
 
