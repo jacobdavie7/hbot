@@ -23,25 +23,70 @@ function install
 
         # apt            # package usage listed below
             echo -e "\n Install APT Packages\n"
-                UTILITIES=( git tree htop dnsutils whois iptables curl ffmpeg ranger ncdu gzip unzip fonts-unfonts-core ibus-hangul zenity iptables-persistent network-manager-gnome v4l2loopback-dkms software-properties-common )
+                UTILITIES=(
+                    curl                            #
+                    dnsutils                        # contains dig
+                    ffmpeg                          # 
+                    fonts-unfonts-core              # display more lanuages
+                    git                             #
+                    gzip                            #
+                    htop                            #   
+                    ibus-hangul                     # input korean
+                    iptables                        #
+                    iptables-persistent             #
+                    ncdu                            # file sizes
+                    network-manager-gnome           # panel applet
+                    ntp                             #
+                    ranger                          # terminal file explorer
+                    software-properties-common      #
+                    tree                            #
+                    unzip                           #
+                    v4l2loopback-dkms               # video loopback device - needed for obs
+                    whois                           #
+                    zenity                          # draw windows for ibus
+                )
                 for U in "${UTILITIES[@]}"
                 do
                     apt install -y $U
                 done
 
-                APPLICATIONS=( gparted qdirstat vlc keepassxc flameshot pulseeffects libreoffice libreoffice-gtk3 galculator speedcrunch steghide screen lutris )
+                APPLICATIONS=(
+                    flameshot                       #
+                    galculator                      #   simple calculator
+                    gparted                         #
+                    keepassxc                       #
+                    libreoffice                     #
+                    libreoffice-gtk3                # make libreoffice look better
+                    pulseeffects                    #
+                    qdirstat                        #
+                    screen                          #
+                    speedcrunch                     # advanced calculator
+                    steghide                        #
+                    vlc                             #
+                )
                 for A in "${APPLICATIONS[@]}"
                 do
                     apt install -y $A
                 done
 
-                PACKAGE_MANAGERS=( flatpak snapd )
+                PACKAGE_MANAGERS=(
+                    flatpak                         #
+                    snapd                           #
+                )
                 for P in "${PACKAGE_MANAGERS[@]}"
                 do
                     apt install -y $P
                 done
 
-                FUN=( cmatrix hollywood neofetch cowsay lolcat fortune rig )
+                FUN=(
+                    cmatrix                         #
+                    cowsay                          #
+                    fortune                         #
+                    hollywood                       # l337 h@x
+                    lolcat                          #
+                    neofetch                        #
+                    rig                             # generate random fake id
+                )
                 for F in "${FUN[@]}"
                 do
                     apt install -y $F
@@ -62,7 +107,7 @@ function install
         # snap
             echo -e "\n Install SNAP Packages\n"
 
-            SNAP=( cpufetch )
+            SNAP=( cpufetch slack )
             for S in "${SNAP[@]}"
             do
                 snap install $S
@@ -80,12 +125,12 @@ function install
                 apt install /tmp/packages/./discord.deb
 
             # slack
-                wget https://downloads.slack-edge.com/releases/linux/4.28.184/prod/x64/slack-desktop-4.28.184-amd64.deb -P /tmp/packages
-                apt install /tmp/packages/./slack-desktop-4.28.184-amd64.deb
-                echo "deb https://packagecloud.io/slacktechnologies/slack/debian/ jessie main" | sudo tee /etc/apt/sources.list.d/slack.list
-                /etc/cron.daily/./slack
-                apt upgrade -y
-                apt autoremove -y
+            #    wget https://downloads.slack-edge.com/releases/linux/4.28.184/prod/x64/slack-desktop-4.28.184-amd64.deb -P /tmp/packages
+            #    apt install /tmp/packages/./slack-desktop-4.28.184-amd64.deb
+            #    echo "deb https://packagecloud.io/slacktechnologies/slack/debian/ jessie main" | sudo tee /etc/apt/sources.list.d/slack.list
+            #    /etc/cron.daily/./slack
+            #    apt upgrade -y
+            #    apt autoremove -y
             
             # visual studio
                 wget -O /tmp/packages/vscode.deb https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64 -P /tmp/packages # -O used to put into file, page does not give .deb file
@@ -123,16 +168,10 @@ function install
 
 
 
-# ranger                terminal file explorer
-# ncdu                  file sizes
-# fonts-unfonts-core    display more lanuages
-# ibus-hangul           input korean
-# zenity                draw windows for ibus
-# galculator            simple calculator
-# speedcrunch           advanced calculator
-# libreoffice-gtk3      make libreoffice look better
-#v4l2loopback-dkms      video loopback device - needed for obs
-#rig                    generate random fake id
+
+
+
+#rig                    
 #
 #
 #
