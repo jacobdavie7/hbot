@@ -34,8 +34,8 @@ function firewallHome
         iptables -A INPUT -s 127.0.0.1 -j ACCEPT -m comment --comment "ACCEPT all incoming on loopback"
         iptables -A OUTPUT -d 127.0.0.1 -j ACCEPT -m comment --comment "ACCEPT all outgoing on loopback"
 
+    echo -e "\nALLOW services OUT"
     USER_ACCOUNT=$(cat /etc/passwd | grep "1000" | cut -d':' -f1)
-
     USERS=( $USER_ACCOUNT root _apt _flatpak )
     for U in "${USERS[@]}"
     do
