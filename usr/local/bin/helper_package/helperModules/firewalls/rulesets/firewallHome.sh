@@ -76,7 +76,7 @@ function firewallHome
                 iptables -A OUTPUT -p udp --dport 3478 -m owner --uid-owner $U -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing to Steam for Voice Chat and P2P for $U"
                 iptables -A OUTPUT -p udp --dport 4379:4380 -m owner --uid-owner $U -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing to Steam for Voice Chat and P2P for $U"
     done
-        
+    
     firewallv6Basic    
     firewallPersistentSave
 
