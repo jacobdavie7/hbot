@@ -12,14 +12,21 @@ function clean
         flatpak uninstall --unused -y
 
     echo -e "\nEmptying GUI trashcan"
-        rm -r /home/jacob/.local/share/Trash/*
+        rm -r /home/$USER_ACCOUNT/.local/share/Trash/*
 
     echo -e "\nRemoving GUI thumbnails"
-        rm -r /home/jacob/.cache/thumbnails/*
+        rm -r /home/$USER_ACCOUNT/.cache/thumbnails/*
 
     echo -e "\nEmptying tmp"
         rm -r /tmp/*
 
     echo -e "\nVacuuming journalctl logs over 3 days"
         journalctl --vacuum-time=3d
+
+    echo -e "\n\e[4mEmpty Downloads for \e[91m$USER_ACCOUNT\e[39m (UID 1000)? (y or N)\e[24m"
+        read ANS
+        if [ "$ANS" == "y" ]; then
+            echo -e "\nRemoving downloads for $USER_ACCOUNT\n"
+            rm -r /home/$USER_ACCOUNT/Downloads/*
+        fi
 }
