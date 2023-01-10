@@ -146,6 +146,10 @@ function install
 
             echo -e '9.9.9.9\n1.1.1.1\n8.8.8.8' >> /etc/resolv.conf
 
+    # ntp
+        systemctl start ntp
+        systemctl enable ntp
+
     # setup firewall
         firewallHome
 
