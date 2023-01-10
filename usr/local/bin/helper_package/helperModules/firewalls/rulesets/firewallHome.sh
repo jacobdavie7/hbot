@@ -34,49 +34,88 @@ function firewallHome
         iptables -A INPUT -s 127.0.0.1 -j ACCEPT -m comment --comment "ACCEPT all incoming on loopback"
         iptables -A OUTPUT -d 127.0.0.1 -j ACCEPT -m comment --comment "ACCEPT all outgoing on loopback"
 
-    echo -e "\nALLOW services OUT"
-    USER_ACCOUNT=$(cat /etc/passwd | grep "1000" | cut -d':' -f1)
-    USERS=( $USER_ACCOUNT root _apt _flatpak )
-    for U in "${USERS[@]}"
-    do
-        echo " - HTTP       $U      (OUT)"
-            iptables -A OUTPUT -p tcp --dport 80 -m owner --uid-owner $U -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing http for $U"
-        echo " - HTTPS      $U      (OUT)"
-            iptables -A OUTPUT -p tcp --dport 443 -m owner --uid-owner $U -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing https for $U"
-        echo " - DNS        $U      (OUT)"
-            iptables -A OUTPUT -p udp --dport 53 -m owner --uid-owner $U -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing dns for $U"
-    done
 
-    USERS=( $USER_ACCOUNT root )
-    for U in "${USERS[@]}"
-    do
-        echo " - SSH        $U      (OUT)"
-            iptables -A OUTPUT -p tcp --dport 22 -m owner --uid-owner $U -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing ssh for $U"        
-        echo " - PING       $U      (OUT)"
-            iptables -A OUTPUT -p icmp --icmp-type 8 -m owner --uid-owner $U -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing ping request for $U"
-        echo " - Wireguard      $U      (OUT)"
-            iptables -A OUTPUT -p udp --dport 51820 -m owner --uid-owner $U -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new wireguard for $U"
-        echo " - HTTP Dev   $U      (OUT)"
-            iptables -A OUTPUT -p tcp --dport 8080 -m owner --uid-owner $U -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new HTTP Dev on 8080 (speedtest) for $U"
-        echo " - RTC        $U      (OUT)"
-            echo "   - VoIP STUN       $U      (OUT)"
-                iptables -A OUTPUT -p udp --dport 3478 -m owner --uid-owner $U -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing WebRTC to video conf. for $U"
-            echo "   - Google Meet     $U      (OUT)"
-                iptables -A OUTPUT -p udp --dport 19302:19309 -m owner --uid-owner $U -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing WebRTC to G-Meet fallback for $U"
-            echo "   - Discord         $U      (OUT)"
-                iptables -A OUTPUT -p udp --dport 50000:50050 -m owner --uid-owner $U -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing RTC to Discord for $U"
-        echo " - Steam      $U      (OUT)"
-            echo "   - Auth/Down/Client $U      (OUT)" 
-                iptables -A OUTPUT -p udp --dport 27000:27100 -m owner --uid-owner $U -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing to Steam for game traffic, auth, downloads, client, P2P, and VC for $U"
-            echo "   - Auth/Down TCP    $U      (OUT)"
-                iptables -A OUTPUT -p tcp --dport 27015:27050 -m owner --uid-owner $U -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing to Steam for auth and downloads TCP backup for $U"
-            echo "   - Client           $U      (OUT)"
-                iptables -A OUTPUT -p udp --dport 4380 -m owner --uid-owner $U -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing to Steam for client for $U"
-            echo "   - Voice Chat/P2P   $U      (OUT)"
-                iptables -A OUTPUT -p udp --dport 3478 -m owner --uid-owner $U -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing to Steam for Voice Chat and P2P for $U"
-                iptables -A OUTPUT -p udp --dport 4379:4380 -m owner --uid-owner $U -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing to Steam for Voice Chat and P2P for $U"
-    done
-    
+    echo -e "\nALLOW services OUT"
+        echo " - SSH        (OUT)"
+            iptables -A OUTPUT -p tcp --dport 22 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing ssh"
+        echo " - HTTP       (OUT)"
+            iptables -A OUTPUT -p tcp --dport 80 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing http"
+        echo " - HTTPS      (OUT)"
+            iptables -A OUTPUT -p tcp --dport 443 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing https"
+        echo " - DNS        (OUT)"
+            iptables -A OUTPUT -p udp --dport 53 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing dns"
+        echo " - PING       (OUT)"
+            iptables -A OUTPUT -p icmp --icmp-type 8 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing ping request"
+        echo " - Wireguard  (OUT)"
+            iptables -A OUTPUT -p udp --dport 51820 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new wireguard"
+        echo " - HTTP Dev   (OUT)"
+            iptables -A OUTPUT -p tcp --dport 8080 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new HTTP Dev on 8080 (speedtest)"
+        echo " - NTP        (OUT)"
+            iptables -A OUTPUT -p udp --dport 123 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new NTP"
+        echo " - RTC        (OUT)"
+            echo "   - VoIP STUN         (OUT)"
+                iptables -A OUTPUT -p udp --dport 3478 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing WebRTC to video conf."
+            echo "   - Google Meet       (OUT)"
+                iptables -A OUTPUT -p udp --dport 19302:19309 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing WebRTC to G-Meet fallback"
+            echo "   - Discord           (OUT)"
+                iptables -A OUTPUT -p udp --dport 50000:50050 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing RTC to Discord"
+        echo " - Steam      (OUT)"
+            echo "   - Auth/Down/Client  (OUT)" 
+                iptables -A OUTPUT -p udp --dport 27000:27100 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing to Steam for game traffic, auth, downloads, client, P2P, and VC"
+            echo "   - Auth/Down TCP     (OUT)"
+                iptables -A OUTPUT -p tcp --dport 27015:27050 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing to Steam for auth and downloads TCP backup"
+            echo "   - Client            (OUT)"
+                iptables -A OUTPUT -p udp --dport 4380 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing to Steam for client"
+            echo "   - Voice Chat/P2P    (OUT)"
+                iptables -A OUTPUT -p udp --dport 3478 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing to Steam for Voice Chat and P2P"
+                iptables -A OUTPUT -p udp --dport 4379:4380 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing to Steam for Voice Chat and P2P"
+
+
+
+
+#    echo -e "\nALLOW services OUT"
+#    USER_ACCOUNT=$(cat /etc/passwd | grep "1000" | cut -d':' -f1)
+#    USERS=( $USER_ACCOUNT root _apt _flatpak )
+#    for U in "${USERS[@]}"
+#    do
+#        echo " - HTTP       $U      (OUT)"
+#            iptables -A OUTPUT -p tcp --dport 80 -m owner --uid-owner $U -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing http for $U"
+#        echo " - HTTPS      $U      (OUT)"
+#            iptables -A OUTPUT -p tcp --dport 443 -m owner --uid-owner $U -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing https for $U"
+#        echo " - DNS        $U      (OUT)"
+#            iptables -A OUTPUT -p udp --dport 53 -m owner --uid-owner $U -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing dns for $U"
+#    done
+#
+#    USERS=( $USER_ACCOUNT root )
+#    for U in "${USERS[@]}"
+#    do
+#        echo " - SSH        $U      (OUT)"
+#            iptables -A OUTPUT -p tcp --dport 22 -m owner --uid-owner $U -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing ssh for $U"        
+#        echo " - PING       $U      (OUT)"
+#            iptables -A OUTPUT -p icmp --icmp-type 8 -m owner --uid-owner $U -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing ping request for $U"
+#        echo " - Wireguard      $U      (OUT)"
+#            iptables -A OUTPUT -p udp --dport 51820 -m owner --uid-owner $U -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new wireguard for $U"
+#        echo " - HTTP Dev   $U      (OUT)"
+#            iptables -A OUTPUT -p tcp --dport 8080 -m owner --uid-owner $U -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new HTTP Dev on 8080 (speedtest) for $U"
+#        echo " - RTC        $U      (OUT)"
+#            echo "   - VoIP STUN       $U      (OUT)"
+#                iptables -A OUTPUT -p udp --dport 3478 -m owner --uid-owner $U -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing WebRTC to video conf. for $U"
+#            echo "   - Google Meet     $U      (OUT)"
+#                iptables -A OUTPUT -p udp --dport 19302:19309 -m owner --uid-owner $U -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing WebRTC to G-Meet fallback for $U"
+#            echo "   - Discord         $U      (OUT)"
+#                iptables -A OUTPUT -p udp --dport 50000:50050 -m owner --uid-owner $U -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing RTC to Discord for $U"
+#        echo " - Steam      $U      (OUT)"
+#            echo "   - Auth/Down/Client $U      (OUT)" 
+#                iptables -A OUTPUT -p udp --dport 27000:27100 -m owner --uid-owner $U -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing to Steam for game traffic, auth, downloads, client, P2P, and VC for $U"
+#            echo "   - Auth/Down TCP    $U      (OUT)"
+#                iptables -A OUTPUT -p tcp --dport 27015:27050 -m owner --uid-owner $U -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing to Steam for auth and downloads TCP backup for $U"
+#            echo "   - Client           $U      (OUT)"
+#                iptables -A OUTPUT -p udp --dport 4380 -m owner --uid-owner $U -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing to Steam for client for $U"
+#            echo "   - Voice Chat/P2P   $U      (OUT)"
+#                iptables -A OUTPUT -p udp --dport 3478 -m owner --uid-owner $U -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing to Steam for Voice Chat and P2P for $U"
+#                iptables -A OUTPUT -p udp --dport 4379:4380 -m owner --uid-owner $U -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing to Steam for Voice Chat and P2P for $U"
+#    done
+
     firewallv6Basic    
     firewallPersistentSave
 
