@@ -74,7 +74,6 @@ function firewallHome
 
 
 #    echo -e "\nALLOW services OUT"
-#    USER_ACCOUNT=$(cat /etc/passwd | grep "1000" | cut -d':' -f1)
 #    USERS=( $USER_ACCOUNT root _apt _flatpak )
 #    for U in "${USERS[@]}"
 #    do

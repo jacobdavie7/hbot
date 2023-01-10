@@ -39,6 +39,7 @@ MAIN_DIR=/usr/local/bin/helper_package/helperModules
     source $MAIN_DIR/support/usage.sh
     source $MAIN_DIR/support/runSudo.sh
     source $MAIN_DIR/support/elevateCheck.sh
+    source $MAIN_DIR/support/userAccount.sh
     
 while getopts "umdsf:iwav:xct:" FLAG; do
     case "$FLAG" in
@@ -63,6 +64,7 @@ while getopts "umdsf:iwav:xct:" FLAG; do
             ;;
         f)
             elevateCheck
+            userAccount
             if [ "$OPTARG" == "home" ]; then
                 firewallHome
             elif [ "$OPTARG" == "web" ]; then
@@ -99,6 +101,7 @@ while getopts "umdsf:iwav:xct:" FLAG; do
             ;;
 
         x)
+            userAccount
             xfceFix
             exit
             ;;
@@ -119,6 +122,7 @@ while getopts "umdsf:iwav:xct:" FLAG; do
 
         c)
             elevateCheck
+            userAccount
             clean
             exit
             ;;

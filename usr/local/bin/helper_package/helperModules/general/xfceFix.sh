@@ -4,7 +4,7 @@ function xfceFix
 {
     echo "currently broke. Does nothing"
     # restart panel
-        #su jacob -c xfce4-panel -r
+        #su $USER_ACCOUNT -c xfce4-panel -r
 
     # lightdm - will fix xfce if panel restart breaks everything
         #systemctl restart lightdm
