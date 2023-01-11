@@ -13,7 +13,7 @@ function usage
     echo -e "           -v  vpn*         setup Mullvad VPN, - REQUIRES ARGUMENT - Mullvad must be running LOCALLY"
     echo -e "                   home     standard vpn config + deploy home firewall ruleset"
     echo -e "                   mobile   home vpn config without local LAN access"
-echo -e "                       high     vpn config for higher risk sitiations + deploy limitedVPN firewall"
+    echo -e "                   high     vpn config for higher risk sitiations + deploy limitedVPN firewall"
     echo -e "           -t  timezone*    temporarily change timezone - REQUIRES ARGUMENT"   
     echo -e "                   pacific  America/Los_Angeles"
     echo -e "                   mountain America/Denver"

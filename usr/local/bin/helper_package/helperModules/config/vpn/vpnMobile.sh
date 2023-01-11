@@ -15,7 +15,7 @@ function vpnMobile ()
             mullvad relay set location us
     
     # VPN Settings
-        echo -e "\nAllow local LAN Devices"
+        echo -e "\nBlock local LAN Devices"
             mullvad lan set block
     
         echo -e "\nSet DNS to Block: Ads, Maleware, Tracking, Gambling, Adult"
