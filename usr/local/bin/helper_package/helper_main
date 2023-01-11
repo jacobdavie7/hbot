@@ -11,9 +11,13 @@ MAIN_DIR=/usr/local/bin/helper_package/helperModules
 # config
     source $MAIN_DIR/config/drawing.sh
     source $MAIN_DIR/config/monitors.sh
-    source $MAIN_DIR/config/vpnLowRisk.sh
-    source $MAIN_DIR/config/vpnHighRisk.sh
+
     source $MAIN_DIR/config/timezone.sh
+
+        # vpn
+            source $MAIN_DIR/config/vpn/vpnHome.sh
+            source $MAIN_DIR/config/vpn/vpnMobile.sh
+            source $MAIN_DIR/config/vpn/vpnHighRisk.sh
 
 # firewalls
     source $MAIN_DIR/firewalls/firewallWatcher.sh
@@ -107,10 +111,11 @@ while getopts "umdsf:iwav:xct:" FLAG; do
             ;;
 
         v)
-            elevateCheck
-            if [ "$OPTARG" == "low" ]; then
-                vpnLowRisk
-            exit
+            elevateCheck    #needed for firewall
+            if [ "$OPTARG" == "home" ]; then
+                vpnHome
+            elif [ "$OPTARG" == "mobile" ]; then
+                vpnMobile
             elif [ "$OPTARG" == "high" ]; then
                 vpnHighRisk
             else

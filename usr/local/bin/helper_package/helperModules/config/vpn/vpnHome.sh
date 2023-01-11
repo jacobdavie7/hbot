@@ -1,10 +1,9 @@
 #!/bin/bash
 
-function vpnLowRisk ()
+function vpnHome ()
 {
-
     # Deploy Home Firewall Ruleset
-        echo -e "\nCall the Home Limited Firewall Ruleset"
+        echo -e "\nCall the Home Firewall Ruleset"
             firewallHome
 
     # Keys
