@@ -19,7 +19,7 @@ General
 ```
    -u  updater     Updates from apt, flatpak, and snap
    -x  xfce fixer  Basic xfce fixes for when it breaks
-   -c  clean       Delete stuff for bounus space! (apt, fp, trash, thumbnails, tmp, logs)
+   -c  clean       Delete stuff for bounus space! (apt, fp, trash, thumbnails, tmp, logs, downloads)
    -t  timezone    temporarily change timezone - REQUIRES ARGUMENT - See Timezone section of Arguments below
 ```
 Config
@@ -65,8 +65,9 @@ auto     GeoClue"
 
 VPN
 ```
-low   standard vpn config + deploy home firewall ruleset
-high  vpn config for higher risk sitiations + deploy limitedVPN firewall ruleset WITH port 51820 for wireguard
+home   standard vpn config + deploy home firewall ruleset
+mobile home vpn config without local LAN access
+high   vpn config for higher risk sitiations + deploy limitedVPN firewall
 ```
 ## Extra Notes
 
@@ -89,6 +90,12 @@ high  vpn config for higher risk sitiations + deploy limitedVPN firewall ruleset
 <br><br>
 * Yes, I am (now) aware the watch command exists, which can replace the watcher module. This module may be depricated in the future
 
+### clean
+* Everything removed will be irrecoverable.
+* This modual will remove logs from journalctl that are over 3 days old
+* This modual will remove unused apt dependencies (autoremove), remove the apt cache (clean), and uninstall unused flatpak runtimes (unused).
+* This modual will empty the tmp folder, as well as the trash (items delted from GUI file manager) and thumbnails (icon previews of files in gui file manager) for the user account with the UID of 1000. 
+* This modual will also give the option to remove all files in the Downloads folder for user with UID of 1000.
 
 ## Installation
 ### Get the Debian package
