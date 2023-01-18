@@ -52,7 +52,7 @@ function install
 
                 APPLICATIONS=(
                     flameshot                       #
-                    galculator                      #   simple calculator
+                    galculator                      # simple calculator
                     gparted                         #
                     keepassxc                       #
                     libreoffice                     #
