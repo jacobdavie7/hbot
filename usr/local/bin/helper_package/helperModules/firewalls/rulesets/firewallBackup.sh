@@ -25,7 +25,7 @@ function firewallBackupServer
         echo " - SYN Flood  (IN)"
             iptables -A INPUT -p tcp --syn -m hashlimit --hashlimit-name synFlood --hashlimit-above 30/s -j DROP -m comment --comment "LIMIT SYN to 30/sec"
 
-    echo -e "\nALLOW anything marked RELATED/ESTABLISHED"
+    echo -e "\nALLOW everything marked RELATED/ESTABLISHED"
         iptables -A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT -m comment --comment "ACCEPT incoming RELATED/ESTABLISHED"
         iptables -A OUTPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT -m comment --comment "ACCEPT outgoing RELATED/ESTABLISHED"
 

@@ -8,17 +8,17 @@ function firewallHomeLax
             iptables -P INPUT DROP
             iptables -P FORWARD DROP
             
-        echo -e "Setting default OUTPUT policy to ALLOW"
+        echo -e "Setting default OUTPUT policy to ACCEPT"
             iptables -P OUTPUT ACCEPT
 
         echo -e "\nFlushing all chains"
             iptables -F
 
-        echo -e "\nALLOW anything marked RELATED/ESTABLISHED"
+        echo -e "\nACCEPT everything marked RELATED/ESTABLISHED"
             iptables -A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT -m comment --comment "ACCEPT incoming RELATED/ESTABLISHED"
             iptables -A OUTPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT -m comment --comment "ACCEPT outgoing RELATED/ESTABLISHED"
     
-        echo "ALLOW everything on loopback"
+        echo "ACCEPT everything on loopback"
             iptables -A INPUT -s 127.0.0.1 -j ACCEPT -m comment --comment "ACCEPT all incoming on loopback"
             iptables -A OUTPUT -d 127.0.0.1 -j ACCEPT -m comment --comment "ACCEPT all outgoing on loopback"
 

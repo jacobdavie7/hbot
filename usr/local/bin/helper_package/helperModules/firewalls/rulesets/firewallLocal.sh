@@ -12,7 +12,7 @@ function firewallLocal
     echo -e "\nFlushing all chains"
         iptables -F
  
-    echo -e "\nALLOW anything marked RELATED/ESTABLISHED"
+    echo -e "\nALLOW everything marked RELATED/ESTABLISHED"
         iptables -A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT -m comment --comment "ACCEPT incoming RELATED/ESTABLISHED"
         iptables -A OUTPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT -m comment --comment "ACCEPT outgoing RELATED/ESTABLISHED"
 
