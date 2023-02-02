@@ -42,6 +42,7 @@ function install
                     tree                            #
                     unzip                           #
                     v4l2loopback-dkms               # video loopback device - needed for obs
+                    vim                             #
                     whois                           #
                     zenity                          # draw windows for ibus
                 )
@@ -136,10 +137,21 @@ function install
                 wget -O /tmp/packages/vscode.deb https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64 -P /tmp/packages # -O used to put into file, page does not give .deb file
                 apt install /tmp/packages/./vscode.deb
 
-            #spotify
+            # spotify
                 curl -sS https://download.spotify.com/debian/pubkey_5E3C45D7B312C643.gpg | sudo apt-key add - 
                 echo "deb http://repository.spotify.com stable non-free" | sudo tee /etc/apt/sources.list.d/spotify.list
                 sudo apt-get update && sudo apt-get install spotify-client
+
+            # mullvad
+            # virtual box
+            # tor
+            # xournalpp
+            
+
+    # setup unattended upgrades
+        sudo dpkg-reconfigure --priority=low unattended-upgrades
+        # make choose yes
+        # check with "sudo systemctl status unattended-upgrades.service"
 
     # update DNS servers
         echo -e "\n Update DNS Servers\n"
