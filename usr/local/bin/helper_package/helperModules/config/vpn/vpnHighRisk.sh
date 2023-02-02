@@ -26,15 +26,14 @@ function vpnHighRisk ()
             mullvad relay set tunnel-protocol wireguard
        
     # Wireguard Settings
-        echo -e "\nSet Port"
-            mullvad relay set tunnel wireguard --port 53
+        echo -e "\nSet Port to 51820"
+            mullvad relay set tunnel wireguard --port 51820
 
-        echo -e "\nObfuscation On UDP 2 TCP"
+        echo -e "\nObfuscation On UDP over TCP"
             mullvad obfuscation set mode udp2tcp
 
-    # Figure out what port this needs
-    #    echo -e "\nEnable Quantum Resistance"
-    #        mullvad tunnel wireguard quantum-resistant-tunnel set on
+        echo -e "\nEnable Quantum Resistance"
+            mullvad tunnel wireguard quantum-resistant-tunnel set on
 
         echo -e "\nEnable MultiHop (Entry in Sweden)"
             mullvad relay set tunnel wireguard --entry-location se
