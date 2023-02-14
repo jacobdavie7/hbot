@@ -2,7 +2,6 @@
 
 function vpnHighRisk ()
 {
-
     # Deploy Limited Firewall Ruleset
         echo -e "\nCall the Home Limited Firewall Ruleset"
             firewallHomeLimitedVPN
@@ -35,8 +34,9 @@ function vpnHighRisk ()
         echo -e "\nEnable Quantum Resistance"
             mullvad tunnel wireguard quantum-resistant-tunnel set on
 
-        echo -e "\nEnable MultiHop (Entry in Sweden)"
-            mullvad relay set tunnel wireguard --entry-location se
+        # Can't run multihop with Quantum
+        # echo -e "\nEnable MultiHop (Entry in Sweden)"
+        #     mullvad relay set tunnel wireguard --entry-location se
 
     # Connect
         echo -e "\nEnable Auto Connect"
