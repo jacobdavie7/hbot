@@ -52,6 +52,7 @@ function install
                 done
 
                 APPLICATIONS=(
+                    firefox-esr                     #
                     flameshot                       #
                     galculator                      # simple calculator
                     gparted                         #
@@ -63,7 +64,9 @@ function install
                     screen                          #
                     speedcrunch                     # advanced calculator
                     steghide                        #
+                    thunderbird                     #
                     vlc                             #
+                    wireshark                       #
                 )
                 for A in "${APPLICATIONS[@]}"
                 do
