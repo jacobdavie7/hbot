@@ -1,7 +1,7 @@
 #!/bin/bash
 
 MAIN_DIR=/usr/local/bin/helper_package/helperModules
-#MAIN_DIR=/home/jacob/Documents/git/helper/usr/local/bin/helper_package/helperModules
+#MAIN_DIR=/srv/git/helper/usr/local/bin/helper_package/helperModules
 
 # general
     source $MAIN_DIR/general/updater.sh
@@ -52,20 +52,24 @@ while getopts "umdsf:iwav:xct:" FLAG; do
             updater
             exit
             ;;
+
         m)
             monitors
             exit
             ;;
+
         d)
             elevateCheck
             drawing
             exit
             ;;
+
         s)
             elevateCheck
             startup
             exit
             ;;
+
         f)
             elevateCheck
             userAccount
@@ -97,7 +101,7 @@ while getopts "umdsf:iwav:xct:" FLAG; do
             install
             exit
             ;;
-            
+
         w)
             elevateCheck
             firewallWatcher
@@ -131,6 +135,7 @@ while getopts "umdsf:iwav:xct:" FLAG; do
             clean
             exit
             ;;
+
         t)
             elevateCheck
             if [ "$OPTARG" == "pacific" ]; then
