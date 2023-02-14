@@ -65,6 +65,8 @@ function firewallHome
             iptables -A OUTPUT -p tcp --dport 8006 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing ProxMox VE Managment"
         echo " - NTP        (ACCEPT - OUT)"
             iptables -A OUTPUT -p udp --dport 123 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing NTP"
+        echo " - ZeroTier   (ACCEPT - OUT)"
+            iptables -A OUTPUT -p udp --dport 9993 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing udp ZeroTier"
         echo " - RTC"
             echo "   - VoIP STUN         (ACCEPT - OUT)"
                 iptables -A OUTPUT -p udp --dport 3478 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing WebRTC to video conf."
