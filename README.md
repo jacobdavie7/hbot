@@ -42,14 +42,15 @@ Special
 ## Arguments 
 Firewall
 ```
-web     web server use
-backup  backup server use
-home    standard home use
-lax     lax home use - Allow all Out
-limited limited home use - Internet Only (HTTP, HTTPS, DNS)
-secure  encrypted internt only (HTTPS, DoH, DoT) - HTTP and DNS will NOT work
-local   no internet, use when doing 1337 hax"
-reset   FLUSH ALL rules and ACCEPT by default !!DANGER!!
+home     standard home use"
+lax      lax home use - Allow all Out"
+limited  limited home use - Internet Only (HTTP, HTTPS, DNS)"
+secure   encrypted internt only (HTTPS, DoH, DoT) - HTTP and DNS will NOT work"
+class    extra ports for class"
+local    no internet, use when doing 1337 hax"
+web      web server use"
+backup   backup server use"
+reset    FLUSH ALL rules and ACCEPT by default !!DANGER!!"
 ```
 
 Timezone
@@ -78,9 +79,11 @@ high   vpn config for higher risk sitiations + deploy limitedVPN firewall
 * Note that choosing reset will FLUSH ALL rules and ACCEPT by default. Effectively, you have no firewall. Use with caution!
 <br><br>
 * All home rulesets ONLY allow related/established traffic IN
+* The standard home ruleset will allow all nessesary ports needed for daily-driver computer usage OUT
 * The lax home ruleset will allow any traffic OUT
 * The limited home ruleset will only allow HTTP/HTTPS/DNS traffic OUT
-* The standard home ruleset will allow all nessesary ports needed for daily-driver computer usage OUT
+* The secure home ruleset will only allow out protocols that are encrypted OUT
+* The class class ruleset allows extra ports used in class. Allows SSH IN
 * The local home ruleset will only allow all private IP's and localhost, NO internet access. Great for 1337 h@x practice on local network
 <br><br>
 * The webserver ruleset allows ssh, http, and https IN. Ports reqired for data out are allowed on a per-user basis.

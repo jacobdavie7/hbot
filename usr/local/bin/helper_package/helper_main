@@ -31,6 +31,7 @@ MAIN_DIR=/usr/local/bin/helper_package/helperModules
         source $MAIN_DIR/firewalls/rulesets/firewallHomeLimited.sh
         source $MAIN_DIR/firewalls/rulesets/firewallHomeLimitedVPN.sh
         source $MAIN_DIR/firewalls/rulesets/firewallHomeLax.sh
+        source $MAIN_DIR/firewalls/rulesets/firewallClass.sh
         source $MAIN_DIR/firewalls/rulesets/firewallLocal.sh
         source $MAIN_DIR/firewalls/rulesets/firewallSecure.sh
         source $MAIN_DIR/firewalls/rulesets/firewallv6Basic.sh
@@ -89,6 +90,8 @@ while getopts "umdsf:iwav:xct:" FLAG; do
                 firewallLocal
             elif [ "$OPTARG" == "secure" ]; then
                 firewallHomeSecure
+            elif [ "$OPTARG" == "class" ]; then
+                firewallClass
             else
                 echo -e "\n\e[31mSorry, but '$OPTARG' is not a valid argument. See valid Arugments for option 'firewall' below\e[39m"
                 usage
