@@ -63,6 +63,8 @@ function firewallHome
             iptables -A OUTPUT -p tcp --dport 8080 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing HTTP Dev on 8080"
         echo " - ProxMox VE (ACCEPT - OUT)"
             iptables -A OUTPUT -p tcp --dport 8006 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing ProxMox VE Managment"
+        echo " - ProxMox BS (ACCEPT - OUT)"
+            iptables -A OUTPUT -p tcp --dport 8007 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing ProxMox Backup Managment"
         echo " - NTP        (ACCEPT - OUT)"
             iptables -A OUTPUT -p udp --dport 123 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing NTP"
         echo " - ZeroTier   (ACCEPT - OUT)"
