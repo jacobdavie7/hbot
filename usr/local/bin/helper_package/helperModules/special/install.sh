@@ -30,10 +30,12 @@ function install
                     fonts-unfonts-core              # display more lanuages
                     git                             #
                     gzip                            #
+                    hdparm                          #
                     htop                            #   
                     ibus-hangul                     # input korean
                     iptables                        #
                     iptables-persistent             #
+                    lshw                            # list hardware, view cpu details
                     ncdu                            # file sizes
                     network-manager-gnome           # panel applet
                     ntp                             #
@@ -56,9 +58,11 @@ function install
                     flameshot                       #
                     galculator                      # simple calculator
                     gparted                         #
+                    gqrx-sdr                        # sdr
                     keepassxc                       #
                     libreoffice                     #
                     libreoffice-gtk3                # make libreoffice look better
+                    obs-studio                      #
                     pulseeffects                    #
                     qdirstat                        #
                     screen                          #
@@ -102,7 +106,7 @@ function install
                 # add flathub repo
                     flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 
-                FLATPAK=( com.github.xournalpp.xournalpp com.obsproject.Studio )
+                FLATPAK=( com.github.xournalpp.xournalpp )
                 for F in "${FLATPAK[@]}"
                 do
                     flatpak install flathub $F
@@ -111,7 +115,7 @@ function install
         # snap
             echo -e "\n Install SNAP Packages\n"
 
-            SNAP=( cpufetch slack )
+            SNAP=( slack )
             for S in "${SNAP[@]}"
             do
                 snap install $S
