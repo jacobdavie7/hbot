@@ -35,6 +35,8 @@ function install
                     ibus-hangul                     # input korean
                     iptables                        #
                     iptables-persistent             #
+                    libpcslite-dev                  # smartcard access via pc/sc (proxmark)
+                    libreadline-dev                 # consistent ui to recall lines of previously input (proxmark)
                     lshw                            # list hardware, view cpu details
                     ncdu                            # file sizes
                     network-manager-gnome           # panel applet
@@ -174,6 +176,19 @@ function install
 
     # set hostname
         
+    # from drawing module, put this here so don't need sudo.    
+        #Append 70-wacom.conf
+        XORG_APPEND=$(cat /usr/share/X11/xorg.conf.d/70-wacom.conf | grep "S620" | cut -d' ' -f2,3 | sed 's/ //g')
+            if [ "$XORG_APPEND" != "GaomonS620" ]; then
+                chmod 664 /usr/share/X11/xorg.conf.d/70-wacom.conf #Requires root
+                echo -e '\n\n# Gaomon S620\nSection "InputClass"\n\tIdentifier "GAOMON Gaomon Tablet"\n\tMatchUSBID  "256c:006d"\n\tMatchDevicePath "/dev/input/event*"\n\tDriver "wacom"\nEndSection' >> /usr/share/X11/xorg.conf.d/70-wacom.conf
+                chmod 644 /usr/share/X11/xorg.conf.d/70-wacom.conf #Requires root
+                echo -e "Need to Restart/Logout Before Continuing. Do so and Run Script Again"
+                exit
+            else
+                echo -e "\nEntry in config found!"
+            fi
+
 
 
 
@@ -189,20 +204,3 @@ function install
     # Provider 1: id: 0x138 cap: 0x2, Sink Output crtcs: 1 outputs: 1 associated providers: 0 name:modesetting
     # ...Goes to provider 4, looks like provider 1                                          ^ This 0 should change to 1 after the commands below
 
-
-
-
-
-
-#rig                    
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
