@@ -8,7 +8,7 @@ function usage
     echo -e "           -x  xfce fixer   basic xfce fixes for when it breaks"
     echo -e "           -c  clean*       delete stuff for bounus space! (apt, fp, trash, thumbnails, tmp, logs, downloads)" 
     echo -e "\n       Config"
-    echo -e "           -d  drawing*     setup drawing tablet"
+    echo -e "           -d  drawing      setup drawing tablet"
     echo -e "           -m  monitors     setup displaylink and arrange monitors"
     echo -e "           -v  vpn*         setup Mullvad VPN, - REQUIRES ARGUMENT - Mullvad must be running LOCALLY"
     echo -e "                   home     standard vpn config + deploy home firewall ruleset"
