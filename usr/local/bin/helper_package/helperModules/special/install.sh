@@ -38,6 +38,7 @@ function install
                     libpcslite-dev                  # smartcard access via pc/sc (proxmark)
                     libreadline-dev                 # consistent ui to recall lines of previously input (proxmark)
                     lshw                            # list hardware, view cpu details
+                    menulibre                       # edit applications whisker menu can open (add app images)
                     ncdu                            # file sizes
                     network-manager-gnome           # panel applet
                     ntp                             #
@@ -49,6 +50,7 @@ function install
                     vim                             #
                     whois                           #
                     zenity                          # draw windows for ibus
+                    zip                             #
                 )
                 for U in "${UTILITIES[@]}"
                 do
@@ -59,6 +61,7 @@ function install
                     firefox-esr                     #
                     flameshot                       #
                     galculator                      # simple calculator
+                    gnome-disk-utility
                     gparted                         #
                     gqrx-sdr                        # sdr
                     keepassxc                       #
