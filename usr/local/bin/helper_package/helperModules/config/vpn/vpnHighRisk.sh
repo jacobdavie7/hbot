@@ -34,9 +34,9 @@ function vpnHighRisk ()
         echo -e "\nEnable Quantum Resistance"
             mullvad tunnel wireguard quantum-resistant-tunnel set on
 
-        # Can't run multihop with Quantum
-        # echo -e "\nEnable MultiHop (Entry in Sweden)"
-        #     mullvad relay set tunnel wireguard --entry-location se
+        # Can't run multihop with Quantum (when is beta)
+         echo -e "\nEnable MultiHop (Entry in Sweden)"
+             mullvad relay set tunnel wireguard --entry-location se
 
     # Connect
         echo -e "\nEnable Auto Connect"

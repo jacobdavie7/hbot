@@ -31,8 +31,8 @@ function vpnMobile ()
         echo -e "\nObfuscation Auto"
             mullvad obfuscation set mode auto
 
-        echo -e "\nDisable Quantum Resistance"
-            mullvad tunnel wireguard quantum-resistant-tunnel set off
+        echo -e "\nEnable Quantum Resistance"
+            mullvad tunnel wireguard quantum-resistant-tunnel set on
 
         echo -e "\nDisable MultiHop"
             mullvad relay set tunnel wireguard --entry-location none
