@@ -11,46 +11,45 @@ function install
     # updates
         updater
 
-    # sudo 
-        echo -e "\n Sudo Group"
-                USER_ACCOUNT_NAME=$(id -n -u)
-            echo " - installing sudo"
-                apt install sudo
-            echo " - Adding $USER_ACCOUNT_NAME to the sudo group"
-                usermod -a -G sudo $USER_ACCOUNT_NAME
+
     
+# add contrib and non-free repos, change http to https, do this before steam and nvidia
+# install nvidia-detect, grab what it wants you to install, do this uphere, before steam
+
+
     # install packages
 
         # apt            # package usage listed below
             echo -e "\n Install APT Packages\n"
                 UTILITIES=(
-                    curl                            #
+                    curl                            # interact with urls
                     dnsutils                        # contains dig
-                    ffmpeg                          # 
+                    ffmpeg                          # video converter/media formats
                     fonts-unfonts-core              # display more lanuages
-                    git                             #
-                    gzip                            #
-                    hdparm                          #
-                    htop                            #   
+                    git                             # content tracker
+                    gzip                            # gzip compression
+                    hdparm                          # get drive parameters
+                    htop                            # proccess viewer
                     ibus-hangul                     # input korean
-                    iptables                        #
-                    iptables-persistent             #
+                    iptables                        # firewall
+                    iptables-persistent             # make ruleset persistent upon restart
                     libpcslite-dev                  # smartcard access via pc/sc (proxmark)
                     libreadline-dev                 # consistent ui to recall lines of previously input (proxmark)
                     lshw                            # list hardware, view cpu details
                     menulibre                       # edit applications whisker menu can open (add app images)
                     ncdu                            # file sizes
                     network-manager-gnome           # panel applet
-                    ntp                             #
+                    ntp                             # get time from ntp server
                     ranger                          # terminal file explorer
-                    software-properties-common      #
-                    tree                            #
-                    unzip                           #
+                    software-properties-common      # repo manager
+                    sudo                            # super
+                    tree                            # show directory structure
+                    unzip                           # unzip files
                     v4l2loopback-dkms               # video loopback device - needed for obs
-                    vim                             #
-                    whois                           #
+                    vim                             # text editor
+                    whois                           # make whois lookups
                     zenity                          # draw windows for ibus
-                    zip                             #
+                    zip                             # create zip files
                 )
                 for U in "${UTILITIES[@]}"
                 do
@@ -58,24 +57,25 @@ function install
                 done
 
                 APPLICATIONS=(
-                    firefox-esr                     #
-                    flameshot                       #
+                    firefox-esr                     # web browser
+                    flameshot                       # screenshots
                     galculator                      # simple calculator
-                    gnome-disk-utility
-                    gparted                         #
+                    gnome-disk-utility              # gui disk manager
+                    gparted                         # gui partition manager
                     gqrx-sdr                        # sdr
-                    keepassxc                       #
-                    libreoffice                     #
+                    gummi                           # laTeX editor
+                    keepassxc                       # password manager
+                    libreoffice                     # productivity suite
                     libreoffice-gtk3                # make libreoffice look better
-                    obs-studio                      #
-                    pulseeffects                    #
-                    qdirstat                        #
-                    screen                          #
+                    obs-studio                      # screencast
+                    pulseeffects                    # effects
+                    qdirstat                        # visualize storage
+                    screen                          # screen manager with terminal emulation
                     speedcrunch                     # advanced calculator
-                    steghide                        #
-                    thunderbird                     #
-                    vlc                             #
-                    wireshark                       #
+                    steam                           # games     #non-free repo
+                    thunderbird                     # email client
+                    vlc                             # media player
+                    wireshark                       # analyze packets and network traffic
                 )
                 for A in "${APPLICATIONS[@]}"
                 do
@@ -83,8 +83,8 @@ function install
                 done
 
                 PACKAGE_MANAGERS=(
-                    flatpak                         #
-                    snapd                           #
+                    flatpak
+                #    snapd
                 )
                 for P in "${PACKAGE_MANAGERS[@]}"
                 do
@@ -92,12 +92,12 @@ function install
                 done
 
                 FUN=(
-                    cmatrix                         #
-                    cowsay                          #
-                    fortune                         #
+                    cmatrix                         # enter the matrix
+                    cowsay                          # what does the cow say
+                    fortune                         # random (or not???) message
                     hollywood                       # l337 h@x
-                    lolcat                          #
-                    neofetch                        #
+                    lolcat                          # love is love
+                    neofetch                        # i run arch btw
                     rig                             # generate random fake id
                 )
                 for F in "${FUN[@]}"
@@ -117,21 +117,8 @@ function install
                     flatpak install flathub $F
                 done
 
-        # snap
-            echo -e "\n Install SNAP Packages\n"
-
-            SNAP=( slack )
-            for S in "${SNAP[@]}"
-            do
-                snap install $S
-            done
-
         # local
             echo -e "\n Install LOCAL APT Packages\n"
-
-            # steam
-                wget https://cdn.akamai.steamstatic.com/client/installer/steam.deb -P /tmp/packages
-                apt install /tmp/packages/./steam.deb
 
             # discord
                 wget -O /tmp/packages/discord.deb "https://discordapp.com/api/download?platform=linux&format=deb" # -O used to put into file, page does not give .deb file
@@ -148,15 +135,14 @@ function install
             # visual studio
                 wget -O /tmp/packages/vscode.deb https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64 -P /tmp/packages # -O used to put into file, page does not give .deb file
                 apt install /tmp/packages/./vscode.deb
-
+                
             # spotify
-                curl -sS https://download.spotify.com/debian/pubkey_5E3C45D7B312C643.gpg | sudo apt-key add - 
+                curl -sS https://download.spotify.com/debian/pubkey_7A3A762FAFD4A51F.gpg | sudo gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/spotify.gpg
                 echo "deb http://repository.spotify.com stable non-free" | sudo tee /etc/apt/sources.list.d/spotify.list
                 sudo apt-get update && sudo apt-get install spotify-client
 
             # mullvad
             # virtual box
-            # tor
             # xournalpp
             
 
@@ -164,6 +150,15 @@ function install
         sudo dpkg-reconfigure --priority=low unattended-upgrades
         # make choose yes
         # check with "sudo systemctl status unattended-upgrades.service"
+
+    # sudo 
+        echo -e "\n Sudo Group"
+                USER_ACCOUNT_NAME=$(id -n -u)
+            echo " - installing sudo"
+                apt install sudo
+            echo " - Adding $USER_ACCOUNT_NAME to the sudo group"
+                usermod -a -G sudo $USER_ACCOUNT_NAME
+
 
     # update DNS servers
         echo -e "\n Update DNS Servers\n"

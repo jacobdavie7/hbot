@@ -1,6 +1,8 @@
 # Based off offical Debian upgrade script
 # debian.org
 
+#!/bin/bash
+
 POST=0
 
 function upgrade
