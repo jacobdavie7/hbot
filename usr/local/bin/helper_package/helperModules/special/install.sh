@@ -11,8 +11,6 @@ function install
     # updates
         updater
 
-
-    
 # add contrib and non-free repos, change http to https, do this before steam and nvidia
 # install nvidia-detect, grab what it wants you to install, do this uphere, before steam
 
@@ -76,19 +74,11 @@ function install
                     thunderbird                     # email client
                     vlc                             # media player
                     wireshark                       # analyze packets and network traffic
+                    xournalpp                       # pdf editing
                 )
                 for A in "${APPLICATIONS[@]}"
                 do
                     apt install -y $A
-                done
-
-                PACKAGE_MANAGERS=(
-                    flatpak
-                #    snapd
-                )
-                for P in "${PACKAGE_MANAGERS[@]}"
-                do
-                    apt install -y $P
                 done
 
                 FUN=(
@@ -105,46 +95,28 @@ function install
                     apt install -y $F
                 done
 
-        # flatpak
-            echo -e "\n Install FLATPAK Packages\n"
-
-                # add flathub repo
-                    flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-
-                FLATPAK=( com.github.xournalpp.xournalpp )
-                for F in "${FLATPAK[@]}"
-                do
-                    flatpak install flathub $F
-                done
-
         # local
             echo -e "\n Install LOCAL APT Packages\n"
 
             # discord
-                wget -O /tmp/packages/discord.deb "https://discordapp.com/api/download?platform=linux&format=deb" # -O used to put into file, page does not give .deb file
-                apt install /tmp/packages/./discord.deb
-
-            # slack
-            #    wget https://downloads.slack-edge.com/releases/linux/4.28.184/prod/x64/slack-desktop-4.28.184-amd64.deb -P /tmp/packages
-            #    apt install /tmp/packages/./slack-desktop-4.28.184-amd64.deb
-            #    echo "deb https://packagecloud.io/slacktechnologies/slack/debian/ jessie main" | sudo tee /etc/apt/sources.list.d/slack.list
-            #    /etc/cron.daily/./slack
-            #    apt upgrade -y
-            #    apt autoremove -y
+                wget -O /tmp/discord.deb "https://discordapp.com/api/download?platform=linux&format=deb" # -O used to put into file, page does not give .deb file
+                apt install /tmp/./discord.deb
             
             # visual studio
-                wget -O /tmp/packages/vscode.deb https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64 -P /tmp/packages # -O used to put into file, page does not give .deb file
-                apt install /tmp/packages/./vscode.deb
+                wget -O /tmp/vscode.deb "https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64" # -O used to put into file, page does not give .deb file
+                apt install /tmp/./vscode.deb
                 
             # spotify
                 curl -sS https://download.spotify.com/debian/pubkey_7A3A762FAFD4A51F.gpg | sudo gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/spotify.gpg
                 echo "deb http://repository.spotify.com stable non-free" | sudo tee /etc/apt/sources.list.d/spotify.list
-                sudo apt-get update && sudo apt-get install spotify-client
+                sudo apt-get update && sudo apt install spotify-client
 
             # mullvad
-            # virtual box
-            # xournalpp
+                wget -O /tmp/mullvadVPN.deb "https://mullvad.net/en/download/app/deb/latest" # -O used to put into file, page does not give .deb file
+                apt install /tmp/./mullvadVPN.deb
             
+            # virtual box
+                # do this manually, no link to latest, just specific verisons
 
     # setup unattended upgrades
         sudo dpkg-reconfigure --priority=low unattended-upgrades
@@ -186,10 +158,6 @@ function install
             else
                 echo -e "\nEntry in config found!"
             fi
-
-
-
-
 }
 
 
