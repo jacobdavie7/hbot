@@ -44,12 +44,12 @@ function firewallWoL
 
         # out
         echo -e "\nDROP local"
-            iptables -A OUTPUT -s 10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,169.254.0.0/16 -j ACCEPT -m comment --comment "DROP local"
+            iptables -A OUTPUT -s 10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,169.254.0.0/16 -j DROP -m comment --comment "DROP local"
 
         echo -e "\nACCEPT HTTPS out for www-data"
-            iptables -A OUTPUT -p tcp --dport 443 -m owner --uid-owner www-data -j ACCEPT -m comment --comment "ACCEPT new outgoing https for www-data"
+            iptables -A OUTPUT -p tcp --dport 443 -m owner --uid-owner _apt -j ACCEPT -m comment --comment "ACCEPT new outgoing https for www-data"
         echo -e "\nACCEPT DNS out for www-data"
-            iptables -A OUTPUT -p udp --dport 53 -m owner --uid-owner www-data -j ACCEPT -m comment --comment "ACCEPT new outgoing dns for www-data"
+            iptables -A OUTPUT -p udp --dport 53 -m owner --uid-owner _apt -j ACCEPT -m comment --comment "ACCEPT new outgoing dns for www-data"
 
     firewallPersistentSave
 
