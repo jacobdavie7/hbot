@@ -39,15 +39,18 @@ function firewallWoL
         iptables -A OUTPUT -d 127.0.0.1 -j ACCEPT -m comment --comment "ACCEPT all outgoing on loopback"
 
         # in
-        echo "\nACCEPT SSH in"
-            iptables -A INPUT -p tcp -s 10.0.4.0/24,10.0.9.0/24 --dport 22 -m conntrack -j ACCEPT -m comment --comment "ACCEPT new incoming ssh"
+        echo -e "\nACCEPT SSH in"
+            iptables -A INPUT -p tcp -s 10.0.4.0/24,10.0.9.0/24 --dport 22 -j ACCEPT -m comment --comment "ACCEPT new incoming ssh"
 
         # out
-        echo "\nACCEPT HTTPS out for www-data"
-            iptables -A OUTPUT -p tcp -s ! 10.0.0.0/8,172.16.0.0/12,192.168.0.0/16 --dport 443 -m owner --uid-owner www-data -j ACCEPT -m comment --comment "ACCEPT new outgoing https for www-data, not to local"
+        echo -e "\nDROP local"
+            iptables -A OUTPUT -s 10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,169.254.0.0/16 -j ACCEPT -m comment --comment "DROP local"
+
+        echo -e "\nACCEPT HTTPS out for www-data"
+            iptables -A OUTPUT -p tcp --dport 443 -m owner --uid-owner www-data -j ACCEPT -m comment --comment "ACCEPT new outgoing https for www-data"
+        echo -e "\nACCEPT DNS out for www-data"
+            iptables -A OUTPUT -p udp --dport 53 -m owner --uid-owner www-data -j ACCEPT -m comment --comment "ACCEPT new outgoing dns for www-data"
 
     firewallPersistentSave
 
-    echo -e "\n\e[91mDon't Forget About Edge Firewall!\e[39m"
-    echo -e "\n\e[31mSSH should be alive, if frozen and not coming back, try SSHing in a new terminal\e[39m\n"
 }
