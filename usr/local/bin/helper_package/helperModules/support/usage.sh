@@ -32,6 +32,7 @@ function usage
     echo -e "                   local    no internet, use when doing 1337 hax"
     echo -e "                   web      web server use"
     echo -e "                   backup   backup server use"
+    echo -e "                   wol      wake on lan server use"
     echo -e "                   reset    FLUSH ALL rules and ACCEPT by default !!DANGER!!"
     echo -e "           -w  watcher*     Watch firewall rule hits in packets and bytes"
     echo -e "\n       Special"

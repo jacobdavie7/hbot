@@ -35,6 +35,7 @@ MAIN_DIR=/usr/local/bin/helper_package/helperModules
         source $MAIN_DIR/firewalls/rulesets/firewallLocal.sh
         source $MAIN_DIR/firewalls/rulesets/firewallSecure.sh
         source $MAIN_DIR/firewalls/rulesets/firewallv6Basic.sh
+        source $MAIN_DIR/firewalls/rulesets/firewallWebWoL.sh
 
 # special
     source $MAIN_DIR/special/install.sh
@@ -91,6 +92,8 @@ while getopts "umdsf:iwav:xct:" FLAG; do
                 firewallHomeSecure
             elif [ "$OPTARG" == "class" ]; then
                 firewallClass
+            elif [ "$OPTARG" == "wol" ]; then
+                firewallWoL
             else
                 echo -e "\n\e[31mSorry, but '$OPTARG' is not a valid argument. See valid Arugments for option 'firewall' below\e[39m"
                 usage
