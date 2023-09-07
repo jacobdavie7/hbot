@@ -22,6 +22,8 @@ function install
                 UTILITIES=(
                     curl                            # interact with urls
                     dnsutils                        # contains dig
+                    etherwake                       # send magic packets
+                    ethtool                         # view nic info
                     ffmpeg                          # video converter/media formats
                     fonts-unfonts-core              # display more lanuages
                     git                             # content tracker
