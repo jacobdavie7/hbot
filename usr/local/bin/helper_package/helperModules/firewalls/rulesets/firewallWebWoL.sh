@@ -11,7 +11,7 @@ function firewallWoL
 
         iptables -P FORWARD DROP
         ip6tables -P FORWARD DROP
-    
+
     echo -e "\nFlushing all chains"
         iptables -F
         ip6tables -F
@@ -34,23 +34,26 @@ function firewallWoL
         iptables -A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT -m comment --comment "ACCEPT incoming RELATED/ESTABLISHED"
         iptables -A OUTPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT -m comment --comment "ACCEPT outgoing RELATED/ESTABLISHED"
 
-    echo "ACCEPT everything on loopback"
+    echo -e "\nACCEPT everything on loopback"
         iptables -A INPUT -s 127.0.0.1 -j ACCEPT -m comment --comment "ACCEPT all incoming on loopback"
         iptables -A OUTPUT -d 127.0.0.1 -j ACCEPT -m comment --comment "ACCEPT all outgoing on loopback"
 
-        # in
-        echo -e "\nACCEPT SSH in"
-            iptables -A INPUT -p tcp -s 10.0.4.0/24,10.0.9.0/24 --dport 22 -j ACCEPT -m comment --comment "ACCEPT new incoming ssh"
+    echo -e "\nINPUT"
+        echo -e " - ACCEPT ssh IN from devices, vpn"
+            iptables -A INPUT -p tcp -s 10.0.4.0/24,10.0.9.0/24 --dport 22 -j ACCEPT -m comment --comment "ACCEPT new incoming ssh from devices/vpn"
 
-        # out
-        echo -e "\nDROP local"
-            iptables -A OUTPUT -s 10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,169.254.0.0/16 -j DROP -m comment --comment "DROP local"
+    echo -e "\nOUTPUT"
+        echo -e " - ACCEPT dns out for _apt to network"
+            iptables -A OUTPUT -p udp -d 10.0.3.1 --dport 53 -m owner --uid-owner _apt -j ACCEPT -m comment --comment "ACCEPT new outgoing dns for _apt"
 
-        echo -e "\nACCEPT HTTPS out for www-data"
-            iptables -A OUTPUT -p tcp --dport 443 -m owner --uid-owner _apt -j ACCEPT -m comment --comment "ACCEPT new outgoing https for www-data"
-        echo -e "\nACCEPT DNS out for www-data"
-            iptables -A OUTPUT -p udp --dport 53 -m owner --uid-owner _apt -j ACCEPT -m comment --comment "ACCEPT new outgoing dns for www-data"
+        echo -e " - DROP local OUT"
+            iptables -A OUTPUT -d 10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,169.254.0.0/16 -j DROP -m comment --comment "DROP local"
+
+        echo -e " - ACCEPT http OUT for _apt"
+            iptables -A OUTPUT -p tcp --dport 80 -m owner --uid-owner _apt -j ACCEPT -m comment --comment "ACCEPT new outgoing http for _apt"
+
+        echo -e " - ACCEPT https OUT for _apt"
+            iptables -A OUTPUT -p tcp --dport 443 -m owner --uid-owner _apt -j ACCEPT -m comment --comment "ACCEPT new outgoing https for _apt"
 
     firewallPersistentSave
-
 }
