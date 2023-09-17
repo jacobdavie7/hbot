@@ -1,7 +1,9 @@
 #!/bin/bash
 
-function firewallWoL
+function firewall_server_wol
 {
+    firewall_v6_support_basic
+
     echo -e "\nSetting default policy to DROP"
         iptables -P OUTPUT DROP
         ip6tables -P OUTPUT DROP
@@ -55,5 +57,5 @@ function firewallWoL
         echo -e " - ACCEPT https OUT for _apt"
             iptables -A OUTPUT -p tcp --dport 443 -m owner --uid-owner _apt -j ACCEPT -m comment --comment "ACCEPT new outgoing https for _apt"
 
-    firewallPersistentSave
+    firewall_persistentSave
 }

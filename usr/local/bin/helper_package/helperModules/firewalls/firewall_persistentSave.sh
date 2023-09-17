@@ -1,6 +1,6 @@
 #!/bin/bash
 
-function firewallPersistentSave
+function firewall_persistentSave
 { 
     IP_PER=$(dpkg -l iptables-persistent | grep iptables-persistent | cut -d' ' -f3)
     if [ "$IP_PER" != "iptables-persistent" ]; then

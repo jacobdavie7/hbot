@@ -46,10 +46,10 @@ home     standard home use"
 lax      lax home use - Allow all Out"
 limited  limited home use - Internet Only (HTTP, HTTPS, DNS)"
 secure   encrypted internt only (HTTPS, DoH, DoT) - HTTP and DNS will NOT work"
-class    extra ports for class"
 local    no internet, use when doing 1337 hax"
 web      web server use"
 backup   backup server use"
+wol      ruleset for wake on lan device
 reset    FLUSH ALL rules and ACCEPT by default !!DANGER!!"
 ```
 
@@ -67,8 +67,7 @@ auto     GeoClue"
 VPN
 ```
 home   standard vpn config + deploy home firewall ruleset
-mobile home vpn config without local LAN access
-high   vpn config for higher risk sitiations + deploy limitedVPN firewall
+mobile vpn config without local LAN access
 ```
 ## Extra Notes
 

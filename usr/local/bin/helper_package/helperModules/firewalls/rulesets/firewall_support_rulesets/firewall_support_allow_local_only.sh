@@ -1,7 +1,9 @@
 #!/bin/bash
 
-function firewallLocal
+function firewall_support_allow_local_only
 {
+    firewall_v6_support_basic
+    
     echo -e "\n\e[44mDeploying Local Firewall Rules\e[49m"
 
     echo -e "\nSetting default policy to DROP"
@@ -33,6 +35,4 @@ function firewallLocal
             iptables -A OUTPUT -d 127.0.0.1 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new to Loopback"            
 
     echo -e "\n\e[91mFirewall Ruleset Updated - NOT Persistant - Will be Cleared on Restart\e[39m"
-
-    firewallv6Basic
 }

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-function elevateCheck
+function support_elevateCheck
 {
     ELEVATE=$(id | grep root | cut -d' ' -f1)
         if [ "$ELEVATE" == "uid=0(root)" ]; then

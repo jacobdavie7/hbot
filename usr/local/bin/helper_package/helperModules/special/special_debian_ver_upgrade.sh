@@ -3,10 +3,10 @@
 
 #!/bin/bash
 
-POST=0
 
-function upgrade
+function special_debian_ver_upgrade
 {
+    POST=0
     echo -e "\n\e[44mUpdating Packages\e[49m"
 
     echo -e "\n\e[95;4mapt\e[39;24m"
@@ -26,9 +26,8 @@ function upgrade
         echo -e "\n\e[44mYou should probally restart now\e[49m"
         exit 0;
     fi
-}
 
-echo -e "\n\e[44mVersions\e[49m"
+    echo -e "\n\e[44mVersions\e[49m"
 
 echo -e "\n\e[4mCurrent Verison Codename? Note Capitalization\e[24m"
     read CURRENT_VER
@@ -82,3 +81,5 @@ echo -e "\n Okay, will upgrade $CURRENT_VER to $NEW_VER"
 # set post flag and update
     POST=1
     upgrade
+}
+

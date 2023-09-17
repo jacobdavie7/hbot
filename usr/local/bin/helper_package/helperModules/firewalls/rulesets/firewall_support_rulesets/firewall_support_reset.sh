@@ -1,6 +1,6 @@
 #!/bin/bash
 
-function firewallReset
+function firewall_support_reset
 {
     echo -e "\n\e[91mReseting all Firewall Rules (Default Accept + Flush Chains)\e[39m"
     echo -e "\nSetting default policy to ALLOW"
@@ -17,7 +17,7 @@ function firewallReset
         iptables -F
         ip6tables -F
 
-    firewallPersistentSave
+    firewall_persistentSave
 
     echo -e "\n\e[31mDon't Forget About Edge Firewall!\e[39m\n"
 }

@@ -1,7 +1,9 @@
 #!/bin/bash
 
-function firewallHomeLax
+function firewall_home_lax
 {
+    firewall_v6_support_basic
+    
     echo -e "\n\e[44mDeploying Lax Home Firewall Rules\e[49m"
 
         echo -e "\nSetting default INPUT and FORWARD policy to DROP"
@@ -22,6 +24,5 @@ function firewallHomeLax
             iptables -A INPUT -s 127.0.0.1 -j ACCEPT -m comment --comment "ACCEPT all incoming on loopback"
             iptables -A OUTPUT -d 127.0.0.1 -j ACCEPT -m comment --comment "ACCEPT all outgoing on loopback"
 
-    firewallv6Basic
-    firewallPersistentSave
+    firewall_persistentSave
 }

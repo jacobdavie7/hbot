@@ -1,6 +1,6 @@
 #!/bin/bash
 
-function updater
+function general_updater
 {
     echo -e "\n\e[44mUpdating Packages\e[49m"
 

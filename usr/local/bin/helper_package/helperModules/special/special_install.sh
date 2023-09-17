@@ -1,6 +1,6 @@
 #!/bin/bash
 
-function install
+function special_install
 {
     echo -e "\nRun full install and setup script? (yes or n)"
     read ANS
@@ -9,7 +9,7 @@ function install
     fi
 
     # updates
-        updater
+        general_updater
 
 # add contrib and non-free repos, change http to https, do this before steam and nvidia
 # install nvidia-detect, grab what it wants you to install, do this uphere, before steam

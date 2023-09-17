@@ -1,7 +1,9 @@
 #!/bin/bash
 
-function firewallHomeLimitedVPN
+function firewall_home_limited_vpn
 {
+    firewall_v6_support_basic
+
     echo -e "\n\e[44mDeploying Limited Home Firewall Rules\e[49m"
 
     echo -e "\nSetting default policy to DROP"
@@ -48,6 +50,5 @@ function firewallHomeLimitedVPN
         echo " - PING       (ACCEPT - OUT)"     # needed to locate server
             iptables -A OUTPUT -p icmp --icmp-type 8 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing ping request"
     
-    firewallv6Basic
-    firewallPersistentSave
+    firewall_persistentSave
 }

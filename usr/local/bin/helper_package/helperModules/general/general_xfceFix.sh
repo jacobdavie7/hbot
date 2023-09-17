@@ -1,6 +1,6 @@
 #!/bin/bash
 
-function xfceFix
+function general_xfceFix
 {
     echo "currently broke. Does nothing"
     # restart panel

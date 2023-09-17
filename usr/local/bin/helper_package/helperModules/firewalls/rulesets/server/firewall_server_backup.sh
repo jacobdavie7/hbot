@@ -1,7 +1,9 @@
 #!/bin/bash
 
-function firewallBackupServer
+function firewall_server_backup
 {
+    firewall_v6_support_basic
+
     echo -e "\nSetting default policy to DROP"
         iptables -P INPUT DROP
         iptables -P OUTPUT DROP
@@ -58,7 +60,7 @@ function firewallBackupServer
                         iptables -A OUTPUT -p udp --dport 53 -m owner --uid-owner $U -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing dns for $U"
                 done
             
-    firewallPersistentSave
+    firewall_persistentSave
 
     echo -e "\n\e[91mDon't Forget About Edge Firewall!\e[39m"
     echo -e "\n\e[31mSSH should be alive, if frozen and not coming back, try SSHing in a new terminal\e[39m\n"

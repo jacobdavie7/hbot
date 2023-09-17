@@ -1,6 +1,6 @@
 #!/bin/bash
 
-function firewallWatcher
+function firewall_watcher
 {
     while true; do
         clear

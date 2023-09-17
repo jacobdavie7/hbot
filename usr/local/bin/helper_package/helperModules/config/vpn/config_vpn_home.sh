@@ -1,10 +1,10 @@
 #!/bin/bash
 
-function vpnMobile ()
+function config_vpn_home ()
 {
     # Deploy Home Firewall Ruleset
-        echo -e "\nCall the Home Limited Firewall Ruleset"
-            firewallHomeLimitedVPN
+        echo -e "\nCall the Home Firewall Ruleset"
+            firewall_home
 
     # Keys
         echo -e "\nSet Wireguard Key Regen to 72 hours"
@@ -15,8 +15,8 @@ function vpnMobile ()
             mullvad relay set location us
     
     # VPN Settings
-        echo -e "\nBlock local LAN Devices"
-            mullvad lan set block
+        echo -e "\nAllow local LAN Devices"
+            mullvad lan set allow
     
         echo -e "\nSet DNS to Block: Ads, Maleware, Tracking, Gambling, Adult"
             mullvad dns set default --block-ads --block-malware --block-trackers --block-gambling --block-adult-content

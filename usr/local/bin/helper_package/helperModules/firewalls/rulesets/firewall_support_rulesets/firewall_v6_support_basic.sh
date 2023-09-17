@@ -1,6 +1,6 @@
 #!/bin/bash
 
-function firewallv6Basic
+function firewall_v6_support_basic
 {
     echo -e "\n\e[44mDeploying Base IPv6 Firewall Rules\e[49m"
 

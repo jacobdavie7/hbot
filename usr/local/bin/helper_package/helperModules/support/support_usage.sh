@@ -1,6 +1,6 @@
 #!/bin/bash
 
-function usage
+function support_usage
 {
     echo -e "\n   Usage: helper [OPTION] [ARGUMENT]"
     echo -e "\n       General"

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-function clean
+function general_clean
 {
     echo -e "\nRemoving unused apt dependencies (autoremove)"
         apt autoremove -y

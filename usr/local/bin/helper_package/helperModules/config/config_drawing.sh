@@ -1,6 +1,6 @@
 #!/bin/bash
 
-function drawing
+function config_drawing
 {
     echo -e "\n\e[44mExecuting 'Drawing' Function\e[49m"
 

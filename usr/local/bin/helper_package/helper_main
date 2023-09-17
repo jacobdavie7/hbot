@@ -3,170 +3,167 @@
 MAIN_DIR=/usr/local/bin/helper_package/helperModules
 #MAIN_DIR=/srv/git/helper/usr/local/bin/helper_package/helperModules
 
-# general
-    source $MAIN_DIR/general/updater.sh
-    source $MAIN_DIR/general/xfceFix.sh
-    source $MAIN_DIR/general/clean.sh
-
 # config
-    source $MAIN_DIR/config/drawing.sh
-    source $MAIN_DIR/config/monitors.sh
-
-    source $MAIN_DIR/config/timezone.sh
+    source $MAIN_DIR/config/config_drawing.sh
+    source $MAIN_DIR/config/config_monitors.sh
+    source $MAIN_DIR/config/config_timezone.sh
 
         # vpn
-            source $MAIN_DIR/config/vpn/vpnHome.sh
-            source $MAIN_DIR/config/vpn/vpnMobile.sh
-            source $MAIN_DIR/config/vpn/vpnHighRisk.sh
+            source $MAIN_DIR/config/vpn/config_vpn_home.sh
+            source $MAIN_DIR/config/vpn/config_vpn_mobile.sh
 
 # firewalls
-    source $MAIN_DIR/firewalls/firewallWatcher.sh
-    source $MAIN_DIR/firewalls/firewallPersistentSave.sh
+    source $MAIN_DIR/firewalls/firewall_watcher.sh
+    source $MAIN_DIR/firewalls/firewall_persistentSave.sh
     
     # rulesets
-        source $MAIN_DIR/firewalls/rulesets/firewallHome.sh
-        source $MAIN_DIR/firewalls/rulesets/firewallWeb.sh
-        source $MAIN_DIR/firewalls/rulesets/firewallBackup.sh
-        source $MAIN_DIR/firewalls/rulesets/firewallReset.sh
-        source $MAIN_DIR/firewalls/rulesets/firewallHomeLimited.sh
-        source $MAIN_DIR/firewalls/rulesets/firewallHomeLimitedVPN.sh
-        source $MAIN_DIR/firewalls/rulesets/firewallHomeLax.sh
-        source $MAIN_DIR/firewalls/rulesets/firewallClass.sh
-        source $MAIN_DIR/firewalls/rulesets/firewallLocal.sh
-        source $MAIN_DIR/firewalls/rulesets/firewallSecure.sh
-        source $MAIN_DIR/firewalls/rulesets/firewallv6Basic.sh
-        source $MAIN_DIR/firewalls/rulesets/firewallWebWoL.sh
+        # firewall_support_rulesets
+            source $MAIN_DIR/firewalls/rulesets/firewall_support_rulesets/firewall_support_allow_local_only.sh
+            source $MAIN_DIR/firewalls/rulesets/firewall_support_rulesets/firewall_support_reset.sh
+            source $MAIN_DIR/firewalls/rulesets/firewall_support_rulesets/firewall_v6_support_basic.sh
+        # home
+            source $MAIN_DIR/firewalls/rulesets/home/firewall_home_lax.sh
+            source $MAIN_DIR/firewalls/rulesets/home/firewall_home_limited_vpn.sh
+            source $MAIN_DIR/firewalls/rulesets/home/firewall_home_limited.sh
+            source $MAIN_DIR/firewalls/rulesets/home/firewall_home_secure.sh
+            source $MAIN_DIR/firewalls/rulesets/home/firewall_home.sh
+        # server
+            source $MAIN_DIR/firewalls/rulesets/server/firewall_server_backup.sh
+            source $MAIN_DIR/firewalls/rulesets/server/firewall_server_web.sh
+            source $MAIN_DIR/firewalls/rulesets/server/firewall_server_wol.sh
+
+# general
+    source $MAIN_DIR/general/general_updater.sh
+    source $MAIN_DIR/general/general_xfceFix.sh
+    source $MAIN_DIR/general/general_clean.sh
 
 # special
-    source $MAIN_DIR/special/install.sh
-    source $MAIN_DIR/special/startup.sh
+    source $MAIN_DIR/special/special_debian_ver_upgrade.sh
+    source $MAIN_DIR/special/special_install.sh
+    source $MAIN_DIR/special/special_startup.sh
 
 # support
-    source $MAIN_DIR/support/usage.sh
-    source $MAIN_DIR/support/runSudo.sh
-    source $MAIN_DIR/support/elevateCheck.sh
-    source $MAIN_DIR/support/userAccount.sh
+    source $MAIN_DIR/support/support_usage.sh
+    source $MAIN_DIR/support/support_runSudo.sh
+    source $MAIN_DIR/support/support_elevateCheck.sh
+    source $MAIN_DIR/support/support_userAccount.sh
     
 while getopts "umdsf:iwav:xct:" FLAG; do
     case "$FLAG" in
         u)
-            elevateCheck
-            updater
+            support_elevateCheck
+            general_updater
             exit
             ;;
 
         m)
-            monitors
+            config_monitors
             exit
             ;;
 
         d)
-            drawing
+            config_drawing
             exit
             ;;
 
         s)
-            elevateCheck
-            startup
+            support_elevateCheck
+            special_startup
             exit
             ;;
 
         f)
-            elevateCheck
-            userAccount
+            support_elevateCheck
+            support_userAccount
             if [ "$OPTARG" == "home" ]; then
-                firewallHome
+                firewall_home
             elif [ "$OPTARG" == "web" ]; then
-                firewallWebServer
+                firewall_server_web
             elif [ "$OPTARG" == "backup" ]; then
-                firewallBackupServer
+                firewall_server_backup
             elif [ "$OPTARG" == "limited" ]; then
-                firewallHomeLimited
+                firewall_home_limited
             elif [ "$OPTARG" == "reset" ]; then
-                firewallReset
+                firewall_support_reset
             elif [ "$OPTARG" == "lax" ]; then
-                firewallHomeLax
+                firewall_home_lax
             elif [ "$OPTARG" == "local" ]; then
-                firewallLocal
+                firewall_support_allow_local_only
             elif [ "$OPTARG" == "secure" ]; then
-                firewallHomeSecure
-            elif [ "$OPTARG" == "class" ]; then
-                firewallClass
+                firewall_home_secure
             elif [ "$OPTARG" == "wol" ]; then
-                firewallWoL
+                firewall_server_wol
             else
                 echo -e "\n\e[31mSorry, but '$OPTARG' is not a valid argument. See valid Arugments for option 'firewall' below\e[39m"
-                usage
+                support_usage
             fi
             exit
             ;;
 
         i)
-            elevateCheck
-            install
+            support_elevateCheck
+            special_install
             exit
             ;;
 
         w)
-            elevateCheck
-            firewallWatcher
+            support_elevateCheck
+            firewall_watcher
             exit
             ;;
 
         x)
-            userAccount
-            xfceFix
+            support_userAccount
+            general_xfceFix
             exit
             ;;
 
         v)
-            elevateCheck    #needed for firewall
+            support_elevateCheck    #needed for firewall
             if [ "$OPTARG" == "home" ]; then
-                vpnHome
+                config_vpn_home
             elif [ "$OPTARG" == "mobile" ]; then
-                vpnMobile
-            elif [ "$OPTARG" == "high" ]; then
-                vpnHighRisk
+                config_vpn_mobile
             else
                 echo -e "\n\e[31mSorry, but '$OPTARG' is not a valid argument. See valid Arugments for option 'vpn' below\e[39m"
-                usage
+                support_usage
             fi
             exit
             ;;
 
         c)
-            elevateCheck
-            userAccount
-            clean
+            support_elevateCheck
+            support_userAccount
+            general_clean
             exit
             ;;
 
         t)
-            elevateCheck
+            support_elevateCheck
             if [ "$OPTARG" == "pacific" ]; then
-                timezonePacific
+                config_timezonePacific
             exit
             elif [ "$OPTARG" == "mountain" ]; then
-                timezoneMountain
+                config_timezoneMountain
             exit
             elif [ "$OPTARG" == "central" ]; then
-                timezoneCentral
+                config_timezoneCentral
             exit
             elif [ "$OPTARG" == "eastern" ]; then
-                timezoneEastern
+                config_timezoneEastern
             exit
             elif [ "$OPTARG" == "arizona" ]; then
-                timezoneArizona
+                config_timezoneArizona
             exit
             elif [ "$OPTARG" == "korea" ]; then
-                timezoneKorea
+                config_timezoneKorea
             exit
             elif [ "$OPTARG" == "auto" ]; then
-                timezoneAuto
+                config_timezoneAuto
             exit
             else
                 echo -e "\n\e[31mSorry, but '$OPTARG' is not a valid argument. See valid Arugments for option 'timezone' below\e[39m"
-                usage
+                support_usage
             fi
             exit
             ;;
@@ -174,4 +171,4 @@ while getopts "umdsf:iwav:xct:" FLAG; do
     esac
 done
 
-usage #calls help function in help.sh file
+support_usage

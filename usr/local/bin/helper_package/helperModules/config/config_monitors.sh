@@ -1,6 +1,6 @@
 #!/bin/bash
 
-function monitors
+function config_monitors
 {
     echo -e "\n\e[44mExecuting 'Monitors' Function\e[49m"
     
