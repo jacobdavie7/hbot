@@ -142,6 +142,7 @@ function install
     # ntp
         systemctl start ntp
         systemctl enable ntp
+        timedatectl set-ntp true
 
     # setup firewall
         firewallHome
