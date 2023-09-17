@@ -27,7 +27,7 @@ function support_usage
     echo -e "                   home     standard home use"
     echo -e "                   lax      lax home use - Allow all Out"
     echo -e "                   limited  limited home use - Internet Only (HTTP, HTTPS, DNS)"
-    echo -e "                   secure   encrypted internt only (HTTPS, DoH, DoT) - HTTP and DNS will NOT work"
+    echo -e "                   secure   encrypted internt only (HTTPS, DoH, DoT) - HTTP and DNS over 53 will NOT work"
     echo -e "                   class    extra ports for class"
     echo -e "                   local    no internet, use when doing 1337 hax"
     echo -e "                   web      web server use"
