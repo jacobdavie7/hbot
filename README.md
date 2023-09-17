@@ -45,7 +45,7 @@ Firewall
 home     standard home use"
 lax      lax home use - Allow all Out"
 limited  limited home use - Internet Only (HTTP, HTTPS, DNS)"
-secure   encrypted internt only (HTTPS, DoH, DoT) - HTTP and DNS will NOT work"
+secure   encrypted internt only (HTTPS, DoH, DoT) - HTTP and DNS over 53 will NOT work"
 local    no internet, use when doing 1337 hax"
 web      web server use"
 backup   backup server use"
@@ -81,8 +81,7 @@ mobile vpn config without local LAN access
 * The standard home ruleset will allow all nessesary ports needed for daily-driver computer usage OUT
 * The lax home ruleset will allow any traffic OUT
 * The limited home ruleset will only allow HTTP/HTTPS/DNS traffic OUT
-* The secure home ruleset will only allow out protocols that are encrypted OUT
-* The class class ruleset allows extra ports used in class. Allows SSH IN
+* The secure home ruleset will only allow out protocols that are encrypted OUT. Easiest way to get dns is to enable dns over https (443) in firefox. Note this will only get dns online within firefox, not system wide. Dns over tls is also allowed.
 * The local home ruleset will only allow all private IP's and localhost, NO internet access. Great for 1337 h@x practice on local network
 <br><br>
 * The webserver ruleset allows ssh, http, and https IN. Ports reqired for data out are allowed on a per-user basis.
