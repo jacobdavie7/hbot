@@ -147,6 +147,8 @@ function special_install
     # setup firewall
         firewallHome
 
+    # static route
+        nmcli connection modify "Wired Connection 1" ipv4.routes "10.0.3.0/24 10.0.4.1"
     # set hostname
         
     # from drawing module, put this here so don't need sudo.    
