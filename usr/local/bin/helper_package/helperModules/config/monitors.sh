@@ -4,8 +4,8 @@ function monitors
 {
     echo -e "\n\e[44mExecuting 'Monitors' Function\e[49m"
     
-    echo -e "\nNvidia X Server: Force full composition pipeline"     #Helps with screen tearing. Must be run before setting outputs and locations
-        nvidia-settings --assign CurrentMetaMode="nvidia-auto-select +0+0 {ForceFullCompositionPipeline=On}"
+  #  echo -e "\nNvidia X Server: Force full composition pipeline"     #Helps with screen tearing. Must be run before setting outputs and locations
+        nvidia-settings --assign CurrentMetaMode="nvidia-auto-select +0+0 {ForceCompositionPipeline=On}"
 
     #echo "Setting output"
     #echo " - 1 to 0"
@@ -21,11 +21,11 @@ function monitors
     
     echo "Setting locations"
     echo " - Center (Pri)"                                       #Need to use pos to correctly line up top monitor. If only use --pos for top monitor, all the monitors will be on the same x level. 
-        xrandr --output DP-0 --size 1920x1080 --rate 270 --pos 1920x0 --primary          # --pos 1440x1080
+        xrandr --output DP-0 --size 1920x1080 --rate 270 --pos 1920x0 --auto --primary   # --pos 1440x1080
     echo " - Left"
-        xrandr --output HDMI-0 --size 1920x1080 --rate 75 --pos 0x0                      # --left-of HDMI-0     --pos 0x1080
+        xrandr --output HDMI-0 --size 1920x1080 --rate 75 --pos 0x0 --auto               # --left-of HDMI-0     --pos 0x1080
     echo " - Right"
-        xrandr --output DVI-D-0 --size 1920x1080 --rate 75 --pos 3840x0                  # --right-of HDMI-0    --pos 3120x1080
+        xrandr --output DVI-D-0 --size 1920x1080 --rate 75 --pos 3840x0 --auto           # --right-of HDMI-0    --pos 3120x1080
     # echo " - Top (TV)"
     #    xrandr --output DVI-I-1-1 --pos 1320x0                                          # --above HDMI-0       --pos 1320x0
 
