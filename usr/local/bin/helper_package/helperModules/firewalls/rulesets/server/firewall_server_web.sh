@@ -4,6 +4,8 @@ function firewall_server_web
 {
     firewall_v6_support_basic
     
+    echo -e "\n\e[44mDeploying Web Server Firewall Rules\e[49m"
+
     echo -e "\nSetting default policy to DROP"
         iptables -P OUTPUT DROP
         ip6tables -P OUTPUT DROP

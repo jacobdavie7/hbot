@@ -4,6 +4,8 @@ function firewall_server_backup
 {
     firewall_v6_support_basic
 
+    echo -e "\n\e[44mDeploying Backup Server Firewall Rules\e[49m"
+
     echo -e "\nSetting default policy to DROP"
         iptables -P INPUT DROP
         iptables -P OUTPUT DROP

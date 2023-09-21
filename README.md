@@ -45,6 +45,8 @@ Firewall
 home     standard home use"
 lax      lax home use - Allow all Out"
 limited  limited home use - Internet Only (HTTP, HTTPS, DNS)"
+vm       limited home use - Internet Only (HTTP, HTTPS, DNS) WITHOUT local access"
+
 secure   encrypted internt only (HTTPS, DoH, DoT) - HTTP and DNS over 53 will NOT work"
 local    no internet, use when doing 1337 hax"
 web      web server use"
