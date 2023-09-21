@@ -28,7 +28,6 @@ function support_usage
     echo -e "                   limited  limited home use - Internet Only (HTTP, HTTPS, DNS)"
     echo -e "                   secure   encrypted internt only (HTTPS, DoH, DoT) - HTTP and DNS over 53 will NOT work"
     echo -e "                   vm       limited home use - Internet Only (HTTP, HTTPS, DNS) WITHOUT local access"
-    echo -e "                   class    extra ports for class"
     echo -e "                   local    no internet, use when doing 1337 hax"
     echo -e "                   web      web server use"
     echo -e "                   backup   backup server use"
