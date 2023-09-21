@@ -6,6 +6,7 @@ MAIN_DIR=/usr/local/bin/helper_package/helperModules
 # config
     source $MAIN_DIR/config/config_drawing.sh
     source $MAIN_DIR/config/config_monitors.sh
+    source $MAIN_DIR/config/config_monitors_custom.sh
     source $MAIN_DIR/config/config_timezone.sh
 
         # vpn
