@@ -14,7 +14,6 @@ function special_install
 # add contrib and non-free repos, change http to https, do this before steam and nvidia
 # install nvidia-detect, grab what it wants you to install, do this uphere, before steam
 
-
     # install packages
 
         # apt            # package usage listed below
@@ -33,8 +32,12 @@ function special_install
                     ibus-hangul                     # input korean
                     iptables                        # firewall
                     iptables-persistent             # make ruleset persistent upon restart
+                    libc++1                         # keep discord from crashing
+                    libc++1-14                      # keep discord from crashing
+                    libc++abi1-14                   # keep discord from crashing
                     libpcslite-dev                  # smartcard access via pc/sc (proxmark)
                     libreadline-dev                 # consistent ui to recall lines of previously input (proxmark)
+                    libunwind-14                    # keep discord from crashing
                     lshw                            # list hardware, view cpu details
                     menulibre                       # edit applications whisker menu can open (add app images)
                     ncdu                            # file sizes
