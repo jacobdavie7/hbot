@@ -2,7 +2,7 @@
 
 function config_timezoneNote
 {
-    echo -e "\nTimezone updated.\n"
+    echo -e "\nTimezone updated to \e[32m$OPTARG\e[39m\n"
 }
 
 function config_timezonePacific
