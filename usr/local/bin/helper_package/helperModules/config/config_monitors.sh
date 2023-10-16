@@ -29,6 +29,9 @@ function config_monitors
     # echo " - Top (TV)"
     #    xrandr --output DVI-I-1-1 --pos 1320x0                                          # --above HDMI-0       --pos 1320x0
 
+    echo -e "\nClose Display Pop-up"
+        pkill xfce4-display-s   # full proccess is xfce4-display-settings -m, pkill only works with up to 15 characters
+
     echo -e "\n\e[91mIf the top monitor is still NOT functioning and drivers ARE installed (from GitHub), the USB DisplayLink adapter may need to be reseated.\e[39m"
     
     # xfce4 display settings written to ~/.config/xfce4/xfconf/xfce-perchannel-xml/displays.xml
