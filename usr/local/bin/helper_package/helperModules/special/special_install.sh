@@ -32,26 +32,26 @@ function special_install
                     ibus-hangul                     # input korean
                     iptables                        # firewall
                     iptables-persistent             # make ruleset persistent upon restart
-                    libc++1                         # keep discord from crashing
-                    libc++1-14                      # keep discord from crashing
-                    libc++abi1-14                   # keep discord from crashing
-                    libpcslite-dev                  # smartcard access via pc/sc (proxmark)
-                    libreadline-dev                 # consistent ui to recall lines of previously input (proxmark)
-                    libunwind-14                    # keep discord from crashing
+                    #libc++1                         # keep discord from crashing
+                    #libc++1-14                      # keep discord from crashing
+                    #libc++abi1-14                   # keep discord from crashing
+                    #libpcslite-dev                  # smartcard access via pc/sc (proxmark)
+                    #libreadline-dev                 # consistent ui to recall lines of previously input (proxmark)
+                    #libunwind-14                    # keep discord from crashing
                     lshw                            # list hardware, view cpu details
-                    menulibre                       # edit applications whisker menu can open (add app images)
+                    #menulibre                       # edit applications whisker menu can open (add app images)
                     ncdu                            # file sizes
-                    network-manager-gnome           # panel applet
+                    #network-manager-gnome           # panel applet
                     ntp                             # get time from ntp server
                     ranger                          # terminal file explorer
-                    software-properties-common      # repo manager
+                    #software-properties-common      # repo manager
                     sudo                            # super
                     tree                            # show directory structure
                     unzip                           # unzip files
-                    v4l2loopback-dkms               # video loopback device - needed for obs
+                    #v4l2loopback-dkms               # video loopback device - needed for obs
                     vim                             # text editor
                     whois                           # make whois lookups
-                    zenity                          # draw windows for ibus
+                    #zenity                          # draw windows for ibus
                     zip                             # create zip files
                 )
                 for U in "${UTILITIES[@]}"
@@ -61,24 +61,24 @@ function special_install
 
                 APPLICATIONS=(
                     firefox-esr                     # web browser
-                    flameshot                       # screenshots
-                    galculator                      # simple calculator
-                    gnome-disk-utility              # gui disk manager
-                    gparted                         # gui partition manager
-                    gqrx-sdr                        # sdr
-                    gummi                           # laTeX editor
+                    #flameshot                       # screenshots
+                    #galculator                      # simple calculator
+                    #gnome-disk-utility              # gui disk manager
+                    #gparted                         # gui partition manager
+                    #gqrx-sdr                        # sdr
+                    #gummi                           # laTeX editor
                     keepassxc                       # password manager
                     libreoffice                     # productivity suite
                     libreoffice-gtk3                # make libreoffice look better
-                    obs-studio                      # screencast
-                    pulseeffects                    # effects
+                    #obs-studio                      # screencast
+                    #pulseeffects                    # effects
                     qdirstat                        # visualize storage
                     screen                          # screen manager with terminal emulation
-                    speedcrunch                     # advanced calculator
+                    #speedcrunch                     # advanced calculator
                     steam                           # games     #non-free repo
-                    thunderbird                     # email client
+                    #thunderbird                     # email client
                     vlc                             # media player
-                    wireshark                       # analyze packets and network traffic
+                    #wireshark                       # analyze packets and network traffic
                     xournalpp                       # pdf editing
                 )
                 for A in "${APPLICATIONS[@]}"
