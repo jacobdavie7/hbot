@@ -43,6 +43,7 @@ MAIN_DIR=/usr/local/bin/helper_package/helperModules
     source $MAIN_DIR/special/special_debian_ver_upgrade.sh
     source $MAIN_DIR/special/special_install.sh
     source $MAIN_DIR/special/special_startup.sh
+    source $MAIN_DIR/special/special_pop_nvidia_driver_fix
 
 # support
     source $MAIN_DIR/support/support_usage.sh
@@ -50,7 +51,7 @@ MAIN_DIR=/usr/local/bin/helper_package/helperModules
     source $MAIN_DIR/support/support_elevateCheck.sh
     source $MAIN_DIR/support/support_userAccount.sh
     
-while getopts "umdsf:iwav:xct:" FLAG; do
+while getopts "umdsf:iwav:xct:g" FLAG; do
     case "$FLAG" in
         u)
             support_elevateCheck
@@ -172,6 +173,11 @@ while getopts "umdsf:iwav:xct:" FLAG; do
             exit
             ;;
 
+        g)
+            support_elevateCheck
+            special_pop_nvidia_driver_fix
+            exit
+            ;;
     esac
 done
 
