@@ -38,6 +38,7 @@ Special
 ```
    -s  startup     Good modules to run on startup
    -i  install     Overall Machine Setup
+   -g  graphics   reinstall pop os nvidia graphics drivers, will uninstall current nvidia drivers
 ```
 ## Arguments 
 Firewall
