@@ -37,5 +37,5 @@ function support_usage
     echo -e "\n       Special"
     echo -e "           -s  startup*     good modules to run on startup"
     echo -e "           -i  install*     overall Machine Setup"
-    echo
+    echo -e "           -g  graphics*    reinstall pop os nvidia graphics drivers, will uninstall current nvidia drivers"
 }
