@@ -43,7 +43,6 @@ MAIN_DIR=/usr/local/bin/helper_package/helperModules
     source $MAIN_DIR/special/special_debian_ver_upgrade.sh
     source $MAIN_DIR/special/special_install.sh
     source $MAIN_DIR/special/special_startup.sh
-    source $MAIN_DIR/special/special_pop_nvidia_driver_fix
 
 # support
     source $MAIN_DIR/support/support_usage.sh
@@ -170,12 +169,6 @@ while getopts "umdsf:iwav:xct:g" FLAG; do
                 echo -e "\n\e[31mSorry, but '$OPTARG' is not a valid argument. See valid Arugments for option 'timezone' below\e[39m"
                 support_usage
             fi
-            exit
-            ;;
-
-        g)
-            support_elevateCheck
-            special_pop_nvidia_driver_fix
             exit
             ;;
     esac

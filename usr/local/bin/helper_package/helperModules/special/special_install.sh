@@ -23,22 +23,36 @@ function install
                     curl                            # interact with urls
                     dnsutils                        # contains dig
                     ffmpeg                          # video converter/media formats
+                    flameshot                       # screenshots
+                    fonts-unfonts-core              # display more lanuages
                     git                             # content tracker
                     gzip                            # gzip compression
                     hdparm                          # get drive parameters
                     htop                            # proccess viewer
+                    ibus-hangul                     # input korean
                     iptables                        # firewall
-                    iptables-persistent             # make ruleset persistent upon restart
+                    iptables-persistent             # make ruleset persistent upon restart         
+                    lm-sensor                       # sensor command to view temps
                     lshw                            # list hardware, view cpu details
+                    menulibre                       # edit applications whisker menu can open (add app images)
                     ncdu                            # file sizes
                     network-manager-gnome           # panel applet
+                    ntp                             # get time from ntp server
+                    nvidia-detect                   # detect package for nvidia drivers (probally going to be nvidia-driver)
+                    nvidia-driver                   # propretary nvidia drivers
+                    pipewire-alsa                   # configures pipewire to use alsa plugin
+                    pipewire-media-session-         # needed for pipewire
+                    pipewire-pulse                  # pipewire replacment daemon for pulse
                     ranger                          # terminal file explorer
+                    screen                          # screen manager with terminal emulation
                     software-properties-common      # repo manager
                     sudo                            # super
                     tree                            # show directory structure
                     unzip                           # unzip files
                     vim                             # text editor
                     whois                           # make whois lookups
+                    wireplumber                     # pipewire session manager
+                    zenity                          # draw windows for ibus
                     zip                             # create zip files
                 )
                 for U in "${UTILITIES[@]}"
@@ -47,11 +61,17 @@ function install
                 done
 
                 APPLICATIONS=(
+                    chromium                        # alt web browser, chromium-browser on pop
+                    easyeffects                     # audio effects for pipewire
+                    firefox-esr                     # web browser
+                    galculator                      # simple calculator
                     gnome-disk-utility              # gui disk manager
                     gparted                         # gui partition manager
                     keepassxc                       # password manager
+                    libreoffice                     # productivity suite
+                    libreoffice-gtk3                # make libreoffice look better 
+                    pavucontrol                     # audio mixer, made for pulse, but works with pipewire
                     qdirstat                        # visualize storage
-                    screen                          # screen manager with terminal emulation
                     vlc                             # media player
                 )
                 for A in "${APPLICATIONS[@]}"
@@ -61,7 +81,6 @@ function install
 
                 PACKAGE_MANAGERS=(
                     flatpak
-                #    snapd
                 )
                 for P in "${PACKAGE_MANAGERS[@]}"
                 do
@@ -82,33 +101,23 @@ function install
                     apt install -y $F
                 done
 
-                EXTRA=(
-                    fonts-unfonts-core              # display more lanuages
-                    ibus-hangul                     # input korean
-                    libpcslite-dev                  # smartcard access via pc/sc (proxmark)
-                    libreadline-dev                 # consistent ui to recall lines of previously input (proxmark)
-                    menulibre                       # edit applications whisker menu can open (add app images)
-                    ntp                             # get time from ntp server
-                    v4l2loopback-dkms               # video loopback device - needed for obs
-                    zenity                          # draw windows for ibus
-                    flameshot                       # screenshots
-                    firefox-esr                     # web browser
-                    galculator                      # simple calculator
-                    gqrx-sdr                        # sdr
-                    libreoffice                     # productivity suite
-                    libreoffice-gtk3                # make libreoffice look better
-                    obs-studio                      # screencast
-                    pulseeffects                    # effects
-                    steam                           # games     #non-free repo
-                    thunderbird                     # email client
-                    wireshark                       # analyze packets and network traffic
-                    gummi                           # laTeX editor
-                    speedcrunch                     # advanced calculator
-                )
-                for E in "${EXTRA[@]}"
-                do
-                    apt install -y $E
-                done
+            #    EXTRA=(
+            #        libpcslite-dev                  # smartcard access via pc/sc (proxmark)
+            #        libreadline-dev                 # consistent ui to recall lines of previously input (proxmark)
+            #        v4l2loopback-dkms               # video loopback device - needed for obs
+            #        gqrx-sdr                        # sdr
+            #        obs-studio                      # screencast
+            #        pulseeffects                    # effects for pulse
+            #        steam                           # games     #non-free repo      # flatpak more stable
+            #        thunderbird                     # email client
+            #        wireshark                       # analyze packets and network traffic
+            #        gummi                           # laTeX editor
+            #        speedcrunch                     # advanced calculator
+            #    )
+            #    for E in "${EXTRA[@]}"
+            #    do
+            #        apt install -y $E
+            #    done
 
 
         # flatpak
@@ -118,12 +127,13 @@ function install
                     flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 
                 FLATPAK=(
-                    com.github.xournalpp.xournalpp  # xournalpp, pdf editor
+                    com.discordapp.Discord          # gamer chat
                     com.github.tchx84.Flatseal      # flatseal, gui for flapak permissons
-                    com.spotify.Client              # spotify, music
+                    com.system76.Popsicle           # easy iso flasher
                     com.valvesoftware.Steam         # steam, games
+                    com.spotify.Client              # spotify, music
                     com.visualstudio.code-oss       # IDE
-                    com.github.wwmm.easyeffects     # sound proccesing for pipewire
+                    com.github.xournalpp.xournalpp  # xournalpp, pdf editor
                     )
                 for F in "${FLATPAK[@]}"
                 do
@@ -139,9 +149,18 @@ function install
                 chown _apt:jacob /tmp/packages
                 wget -O /tmp/packages/mullvad.deb https://mullvad.net/en/download/app/deb/latest -P /tmp/packages # -O used to put into file, page does not give .deb file
                 apt install /tmp/packages/./mullvad.deb
-                
+
+            # signal
+                wget -O- https://updates.signal.org/desktop/apt/keys.asc | gpg --dearmor > signal-desktop-keyring.gpg
+                cat signal-desktop-keyring.gpg | sudo tee /usr/share/keyrings/signal-desktop-keyring.gpg > /dev/null
+                echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/signal-desktop-keyring.gpg] https://updates.signal.org/desktop/apt xenial main' |\
+                sudo tee /etc/apt/sources.list.d/signal-xenial.list
+                sudo apt update && sudo apt install signal-desktop    
+            
             # virtual box
             
+    # enable wireplumber session manger for pipewire
+        systemctl --user --now enable wireplumber.service
 
     # setup unattended upgrades
         sudo dpkg-reconfigure --priority=low unattended-upgrades
