@@ -1,6 +1,6 @@
 #!/bin/bash
 
-function install
+function special_install
 {
     # check if we want to run script
         echo -e "\nRun full install and setup script? (yes or n)"
