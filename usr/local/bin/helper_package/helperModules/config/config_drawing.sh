@@ -5,6 +5,17 @@ function config_drawing
     echo -e "\n\e[44mExecuting 'Drawing' Function\e[49m"
 
     # need x11 config updated once. This is persitent after restart. Moved to install module so this can be run without root
+            XORG_APPEND=$(cat /usr/share/X11/xorg.conf.d/70-wacom.conf | grep "S620" | cut -d' ' -f2,3 | sed 's/ //g')
+            if [ "$XORG_APPEND" != "GaomonS620" ]; then
+                support_elevateCheck    # verify root, don't check this when module initially called, want to run rest of module without sudo. This portion only needs to be run once and is persitent 
+                chmod 664 /usr/share/X11/xorg.conf.d/70-wacom.conf
+                echo -e '\n\n# Gaomon S620\nSection "InputClass"\n\tIdentifier "GAOMON Gaomon Tablet"\n\tMatchUSBID  "256c:006d"\n\tMatchDevicePath "/dev/input/event*"\n\tDriver "wacom"\nEndSection' >> /usr/share/X11/xorg.conf.d/70-wacom.conf
+                chmod 644 /usr/share/X11/xorg.conf.d/70-wacom.conf
+                echo -e "Need to Restart/Logout Before Continuing. Do so and Run Script Again"
+                exit
+            else
+                echo -e "\nEntry in config found!"
+            fi
 
 	#Find Input ID's (used to map to single display)
 		INPUT_ID_PEN=$(xsetwacom --list | grep "GAOMON Gaomon Tablet Pen stylus"| cut -f2 | cut -d' ' -f2)
