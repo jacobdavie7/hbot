@@ -43,4 +43,8 @@ function config_vpn_home ()
 
         echo -e "\nConnecting to Mullvad"
             mullvad connect
+    
+    # View Connection Status
+        echo -e "\nVerify Connection Status"
+            mullvad status
 }
