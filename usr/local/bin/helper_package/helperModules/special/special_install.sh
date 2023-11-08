@@ -189,13 +189,14 @@ function special_install
             NVIDIA_DETECT=$(nvidia-detect)
             NVIDIA_DETECT_DRIVER=$(nvidia-detect | grep nvidia-driver | cut -d ' ' -f5)
                 if [ "$NVIDIA_DETECT" == "No NVIDIA GPU detected." ]; then
-                    echo nvidia flag no
+                    echo -e "\n\n no nvidia GPU found \n\n"
                 elif [ "$NVIDIA_DETECT_DRIVER" == "nvidia-driver" ]; then
-                    echo nvidia flag yes
-                    #sleep 5
-                    #nvidia-smi
+                    echo -e "\n\n nvidia GPU found! Installing nvidia-driver \n\n"   # keep space between ! and \n
+                    apt install nvidia-driver -y
+                    sleep 5
+                    nvidia-smi
                 else
-                    echo nvidia flag error
+                    echo -e "\n\n error detecting if nvidia GPU is present. No action will be taken \n\n"
                 fi
 
     # icons install + cache
@@ -206,15 +207,15 @@ function special_install
 
 }
 
-   #Clone GitHub Repo
-        #git clone https://github.com/AdnanHodzic/displaylink-debian.git /tmp/displaylink-debian
-        #./tmp/displaylink-debian/displaylink-debian.sh
+#Clone GitHub Repo
+    #git clone https://github.com/AdnanHodzic/displaylink-debian.git /tmp/displaylink-debian
+    #./tmp/displaylink-debian/displaylink-debian.sh
 
     # Run xrandr --listproviders to view monitor outputs. Provider 0 should be GPU, 1-4 should be the adapters.
     # Should look like something below:
     # Provider 1: id: 0x138 cap: 0x2, Sink Output crtcs: 1 outputs: 1 associated providers: 0 name:modesetting
     # ...Goes to provider 4, looks like provider 1                                          ^ This 0 should change to 1 after the commands below
- # add contrib and non-free repos, change http to https, do this before steam and nvidia
+# add contrib and non-free repos, change http to https, do this before steam and nvidia
 # install nvidia-detect, grab what it wants you to install, do this uphere, before steam
 
     # setup unattended upgrades
