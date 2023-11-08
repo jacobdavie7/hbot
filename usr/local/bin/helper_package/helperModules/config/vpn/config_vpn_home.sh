@@ -8,7 +8,7 @@ function config_vpn_home ()
 
     # Keys
         echo -e "\nSet Wireguard Key Regen to 72 hours"
-            mullvad tunnel wireguard key rotation-interval set 72
+            mullvad tunnel set wireguard --rotation-interval 72
 
     # Location
         echo -e "\nSet US Relay"
@@ -32,10 +32,10 @@ function config_vpn_home ()
             mullvad obfuscation set mode auto
 
         echo -e "\nEnable Quantum Resistance"
-            mullvad tunnel wireguard quantum-resistant-tunnel set on
+            mullvad tunnel set wireguard --quantum-resistant on
 
         echo -e "\nDisable MultiHop"
-            mullvad relay set tunnel wireguard --entry-location none
+            mullvad relay set location none
 
     # Connect
         echo -e "\nEnable Auto Connect"
