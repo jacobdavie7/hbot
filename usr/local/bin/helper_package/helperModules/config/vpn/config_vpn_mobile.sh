@@ -35,7 +35,7 @@ function config_vpn_mobile ()
             mullvad tunnel set wireguard --quantum-resistant on
 
         echo -e "\nDisable MultiHop"
-            mullvad relay set location none
+            mullvad relay set tunnel wireguard --use-multihop off
 
     # Connect
         echo -e "\nEnable Auto Connect"
