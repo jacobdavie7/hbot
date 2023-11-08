@@ -21,7 +21,7 @@ function special_install
 
     # updates
         echo -e "\n\n\e[45m run update module \e[49m\n\n"
-            updater
+            general_updater
 
     # package installation
         # apt
@@ -158,16 +158,16 @@ function special_install
                     echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/oracle-virtualbox-2016.gpg] https://download.virtualbox.org/virtualbox/debian bookworm contrib' |\
                     sudo tee /etc/apt/sources.list.d/oracle-virtualbox.list
                     wget -O- https://www.virtualbox.org/download/oracle_vbox_2016.asc | sudo gpg --dearmor --yes --output /usr/share/keyrings/oracle-virtualbox-2016.gpg
-                    sudo apt update && sudo apt install virtualbox-7.0
+                    sudo apt update && sudo apt install virtualbox-7.0 -y
 
 
     # setup firewall
         echo -e "\n\n\e[45m call firewall home module \e[49m\n\n"
-            firewallHome
+            firewall_home
 
     # sudo 
         echo -e "\n\n\e[45m add user account to sudo group \e[49m\n\n"
-                usermod -a -G sudo $USER_ACCOUNT
+            usermod -a -G sudo $USER_ACCOUNT
 
     # enable wireplumber session manger for pipewire
         echo -e "\n\n\e[45m enable wireplumber service \e[49m\n\n"
@@ -188,7 +188,7 @@ function special_install
         
     # updates
         echo -e "\n\n\e[45m run update module \e[49m\n\n"
-            updater
+            general_updater
     
     # nvidia drivers
         echo -e "\n\n\e[45m check if nvidia card is found \e[49m\n\n"
