@@ -136,7 +136,7 @@ function special_install
 
         # apt local packages
             echo -e "\n\n\e[45m install local apt packages \e[49m\n\n"
-           
+
             # mullvad
                 echo -e "\n\n\e[45m install mullvad \e[49m\n\n"
                     mkdir /tmp/packages
@@ -152,14 +152,13 @@ function special_install
                     echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/signal-desktop-keyring.gpg] https://updates.signal.org/desktop/apt xenial main' |\
                     sudo tee /etc/apt/sources.list.d/signal-xenial.list
                     sudo apt update && sudo apt install signal-desktop
-            
+
             # virtual box - ensure distro and virtual box version are correct (distro (bookmark) in 1st line, virtualbox version in last. Versions do no perfectly match downloadable on website, tab complete to check what the latest version in the repo is)
                 echo -e "\n\n\e[45m install virtualbox \e[49m\n\n"
                     echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/oracle-virtualbox-2016.gpg] https://download.virtualbox.org/virtualbox/debian bookworm contrib' |\
                     sudo tee /etc/apt/sources.list.d/oracle-virtualbox.list
                     wget -O- https://www.virtualbox.org/download/oracle_vbox_2016.asc | sudo gpg --dearmor --yes --output /usr/share/keyrings/oracle-virtualbox-2016.gpg
                     sudo apt update && sudo apt install virtualbox-7.0 -y
-
 
     # setup firewall
         echo -e "\n\n\e[45m call firewall home module \e[49m\n\n"
@@ -180,29 +179,23 @@ function special_install
     # static route 
         echo -e "\n\n\e[45m add static route \e[49m\n\n"
             nmcli connection modify "Wired connection 1" ipv4.routes "10.0.3.0/24 10.0.4.1"
-    
-    # ntp
-        echo -e "\n\n\e[45m enable the ntp service \e[49m\n\n"
-            systemctl start ntp
-            systemctl enable ntp
-        
+
     # updates
         echo -e "\n\n\e[45m run update module \e[49m\n\n"
             general_updater
-    
+
     # nvidia drivers
         echo -e "\n\n\e[45m check if nvidia card is found \e[49m\n\n"
             NVIDIA_DETECT=$(nvidia-detect)
-            NVIDIA_DETECT_DRIVER=$(nvidia-detect | grep nvidia-driver)
-                if ["NVIDIA_DETECT" == "No NVIDIA GPU detected."]; then
+            NVIDIA_DETECT_DRIVER=$(nvidia-detect | grep nvidia-driver | cut -d ' ' -f5)
+                if [ "$NVIDIA_DETECT" == "No NVIDIA GPU detected." ]; then
                     echo nvidia flag no
-                elif ["NVIDIA_DETECT_DRIVER" == "nvidia-driver"]; then
+                elif [ "$NVIDIA_DETECT_DRIVER" == "nvidia-driver" ]; then
                     echo nvidia flag yes
-                    # apt install nvidia-driver
+                    #sleep 5
+                    #nvidia-smi
                 else
                     echo nvidia flag error
-                    nvidia-smi
-                    sleep 5
                 fi
 
     # icons install + cache
