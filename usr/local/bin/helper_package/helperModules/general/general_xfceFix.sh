@@ -3,20 +3,15 @@
 function general_xfceFix
 {
     echo "currently broke. Does nothing"
-    # restart panel
-        #su $USER_ACCOUNT -c xfce4-panel -r
 
-    # lightdm - will fix xfce if panel restart breaks everything
-        #systemctl restart lightdm
-   
-    #pulse BREAKS OUTPUT, WILL NOT SHOW ANY DEVICES
-        #systemctl --user restart pulseaudio.service
-        #sleep 3
-        #systemctl --user restart pulseaudio.socket
-        
-        #pacmd unload-module module-udev-detect
-        #pacmd load-module module-udev-detect
-        #pactl load-module module-detect
+    # echo -e "\nRestarting panel for user"
+    #    su $USER_ACCOUNT -c xfce4-panel -r
+    #    sleep 2
 
-    #network manger
+    # echo -e "\nRestarting the lightdm display manager"    
+    #    systemctl restart lightdm
+    #    sleep 2
+    
+    # echo -e "\nRestarting the xfwm4 window manager"
+    #    xfwm4 --replace
 }
