@@ -46,9 +46,9 @@ function special_install
                         network-manager-gnome           # panel applet
                         ntp                             # get time from ntp server
                         nvidia-detect                   # detect package for nvidia drivers (probally going to be nvidia-driver)
-                        pipewire-alsa                   # configures pipewire to use alsa plugin
-                        pipewire-media-session-         # needed for pipewire
-                        pipewire-pulse                  # pipewire replacment daemon for pulse
+                        #pipewire-alsa                   # configures pipewire to use alsa plugin
+                        #pipewire-media-session-         # needed for pipewire
+                        #pipewire-pulse                  # pipewire replacment daemon for pulse
                         ranger                          # terminal file explorer
                         screen                          # screen manager with terminal emulation
                         software-properties-common      # repo manager
@@ -58,7 +58,7 @@ function special_install
                         unzip                           # unzip files
                         vim                             # text editor
                         whois                           # make whois lookups
-                        wireplumber                     # pipewire session manager
+                        #wireplumber                     # pipewire session manager
                         zenity                          # draw windows for ibus
                         zip                             # create zip files
                     )
@@ -121,6 +121,7 @@ function special_install
                 flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 
             FLATPAK=(
+                org.cryptomator.Cryptomator     # client side encryption
                 com.discordapp.Discord          # gamer chat
                 com.github.tchx84.Flatseal      # flatseal, gui for flapak permissons
                 com.system76.Popsicle           # easy iso flasher
@@ -169,12 +170,12 @@ function special_install
             usermod -a -G sudo $USER_ACCOUNT
 
     # enable wireplumber session manger for pipewire
-        echo -e "\n\n\e[45m enable wireplumber service \e[49m\n\n"
-            systemctl --user --now enable wireplumber.service
+    #    echo -e "\n\n\e[45m enable wireplumber service \e[49m\n\n"
+    #        systemctl --user --now enable wireplumber.service
 
     # update DNS servers
-        echo -e "\n\n\e[45m update dns servers \e[49m\n\n"
-            echo -e '9.9.9.9\n1.1.1.1\n8.8.8.8' >> /etc/resolv.conf
+    #    echo -e "\n\n\e[45m update dns servers \e[49m\n\n"
+    #        echo -e '9.9.9.9\n1.1.1.1\n8.8.8.8' >> /etc/resolv.conf
 
     # static route 
         echo -e "\n\n\e[45m add static route \e[49m\n\n"
