@@ -24,6 +24,7 @@ MAIN_DIR=/usr/local/bin/helper_package/helperModules
             source $MAIN_DIR/firewalls/rulesets/firewall_support_rulesets/firewall_v6_support_basic.sh
         # home
             source $MAIN_DIR/firewalls/rulesets/home/firewall_home_lax.sh
+            source $MAIN_DIR/firewalls/rulesets/home/firewall_home_lax_in.sh
             source $MAIN_DIR/firewalls/rulesets/home/firewall_home_limited_vpn.sh
             source $MAIN_DIR/firewalls/rulesets/home/firewall_home_limited_no_local.sh
             source $MAIN_DIR/firewalls/rulesets/home/firewall_home_limited.sh
@@ -89,6 +90,8 @@ while getopts "umdsf:iwav:xct:g" FLAG; do
                 firewall_support_reset
             elif [ "$OPTARG" == "lax" ]; then
                 firewall_home_lax
+            elif [ "$OPTARG" == "lax_in" ]; then
+                firewall_home_lax_in
             elif [ "$OPTARG" == "local" ]; then
                 firewall_support_allow_local_only
             elif [ "$OPTARG" == "secure" ]; then

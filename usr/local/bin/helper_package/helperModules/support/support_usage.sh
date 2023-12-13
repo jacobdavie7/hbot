@@ -25,6 +25,7 @@ function support_usage
     echo -e "           -f  firewall*    deploy firewall ruleset - REQUIRES ARGUMENT"
     echo -e "                   home     standard home use"
     echo -e "                   lax      lax home use - Allow all Out"
+    echo -e "                   lax_in   lax home use with inbound - Allow all Out, AND accept ssh and ping IN"
     echo -e "                   limited  limited home use - Internet Only (HTTP, HTTPS, DNS)"
     echo -e "                   secure   encrypted internt only (HTTPS, DoH, DoT) - HTTP and DNS over 53 will NOT work"
     echo -e "                   vm       limited home use - Internet Only (HTTP, HTTPS, DNS) WITHOUT local access"
