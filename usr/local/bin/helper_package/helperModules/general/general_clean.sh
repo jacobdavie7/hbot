@@ -10,6 +10,9 @@ function general_clean
     
     echo -e "\nRemoving unused flatpak runtimes"
         flatpak uninstall --unused -y
+    
+    echo -e "\nRemoving flatpak cache"
+        rm -rf /var/tmp/flatpak-cache-*
 
     echo -e "\nEmpyting notification log"
         rm -r /home/$USER_ACCOUNT/.cache/xfce4/notifyd/*
