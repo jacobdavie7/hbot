@@ -51,6 +51,7 @@ function special_install
                         #pipewire-pulse                  # pipewire replacment daemon for pulse
                         ranger                          # terminal file explorer
                         screen                          # screen manager with terminal emulation
+                        secure-delete                   # contains sfill command
                         software-properties-common      # repo manager
                         sudo                            # super
                         tree                            # show directory structure
