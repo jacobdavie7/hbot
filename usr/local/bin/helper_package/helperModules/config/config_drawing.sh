@@ -27,10 +27,12 @@ function config_drawing
                 echo "\n\nSet the following preferances within xournalpp (Edit > Preferances)"
                 echo " - Input System Tab"
                 echo "    - Set GAOMON Gaemon Tablet Pad pad (tablet pad) > Mouse + Keyboard Combo (This will allow button on tablet to be keyboard input)"
+                echo "    - Set Both keyboard inputs (noted as mouse) > Mouse + Keyboard Combo (This will allow keyboard to enter text input)"
+                echo "    - Set GAOMON Gaemon Tablet Pad pad (tablet pad) > Mouse + Keyboard Combo (This will allow button on tablet to be keyboard input)"
                 echo " - Stylus Tab"
                 echo "    - Set button 1 to Eraser"
                 echo "    - Set button 2 to Hand"
-
+                echo "\n - Toolbar (not from preferances menu)> View > Toolbars > Xournal++"
                 echo -e "\nNeed to Restart/Logout Before Continuing. Do so and RUN SCRIPT AGAIN"
                 exit
             else
@@ -49,7 +51,7 @@ function config_drawing
 
 	echo -e "\nMapping pad keys"
         echo " - pen"
-            xsetwacom --set 'GAOMON Gaomon Tablet Pad pad' Button 1 key "+ctrl +shift p -shift -ctrl"	#Pen
+            xsetwacom --set 'GAOMON Gaomon Tablet Pad pad' Button 1 key "+ctrl +shift p d -shift -ctrl"	#Pen, p to select pen, d to deselect (d stands for default) shapes that are drawn with pen and take priority over freedraw
         echo " - highlighter"
             xsetwacom --set 'GAOMON Gaomon Tablet Pad pad' Button 2 key "+ctrl +shift h -shift -ctrl"	#Highlighter
         echo " - undo"
