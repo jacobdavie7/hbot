@@ -28,6 +28,7 @@ function special_install
             # apt utilities
                 echo -e "\n\n\e[45m install utility apt packages \e[49m\n\n"
                     UTILITIES=(
+                        autorandr                       # default display layout
                         curl                            # interact with urls
                         dnsutils                        # contains dig
                         ffmpeg                          # video converter/media formats
@@ -182,6 +183,15 @@ function special_install
         echo -e "\n\n\e[45m add static route \e[49m\n\n"
             nmcli connection modify "Wired connection 1" ipv4.routes "10.0.3.0/24 10.0.4.1"
 
+    # setup autorandr for default dispaly order
+            config_monitors                     # call the monitors function, autorandr will save the current settings and layout
+            autorandr --save triple_primary     # save the currently display layout and settings as a autorandr profile called triple_primary
+            autorandr --default triple_primary  # set the triple_primary profile as the default
+            # run "autorandr triple_primary" to set profile to triple_primary, "autorandr --config" to view saved config of current profile
+
+    # update timeout from 90s to 5s. This will only give nvidia-persisted 5s before being killed during shutdown, instead of needing to wait the full 90s.
+        sed -i 's/#DefaultTimeoutStopSec=90s/DefaultTimeoutStopSec=5s/' /etc/systemd/system.conf
+            
     # updates
         echo -e "\n\n\e[45m run update module \e[49m\n\n"
             general_updater
