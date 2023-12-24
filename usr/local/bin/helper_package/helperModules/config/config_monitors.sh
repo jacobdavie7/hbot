@@ -28,7 +28,7 @@ function config_monitors
         xrandr --output DVI-D-0 --size 1920x1080 --rate 75 --pos 3840x0 --auto           # --right-of HDMI-0    --pos 3120x1080
     # echo " - Top (TV)"
     #    xrandr --output DVI-I-1-1 --pos 1320x0                                          # --above HDMI-0       --pos 1320x0
-
+       
     echo -e "\nClose Display Pop-up"
         pkill xfce4-display-s   # full proccess is xfce4-display-settings -m, pkill only works with up to 15 characters
 
