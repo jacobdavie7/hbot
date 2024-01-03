@@ -78,6 +78,7 @@ function special_install
                         galculator                      # simple calculator
                         gnome-disk-utility              # gui disk manager
                         gparted                         # gui partition manager
+                        gsmartcontrol                   # gui for smart data
                         keepassxc                       # password manager
                         libreoffice                     # productivity suite
                         libreoffice-gtk3                # make libreoffice look better 
@@ -215,25 +216,14 @@ function special_install
     # keyboard shortcuts
     # startup applications
     # cron jobs
-
-
-}
-
-#Clone GitHub Repo
-    #git clone https://github.com/AdnanHodzic/displaylink-debian.git /tmp/displaylink-debian
-    #./tmp/displaylink-debian/displaylink-debian.sh
-
-    # Run xrandr --listproviders to view monitor outputs. Provider 0 should be GPU, 1-4 should be the adapters.
-    # Should look like something below:
-    # Provider 1: id: 0x138 cap: 0x2, Sink Output crtcs: 1 outputs: 1 associated providers: 0 name:modesetting
-    # ...Goes to provider 4, looks like provider 1                                          ^ This 0 should change to 1 after the commands below
-# add contrib and non-free repos, change http to https, do this before steam and nvidia
-# install nvidia-detect, grab what it wants you to install, do this uphere, before steam
-
     # setup unattended upgrades
     #    sudo dpkg-reconfigure --priority=low unattended-upgrades
     #    make choose yes
     #    check with "sudo systemctl status unattended-upgrades.service"
+
+
+}
+
 
 
 # apt extra
