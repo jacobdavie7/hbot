@@ -126,6 +126,7 @@ function special_install
             FLATPAK=(
                 org.cryptomator.Cryptomator     # client side encryption
                 com.discordapp.Discord          # gamer chat
+                com.jgraph.drawio.desktop       # drawing
                 com.github.tchx84.Flatseal      # flatseal, gui for flapak permissons
                 com.system76.Popsicle           # easy iso flasher
                 com.valvesoftware.Steam         # steam, games
@@ -156,6 +157,11 @@ function special_install
                     echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/signal-desktop-keyring.gpg] https://updates.signal.org/desktop/apt xenial main' |\
                     sudo tee /etc/apt/sources.list.d/signal-xenial.list
                     sudo apt update && sudo apt install signal-desktop
+
+            # VSCodium
+                wget -qO - https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg | gpg --dearmor | sudo dd of=/usr/share/keyrings/vscodium-archive-keyring.gpg    # gpg key
+                echo 'deb [ signed-by=/usr/share/keyrings/vscodium-archive-keyring.gpg ] https://download.vscodium.com/debs vscodium main' | sudo tee /etc/apt/sources.list.d/vscodium.list  #repo
+                sudo apt update && sudo apt install codium
 
             # virtual box - ensure distro and virtual box version are correct (distro (bookmark) in 1st line, virtualbox version in last. Versions do no perfectly match downloadable on website, tab complete to check what the latest version in the repo is)
                 echo -e "\n\n\e[45m install virtualbox \e[49m\n\n"
