@@ -34,11 +34,11 @@ function firewall_header
             iptables -A INPUT -p udp --dport 1900 -j DROP -m comment --comment "DROP UPnP"
         echo " - Steam" # needs to be before related/established, steam will intitiate on both sides and remote play will match on related/established. Needs to be BEFORE. Even with dropping these before, steam can lauch the game on remote, but will not be able to get a virtual desktop connection 
             echo "   - Remote Play UPD (DROP - IN)" 
-                iptables -A INPUT -p udp --sport 27031:27036 -j DROP -m comment --comment "DROP new incoming Steam remote play udp"
+                iptables -A INPUT -p udp --dport 27031:27036 -j DROP -m comment --comment "DROP new incoming Steam remote play udp"
             echo "   - Remote Play TCP (DROP - IN)" 
-                iptables -A INPUT -p tcp --sport 27036 -j DROP -m comment --comment "DROP new incoming Steam remote play tcp"
+                iptables -A INPUT -p tcp --dport 27036 -j DROP -m comment --comment "DROP new incoming Steam remote play tcp"
             echo "   - SRCDS Rcon      (DROP - IN)"
-                iptables -A INPUT -p tcp --sport 27015 -j DROP -m comment --comment "DROP new incoming Steam - source dedicated server remote console"
+                iptables -A INPUT -p tcp --dport 27015 -j DROP -m comment --comment "DROP new incoming Steam - source dedicated server remote console"
 
     echo -e "\nDROP services OUT"
         echo " - Steam" # needs to be before related/established, steam will intitiate on both sides and remote play will match on related/established. Needs to be BEFORE. Even with dropping these before, steam can lauch the game on remote, but will not be able to get a virtual desktop connection 
