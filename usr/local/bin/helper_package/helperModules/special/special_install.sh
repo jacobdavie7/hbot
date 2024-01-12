@@ -126,12 +126,10 @@ function special_install
             FLATPAK=(
                 org.cryptomator.Cryptomator     # client side encryption
                 com.discordapp.Discord          # gamer chat
-                com.jgraph.drawio.desktop       # drawing
                 com.github.tchx84.Flatseal      # flatseal, gui for flapak permissons
                 com.system76.Popsicle           # easy iso flasher
                 com.valvesoftware.Steam         # steam, games
                 com.spotify.Client              # spotify, music
-                com.visualstudio.code-oss       # IDE
                 com.github.xournalpp.xournalpp  # pdf editor
                 )
             for F in "${FLATPAK[@]}"
@@ -159,9 +157,10 @@ function special_install
                     sudo apt update && sudo apt install signal-desktop
 
             # VSCodium
-                wget -qO - https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg | gpg --dearmor | sudo dd of=/usr/share/keyrings/vscodium-archive-keyring.gpg    # gpg key
-                echo 'deb [ signed-by=/usr/share/keyrings/vscodium-archive-keyring.gpg ] https://download.vscodium.com/debs vscodium main' | sudo tee /etc/apt/sources.list.d/vscodium.list  #repo
-                sudo apt update && sudo apt install codium
+                echo -e "\n\n\e[45m install VSCodium \e[49m\n\n"
+                    wget -qO - https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg | gpg --dearmor | sudo dd of=/usr/share/keyrings/vscodium-archive-keyring.gpg    # gpg key
+                    echo 'deb [ signed-by=/usr/share/keyrings/vscodium-archive-keyring.gpg ] https://download.vscodium.com/debs vscodium main' | sudo tee /etc/apt/sources.list.d/vscodium.list  #repo
+                    sudo apt update && sudo apt install codium
 
             # virtual box - ensure distro and virtual box version are correct (distro (bookmark) in 1st line, virtualbox version in last. Versions do no perfectly match downloadable on website, tab complete to check what the latest version in the repo is)
                 echo -e "\n\n\e[45m install virtualbox \e[49m\n\n"
@@ -250,4 +249,15 @@ function special_install
 #      for E in "${EXTRA[@]}"
 #      do
 #          apt install -y $E
+#      done
+
+# flatpak extra
+#   echo -e "\n\n\e[45m install extra apt packages \e[49m\n\n"
+#      FLATPAK=(
+#           com.jgraph.drawio.desktop
+#           com.visualstudio.code-oss       # IDE
+#      )
+#      for F in "${FLATPAK[@]}"
+#      do
+#           flatpak install flathub $F -y
 #      done
