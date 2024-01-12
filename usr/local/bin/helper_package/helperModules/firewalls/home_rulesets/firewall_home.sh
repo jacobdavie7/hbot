@@ -6,18 +6,6 @@ function firewall_home
 
     echo -e "\n\e[44mDeploying Home Firewall Rules\e[49m"
 
-    echo -e "\nCreate STEAM_OUT chain"
-        iptables -N STEAM_OUT
-
-    echo -e "\nDROP steam OUT" # needs to be before related/established, steam will intitiate on both sides and remote play will match on related/established. Needs to be BEFORE. Even with dropping these before, steam can lauch the game on remote, but will not be able to get a virtual desktop connection 
-            echo "   - Remote Play UPD (DROP - OUT)" 
-                iptables -A OUTPUT -p udp --dport 27031:27036 -m conntrack --ctstate NEW -j DROP -m comment --comment "DROP new outgoing Steam remote play udp"
-            echo "   - Remote Play TCP (DROP - OUT)" 
-                iptables -A OUTPUT -p tcp --dport 27036 -m conntrack --ctstate NEW -j DROP -m comment --comment "DROP new outgoing Steam remote play tcp"
-            echo "   - SRCDS Rcon      (DROP - OUT)"
-                iptables -A OUTPUT -p tcp --dport 27015 -m conntrack --ctstate NEW -j DROP -m comment --comment "DROP new outgoing Steam - source dedicated server remote console"
-            echo "   - SRCDS Rcon      (DROP - OUT)"
-            
     echo -e "\nACCEPT services OUT"
         echo " - SSH        (ACCEPT - OUT)"
             iptables -A OUTPUT -p tcp --dport 22 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing ssh"

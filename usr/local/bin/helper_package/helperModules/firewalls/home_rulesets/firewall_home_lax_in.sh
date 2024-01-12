@@ -6,7 +6,7 @@ function firewall_home_lax_in
     
     echo -e "\n\e[44mDeploying Lax IN Home Firewall Rules\e[49m"
         
-        echo -e "Setting default OUTPUT policy to ACCEPT"    
+        echo -e "\nSetting default OUTPUT policy to ACCEPT"    
             iptables -P OUTPUT ACCEPT
 
         echo -e "\nACCEPT services IN"

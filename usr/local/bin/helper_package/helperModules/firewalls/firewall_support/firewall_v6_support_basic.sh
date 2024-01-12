@@ -12,7 +12,10 @@ function firewall_v6_support_basic
         echo -e "\nFlushing all IPv6 chains"
             ip6tables -F
 
-        echo "ACCEPT everything on loopback" # needed on ipv6 to login
+        echo -e "\nDROP spoofed loopback" # needed on ipv6 to login
+            ip6tables -A INPUT -s ::1/128 ! -i lo -j DROP
+        
+        echo -e "\nACCEPT everything on loopback" # needed on ipv6 to login
             ip6tables -A INPUT -i lo -j ACCEPT -m comment --comment "ACCEPT all v6 incoming on loopback"
             ip6tables -A OUTPUT -o lo -j ACCEPT -m comment --comment "ACCEPT all v6 outgoing on loopback"
 

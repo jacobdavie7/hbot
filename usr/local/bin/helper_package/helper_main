@@ -31,9 +31,9 @@ MAIN_DIR=/usr/local/bin/helper_package/helperModules
         source $MAIN_DIR/firewalls/home_rulesets/firewall_home_secure.sh
         source $MAIN_DIR/firewalls/home_rulesets/firewall_home.sh
     # server_rulesets
-        source $MAIN_DIR/firewalls/rulesets/server/firewall_server_backup.sh
-        source $MAIN_DIR/firewalls/rulesets/server/firewall_server_web.sh
-        source $MAIN_DIR/firewalls/rulesets/server/firewall_server_wol.sh
+        source $MAIN_DIR/firewalls/server_rulesets/firewall_server_backup.sh
+        source $MAIN_DIR/firewalls/server_rulesets/firewall_server_web.sh
+        source $MAIN_DIR/firewalls/server_rulesets/firewall_server_wol.sh
 
 # general
     source $MAIN_DIR/general/general_updater.sh

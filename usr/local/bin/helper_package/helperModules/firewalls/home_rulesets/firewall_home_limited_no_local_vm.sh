@@ -16,6 +16,9 @@ function firewall_home_limited_no_local_vm
         echo " - APIPA"
             iptables -A INPUT -s 169.254.0.0/16 -j DROP -m comment --comment "DROP from APIPA" 
 
+    echo -e "\nACCEPT Local DNS Out"
+        iptables -A OUTPUT -p udp -d 10.0.4.1 --dport 53 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing dns to local"
+
     echo -e "\nDROP Local Out"
         echo " - Class A"
             iptables -A OUTPUT -d 10.0.0.0/8 -j DROP -m comment --comment "DROP to Private Class A"

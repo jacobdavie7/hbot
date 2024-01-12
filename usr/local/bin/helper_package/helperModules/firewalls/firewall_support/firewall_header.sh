@@ -18,6 +18,8 @@ function firewall_header
         iptables -X
 
     echo -e "\nDROP bad packets IN"
+        echo " - lo spoof   (DROP - IN)"
+            iptables -A INPUT -s 127.0.0.0/8 ! -i lo -j DROP -m comment --comment "DROP 127.0.0.1 not from loopback"
         echo " - XMAS       (DROP - IN)"
             iptables -A INPUT -p tcp --tcp-flags ALL ALL -j DROP -m comment --comment "DROP outgoing XMAS"
         echo " - NULL       (DROP - IN)"
@@ -28,6 +30,16 @@ function firewall_header
             iptables -A INPUT -p tcp ! --syn -m conntrack --ctstate NEW -j DROP -m comment --comment "DROP any NEW connections that do NOT start with SYN"
         echo " - SYN Flood  (DROP - IN)"
             iptables -A INPUT -p tcp --syn -m hashlimit --hashlimit-name synFlood --hashlimit-above 30/s -j DROP -m comment --comment "LIMIT SYN to 30/sec"
+        echo " - UPnP (DROP - IN)" 
+            iptables -A INPUT -p udp --dport 1900 -j DROP -m comment --comment "DROP UPnP"
+               echo -e "\nDROP services OUT"
+        echo " - Steam" # needs to be before related/established, steam will intitiate on both sides and remote play will match on related/established. Needs to be BEFORE. Even with dropping these before, steam can lauch the game on remote, but will not be able to get a virtual desktop connection 
+            echo "   - Remote Play UPD (DROP - OUT)" 
+                iptables -A OUTPUT -p udp --dport 27031:27036 -m conntrack --ctstate NEW -j DROP -m comment --comment "DROP new outgoing Steam remote play udp"
+            echo "   - Remote Play TCP (DROP - OUT)" 
+                iptables -A OUTPUT -p tcp --dport 27036 -m conntrack --ctstate NEW -j DROP -m comment --comment "DROP new outgoing Steam remote play tcp"
+            echo "   - SRCDS Rcon      (DROP - OUT)"
+                iptables -A OUTPUT -p tcp --dport 27015 -m conntrack --ctstate NEW -j DROP -m comment --comment "DROP new outgoing Steam - source dedicated server remote console"
 
     echo -e "\nACCEPT everything marked RELATED/ESTABLISHED"
         iptables -A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT -m comment --comment "ACCEPT incoming RELATED/ESTABLISHED"
@@ -35,5 +47,5 @@ function firewall_header
     
     echo "ACCEPT everything on loopback"
         iptables -A INPUT -i lo -j ACCEPT -m comment --comment "ACCEPT all incoming on loopback"
-        iptables -A OUTPUT -o lo -j ACCEPT -j ACCEPT -m comment --comment "ACCEPT all outgoing on loopback"
+        iptables -A OUTPUT -o lo -j ACCEPT -m comment --comment "ACCEPT all outgoing on loopback"
 }
