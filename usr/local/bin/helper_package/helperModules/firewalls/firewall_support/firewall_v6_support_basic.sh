@@ -13,11 +13,11 @@ function firewall_v6_support_basic
             ip6tables -F
 
         echo -e "\nDROP spoofed loopback" # needed on ipv6 to login
-            ip6tables -A INPUT -s ::1/128 ! -i lo -j DROP
+            ip6tables -A INPUT -s ::1/128 ! -i lo -j DROP -m comment --comment "DROP ::1/128 not from loopback"
         
         echo -e "\nACCEPT everything on loopback" # needed on ipv6 to login
-            ip6tables -A INPUT -i lo -j ACCEPT -m comment --comment "ACCEPT all v6 incoming on loopback"
-            ip6tables -A OUTPUT -o lo -j ACCEPT -m comment --comment "ACCEPT all v6 outgoing on loopback"
+            ip6tables -A INPUT -i lo -s ::1/128 -d ::1/128 -j ACCEPT -m comment --comment "ACCEPT all v6 incoming on loopback"
+            ip6tables -A OUTPUT -o lo -s ::1/128 -d ::1/128 -j ACCEPT -m comment --comment "ACCEPT all v6 outgoing on loopback"
 
 #        echo -e "\nDROP bad packets"
 #                echo " - XMAS       (DROP - IN)"
