@@ -161,6 +161,7 @@ function special_install
                     wget -qO - https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg | gpg --dearmor | sudo dd of=/usr/share/keyrings/vscodium-archive-keyring.gpg    # gpg key
                     echo 'deb [ signed-by=/usr/share/keyrings/vscodium-archive-keyring.gpg ] https://download.vscodium.com/debs vscodium main' | sudo tee /etc/apt/sources.list.d/vscodium.list  #repo
                     sudo apt update && sudo apt install codium
+                        codium --install-extension eamodio.gitlens
 
             # virtual box - ensure distro and virtual box version are correct (distro (bookmark) in 1st line, virtualbox version in last. Versions do no perfectly match downloadable on website, tab complete to check what the latest version in the repo is)
                 echo -e "\n\n\e[45m install virtualbox \e[49m\n\n"
