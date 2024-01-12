@@ -2,40 +2,9 @@
 
 function firewall_server_backup
 {
-    firewall_v6_support_basic
+    firewall_header
 
     echo -e "\n\e[44mDeploying Backup Server Firewall Rules\e[49m"
-
-    echo -e "\nSetting default policy to DROP"
-        iptables -P INPUT DROP
-        iptables -P OUTPUT DROP
-        iptables -P FORWARD DROP
-
-    echo -e "\nFlushing all chains"
-    echo "   Includes IP's banned by Fail2Ban"
-        iptables -F
-    
-    echo -e "\nDROP bad packets"
-        echo " - XMAS       (IN)"
-            iptables -A INPUT -p tcp --tcp-flags ALL ALL -j DROP -m comment --comment "DROP outgoing XMAS"
-        echo " - NULL       (IN)"
-            iptables -A INPUT -p tcp --tcp-flags ALL NONE -j DROP -m comment --comment "DROP outgoing NULL"
-        echo " - INVALID    (IN)"
-            iptables -A INPUT -m conntrack --ctstate INVALID -j DROP -m comment --comment "DROP anything marked INVALID"
-        echo " - Fragmented (IN)"
-            iptables -A INPUT -f -j DROP -m comment --comment "DROP Fragmented"
-        echo " - NEW != SYN (IN)"
-            iptables -A INPUT -p tcp ! --syn -m conntrack --ctstate NEW -j DROP -m comment --comment "DROP any NEW connections that do NOT start with SYN"
-        echo " - SYN Flood  (IN)"
-            iptables -A INPUT -p tcp --syn -m hashlimit --hashlimit-name synFlood --hashlimit-above 30/s -j DROP -m comment --comment "LIMIT SYN to 30/sec"
-
-    echo -e "\nALLOW everything marked RELATED/ESTABLISHED"
-        iptables -A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT -m comment --comment "ACCEPT incoming RELATED/ESTABLISHED"
-        iptables -A OUTPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT -m comment --comment "ACCEPT outgoing RELATED/ESTABLISHED"
-
-    echo "ALLOW everything on loopback"
-        iptables -A INPUT -s 127.0.0.1 -j ACCEPT -m comment --comment "ACCEPT all incoming on loopback"
-        iptables -A OUTPUT -d 127.0.0.1 -j ACCEPT -m comment --comment "ACCEPT all outgoing on loopback"
 
     echo -e "\nALLOW services IN"
         echo " - ssh       (IN)"

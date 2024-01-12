@@ -14,26 +14,26 @@ MAIN_DIR=/usr/local/bin/helper_package/helperModules
             source $MAIN_DIR/config/vpn/config_vpn_mobile.sh
 
 # firewalls
-    source $MAIN_DIR/firewalls/firewall_watcher.sh
-    source $MAIN_DIR/firewalls/firewall_persistentSave.sh
-    
-    # rulesets
-        # firewall_support_rulesets
-            source $MAIN_DIR/firewalls/rulesets/firewall_support_rulesets/firewall_support_allow_local_only.sh
-            source $MAIN_DIR/firewalls/rulesets/firewall_support_rulesets/firewall_support_reset.sh
-            source $MAIN_DIR/firewalls/rulesets/firewall_support_rulesets/firewall_v6_support_basic.sh
-        # home
-            source $MAIN_DIR/firewalls/rulesets/home/firewall_home_lax.sh
-            source $MAIN_DIR/firewalls/rulesets/home/firewall_home_lax_in.sh
-            source $MAIN_DIR/firewalls/rulesets/home/firewall_home_limited_vpn.sh
-            source $MAIN_DIR/firewalls/rulesets/home/firewall_home_limited_no_local.sh
-            source $MAIN_DIR/firewalls/rulesets/home/firewall_home_limited.sh
-            source $MAIN_DIR/firewalls/rulesets/home/firewall_home_secure.sh
-            source $MAIN_DIR/firewalls/rulesets/home/firewall_home.sh
-        # server
-            source $MAIN_DIR/firewalls/rulesets/server/firewall_server_backup.sh
-            source $MAIN_DIR/firewalls/rulesets/server/firewall_server_web.sh
-            source $MAIN_DIR/firewalls/rulesets/server/firewall_server_wol.sh
+    # firewall_support
+        source $MAIN_DIR/firewalls/firewall_support/firewall_header.sh
+        source $MAIN_DIR/firewalls/firewall_support/firewall_persistentSave.sh
+        source $MAIN_DIR/firewalls/firewall_support/firewall_support_allow_local_only.sh
+        source $MAIN_DIR/firewalls/firewall_support/firewall_support_reset.sh
+        source $MAIN_DIR/firewalls/firewall_support/firewall_v6_support_basic.sh
+        source $MAIN_DIR/firewalls/firewall_support/firewall_watcher.sh
+
+    # home_rulesets
+        source $MAIN_DIR/firewalls/home_rulesets/firewall_home_lax_in.sh
+        source $MAIN_DIR/firewalls/home_rulesets/firewall_home_lax.sh
+        source $MAIN_DIR/firewalls/home_rulesets/firewall_home_limited_no_local_vm.sh
+        source $MAIN_DIR/firewalls/home_rulesets/firewall_home_limited.sh
+        source $MAIN_DIR/firewalls/home_rulesets/firewall_home_limited_vpn.sh
+        source $MAIN_DIR/firewalls/home_rulesets/firewall_home_secure.sh
+        source $MAIN_DIR/firewalls/home_rulesets/firewall_home.sh
+    # server_rulesets
+        source $MAIN_DIR/firewalls/rulesets/server/firewall_server_backup.sh
+        source $MAIN_DIR/firewalls/rulesets/server/firewall_server_web.sh
+        source $MAIN_DIR/firewalls/rulesets/server/firewall_server_wol.sh
 
 # general
     source $MAIN_DIR/general/general_updater.sh
@@ -99,7 +99,7 @@ while getopts "umdsf:iwav:xct:g" FLAG; do
             elif [ "$OPTARG" == "wol" ]; then
                 firewall_server_wol
             elif [ "$OPTARG" == "vm" ]; then
-                firewall_home_limited_no_local
+                firewall_home_limited_no_local_vm
             else
                 echo -e "\n\e[31mSorry, but '$OPTARG' is not a valid argument. See valid Arugments for option 'firewall' below\e[39m"
                 support_usage

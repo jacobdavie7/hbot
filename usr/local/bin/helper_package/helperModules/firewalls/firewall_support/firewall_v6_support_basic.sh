@@ -12,6 +12,10 @@ function firewall_v6_support_basic
         echo -e "\nFlushing all IPv6 chains"
             ip6tables -F
 
+        echo "ACCEPT everything on loopback" # needed on ipv6 to login
+            ip6tables -A INPUT -i lo -j ACCEPT -m comment --comment "ACCEPT all v6 incoming on loopback"
+            ip6tables -A OUTPUT -o lo -j ACCEPT -m comment --comment "ACCEPT all v6 outgoing on loopback"
+
 #        echo -e "\nDROP bad packets"
 #                echo " - XMAS       (DROP - IN)"
 #                    ip6tables -A INPUT -p tcp --tcp-flags ALL ALL -j DROP -m comment --comment "DROP outgoing XMAS"
@@ -48,4 +52,5 @@ function firewall_v6_support_basic
 #        echo "ACCEPT everything on loopback"
 #            ip6tables -A INPUT -i lo -j ACCEPT -m comment --comment "ACCEPT all incoming on loopback"
 #            ip6tables -A OUTPUT -o lo -j ACCEPT -m comment --comment "ACCEPT all outgoing on loopback"
+
 }
