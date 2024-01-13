@@ -15,5 +15,5 @@ function firewall_home_lax_in
             echo " - PING       (ACCEPT - IN)"
                 iptables -A INPUT -p icmp --icmp-type 8 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing ping request"
 
-    firewall_persistentSave
+        echo -e "\n\e[31mDoes not call persistent save, WILL BE LOST ON RESTART\e[39m\n"
 }

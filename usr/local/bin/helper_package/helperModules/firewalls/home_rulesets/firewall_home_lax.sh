@@ -9,5 +9,5 @@ function firewall_home_lax
         echo -e "\nSetting default OUTPUT policy to ACCEPT"    
             iptables -P OUTPUT ACCEPT
 
-    firewall_persistentSave
+    echo -e "\n\e[31mDoes not call persistent save, WILL BE LOST ON RESTART\e[39m\n"
 }
