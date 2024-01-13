@@ -27,7 +27,7 @@ function firewall_header
         echo " - INVALID    (DROP - IN)"
             iptables -A INPUT -m conntrack --ctstate INVALID -j DROP -m comment --comment "DROP anything marked INVALID"
         echo " - NEW != SYN (DROP - IN)"
-            iptables -A INPUT -p tcp ! --syn -m conntrack --ctstate NEW -j DROP -m comment --comment "DROP any NEW connections that do NOT start with SYN"
+            iptables -A INPUT -p tcp ! --syn -m conntrack --ctstate NEW -j DROP -m comment --comment "DROP any NEW tcp connections that do NOT start with SYN"
         echo " - SYN Flood  (DROP - IN)"
             iptables -A INPUT -p tcp --syn -m hashlimit --hashlimit-name synFlood --hashlimit-above 30/s -j DROP -m comment --comment "LIMIT SYN to 30/sec"
         echo " - UPnP       (DROP - IN)" 
