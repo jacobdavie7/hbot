@@ -1,9 +1,14 @@
 # hbot
+## legacy name is helper
 My colletion of bash scripts combined into one script to help make my (and your) life that much easier.
 <br>
+<br>
 h helper
+<br>
 b basic
+<br>
 o operations
+<br>
 t toolkit
 <br>
 <br>
