@@ -1,8 +1,8 @@
-Package: helper
+Package: hbot
 Version: 0.243-1
 Section: misc
 Priority: optional
 Architecture: all
 Depends:
-Maintainer: Jacob Davie
+Maintainer: Jacob
 Description: My colletion of bash scripts combined into one script to help make my (and your) life that much easier

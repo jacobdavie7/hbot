@@ -1,7 +1,6 @@
 #!/bin/bash
 
-MAIN_DIR=/usr/local/bin/helper_package/helperModules
-#MAIN_DIR=/srv/git/helper/usr/local/bin/helper_package/helperModules
+MAIN_DIR=/usr/local/bin/hbot_package/hbotModules
 
 # config
     source $MAIN_DIR/config/config_drawing.sh

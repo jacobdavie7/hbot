@@ -2,7 +2,7 @@
 
 function support_usage
 {
-    echo -e "\n   Usage: helper [OPTION] [ARGUMENT]"
+    echo -e "\n   Usage: hbot [OPTION] [ARGUMENT]"
     echo -e "\n       General"
     echo -e "           -u  updater*     updates from apt, flatpak, and snap"
     echo -e "           -x  xfce fixer   basic xfce fixes for when it breaks"
@@ -28,12 +28,14 @@ function support_usage
     echo -e "                   lax_in   lax home use with inbound - Allow all Out, AND accept ssh and ping IN"
     echo -e "                   limited  limited home use - Internet Only (HTTP, HTTPS, DNS)"
     echo -e "                   secure   encrypted internt only (HTTPS, DoH, DoT) - HTTP and DNS over 53 will NOT work"
-    echo -e "                   vm       limited home use - Internet Only (HTTP, HTTPS, DNS) WITHOUT local access"
-    echo -e "                   local    no internet, use when doing 1337 hax"
+    echo -e ""
     echo -e "                   web      web server use"
     echo -e "                   backup   backup server use"
     echo -e "                   wol      wake on lan server use"
+    echo -e ""
     echo -e "                   reset    FLUSH ALL rules and ACCEPT by default !!DANGER!!"
+    echo -e "                   vm       limited home use - Internet Only (HTTP, HTTPS, DNS) WITHOUT local access"
+    echo -e "                   local    no internet, use when doing 1337 hax"
     echo -e "           -w  watcher*     Watch firewall rule hits in packets and bytes"
     echo -e "\n       Special"
     echo -e "           -s  startup*     good modules to run on startup"
