@@ -124,13 +124,14 @@ function special_install
                 flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 
             FLATPAK=(
-                org.cryptomator.Cryptomator     # client side encryption
-                com.discordapp.Discord          # gamer chat
-                com.github.tchx84.Flatseal      # flatseal, gui for flapak permissons
-                com.system76.Popsicle           # easy iso flasher
-                com.valvesoftware.Steam         # steam, games
-                com.spotify.Client              # spotify, music
-                com.github.xournalpp.xournalpp  # pdf editor
+                org.cryptomator.Cryptomator     # cryptomator   # client side encryption
+                com.discordapp.Discord          # discord       # gamer chat
+                com.github.tchx84.Flatseal      # flatseal      # gui for flapak permissons
+                org.kde.kdenlive                # kdenlive      # video editor  # is in apt repos, but installs a ton of kde bloat like kde connect for phone. Flathub stops crap from being downloaded and is actually smaller than apt repos, plus don't have to deal with bloat
+                com.system76.Popsicle           # popsicle      # easy iso flasher
+                com.valvesoftware.Steam         # steam         # games
+                com.spotify.Client              # spotify       # music
+                com.github.xournalpp.xournalpp  # xournalpp     # pdf editor
                 )
             for F in "${FLATPAK[@]}"
             do
