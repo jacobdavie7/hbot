@@ -189,16 +189,30 @@ function special_install
 
     # static route 
         echo -e "\n\n\e[45m add static route \e[49m\n\n"
-            nmcli connection modify "Wired connection 1" ipv4.routes "10.0.3.0/24 10.0.4.1"
+            nmcli connection modify "Wired connection 1" +ipv4.routes "10.0.0.0/8 10.0.30.1"
+            #nmcli connection modify "Wired connection 1" +ipv4.routes "10.0.100.0/24 10.0.30.1"
+            #nmcli connection modify "Wired connection 1" +ipv4.routes "10.0.110.0/24 10.0.30.1"
+            #nmcli connection modify "Wired connection 1" +ipv4.routes "10.0.120.0/24 10.0.30.1"
+            #nmcli connection modify "Wired connection 1" +ipv4.routes "10.0.130.0/24 10.0.30.1"
+            #nmcli connection modify "Wired connection 1" +ipv4.routes "10.0.140.0/24 10.0.30.1"
+            #nmcli connection modify "Wired connection 1" +ipv4.routes "10.0.150.0/24 10.0.30.1"
+            #nmcli connection modify "Wired connection 1" +ipv4.routes "10.0.160.0/24 10.0.30.1"
+            #nmcli connection modify "Wired connection 1" +ipv4.routes "10.0.170.0/24 10.0.30.1"
+            #nmcli connection modify "Wired connection 1" +ipv4.routes "10.0.180.0/24 10.0.30.1"
+            #nmcli connection modify "Wired connection 1" +ipv4.routes "10.0.190.0/24 10.0.30.1"
+        echo -e "\n never default these routes"
+            nmcli connection modify "Wired connection 1" ipv4.never-default true    #enable this connection only for resources on its network setting
 
     # setup autorandr for default dispaly order
+        echo -e "\n\n\e[45m setup autorandr \e[49m\n\n"
             config_monitors                     # call the monitors function, autorandr will save the current settings and layout
             autorandr --save triple_primary     # save the currently display layout and settings as a autorandr profile called triple_primary
             autorandr --default triple_primary  # set the triple_primary profile as the default
             # run "autorandr triple_primary" to set profile to triple_primary, "autorandr --config" to view saved config of current profile
 
     # update timeout from 90s to 5s. This will only give nvidia-persisted 5s before being killed during shutdown, instead of needing to wait the full 90s.
-        sed -i 's/#DefaultTimeoutStopSec=90s/DefaultTimeoutStopSec=5s/' /etc/systemd/system.conf
+        echo -e "\n\n\e[45m update stop timeout \e[49m\n\n"
+            sed -i 's/#DefaultTimeoutStopSec=90s/DefaultTimeoutStopSec=5s/' /etc/systemd/system.conf
             
     # updates
         echo -e "\n\n\e[45m run update module \e[49m\n\n"

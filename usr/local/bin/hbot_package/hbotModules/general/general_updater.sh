@@ -19,8 +19,11 @@ function general_updater
         echo -e "\n\e[96mupdate\e[39m"
             flatpak update -y
         echo -e "\n\e[96mautoremove\e[39m"
-            flatpak uninstall --unused 
+            flatpak uninstall --unused -y
         
     echo -e "\n\e[95;4msnap\e[39;24m"
         snap refresh
+    
+    echo -e "\n\e[95;4mnpm\e[39;24m"
+        npm update -g
 }
