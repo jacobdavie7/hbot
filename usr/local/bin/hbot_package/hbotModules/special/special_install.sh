@@ -125,11 +125,11 @@ function special_install
 
             FLATPAK=(
                 org.cryptomator.Cryptomator     # cryptomator   # client side encryption
+                com.visualstudio.code-oss       # code-oss      # IDE; vscode without microsoft temlemetry, vscodium is 'better' built before micosoft but have had endless problems with git. Code-oss works much better
                 com.discordapp.Discord          # discord       # gamer chat
                 com.github.tchx84.Flatseal      # flatseal      # gui for flapak permissons
                 org.kde.kdenlive                # kdenlive      # video editor  # is in apt repos, but installs a ton of kde bloat like kde connect for phone. Flathub stops crap from being downloaded and is actually smaller than apt repos, plus don't have to deal with bloat
                 com.system76.Popsicle           # popsicle      # easy iso flasher
-                com.valvesoftware.Steam         # steam         # games
                 com.spotify.Client              # spotify       # music
                 com.github.xournalpp.xournalpp  # xournalpp     # pdf editor
                 )
@@ -147,7 +147,8 @@ function special_install
                     chmod 170 /tmp/packages
                     chown _apt:jacob /tmp/packages
                     wget -O /tmp/packages/mullvad.deb https://mullvad.net/en/download/app/deb/latest -P /tmp/packages # -O used to put into file, page does not give .deb file
-                    apt install /tmp/packages/./mullvad.deb
+                    apt install -y /tmp/packages/./mullvad.deb
+                    rm -r /tmp/packages
 
             # signal
                 echo -e "\n\n\e[45m install signal \e[49m\n\n"
@@ -155,14 +156,16 @@ function special_install
                     cat signal-desktop-keyring.gpg | sudo tee /usr/share/keyrings/signal-desktop-keyring.gpg > /dev/null
                     echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/signal-desktop-keyring.gpg] https://updates.signal.org/desktop/apt xenial main' |\
                     sudo tee /etc/apt/sources.list.d/signal-xenial.list
-                    sudo apt update && sudo apt install signal-desktop
+                    sudo apt update && sudo apt install -y signal-desktop
 
-            # VSCodium
-                echo -e "\n\n\e[45m install VSCodium \e[49m\n\n"
-                    wget -qO - https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg | gpg --dearmor | sudo dd of=/usr/share/keyrings/vscodium-archive-keyring.gpg    # gpg key
-                    echo 'deb [ signed-by=/usr/share/keyrings/vscodium-archive-keyring.gpg ] https://download.vscodium.com/debs vscodium main' | sudo tee /etc/apt/sources.list.d/vscodium.list  #repo
-                    sudo apt update && sudo apt install codium
-                        codium --install-extension eamodio.gitlens  # git extension; needed for push box to pop up
+            # steam     # this is the best way to install steam
+                echo -e "\n\n\e[45m install Steam \e[49m\n\n"
+                    mkdir /tmp/packages
+                    chmod 170 /tmp/packages
+                    chown _apt:jacob /tmp/packages
+                    wget -O /tmp/packages/steam_latest.deb https://cdn.cloudflare.steamstatic.com/client/installer/steam.deb -P /tmp/packages # -O used to put into file, page does not give .deb file
+                    apt install -y /tmp/packages/./steam_latest.deb
+                    rm -r /tmp/packages
 
             # virtual box - ensure distro and virtual box version are correct (distro (bookmark) in 1st line, virtualbox version in last. Versions do no perfectly match downloadable on website, tab complete to check what the latest version in the repo is)
                 echo -e "\n\n\e[45m install virtualbox \e[49m\n\n"
