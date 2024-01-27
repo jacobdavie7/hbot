@@ -8,14 +8,14 @@ function firewall_server_wol
 
     echo -e "\nINPUT"
         echo -e " - ACCEPT ssh IN from devices, vpn"
-            iptables -A INPUT -p tcp -s 10.0.4.0/24,10.0.9.0/24 --dport 22 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new incoming ssh from devices/vpn"
+            iptables -A INPUT -p tcp -s 10.0.40.0/24,10.0.90.0/24 --dport 22 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new incoming ssh from devices/vpn"
 
     echo -e "\nOUTPUT"
         echo -e " - ACCEPT dns out for _apt to network"
-            iptables -A OUTPUT -p udp -d 10.0.3.1 --dport 53 -m owner --uid-owner _apt -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing dns for _apt"
+            iptables -A OUTPUT -p udp -d 10.0.30.1 --dport 53 -m owner --uid-owner _apt -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing dns for _apt"
 
         echo -e " - ACCEPT dns out for ntp to network"
-            iptables -A OUTPUT -p udp -d 10.0.3.1 --dport 53 -m owner --uid-owner ntp -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing dns for ntp"
+            iptables -A OUTPUT -p udp -d 10.0.30.1 --dport 53 -m owner --uid-owner ntp -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing dns for ntp"
 
         echo -e " - DROP local OUT"
             iptables -A OUTPUT -d 10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,169.254.0.0/16 -j DROP -m comment --comment "DROP local"

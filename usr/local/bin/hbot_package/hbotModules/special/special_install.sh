@@ -192,19 +192,17 @@ function special_install
 
     # static route 
         echo -e "\n\n\e[45m add static route \e[49m\n\n"
-            nmcli connection modify "Wired connection 1" +ipv4.routes "10.0.0.0/8 10.0.30.1"
-            #nmcli connection modify "Wired connection 1" +ipv4.routes "10.0.100.0/24 10.0.30.1"
-            #nmcli connection modify "Wired connection 1" +ipv4.routes "10.0.110.0/24 10.0.30.1"
-            #nmcli connection modify "Wired connection 1" +ipv4.routes "10.0.120.0/24 10.0.30.1"
-            #nmcli connection modify "Wired connection 1" +ipv4.routes "10.0.130.0/24 10.0.30.1"
-            #nmcli connection modify "Wired connection 1" +ipv4.routes "10.0.140.0/24 10.0.30.1"
-            #nmcli connection modify "Wired connection 1" +ipv4.routes "10.0.150.0/24 10.0.30.1"
-            #nmcli connection modify "Wired connection 1" +ipv4.routes "10.0.160.0/24 10.0.30.1"
-            #nmcli connection modify "Wired connection 1" +ipv4.routes "10.0.170.0/24 10.0.30.1"
-            #nmcli connection modify "Wired connection 1" +ipv4.routes "10.0.180.0/24 10.0.30.1"
-            #nmcli connection modify "Wired connection 1" +ipv4.routes "10.0.190.0/24 10.0.30.1"
-        echo -e "\n never default these routes"
-            nmcli connection modify "Wired connection 1" ipv4.never-default true    #enable this connection only for resources on its network setting
+            nmcli connection modify "Wired connection 1" +ipv4.routes "10.0.0.0/8 10.0.40.1"
+        
+        echo -e "\n\n\e[45m Restart networking, network manager, disable and re-enable \e[49m\n\n"
+            systemctl restart networking
+                sleep 1
+            systemctl restart NetworkManager
+                sleep 1
+            nmcli networking off
+                sleep 2
+            nmcli networking on
+                sleep 10
 
     # setup autorandr for default dispaly order
         echo -e "\n\n\e[45m setup autorandr \e[49m\n\n"
