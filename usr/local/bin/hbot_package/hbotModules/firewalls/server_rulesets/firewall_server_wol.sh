@@ -15,7 +15,7 @@ function firewall_server_wol
             iptables -A OUTPUT -p udp -d 10.0.30.1 --dport 53 -m owner --uid-owner _apt -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing dns for _apt"
 
         echo -e " - ACCEPT dns out for ntp to network"
-            iptables -A OUTPUT -p udp -d 10.0.30.1 --dport 53 -m owner --uid-owner ntp -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing dns for ntp"
+            iptables -A OUTPUT -p udp -d 10.0.30.1 --dport 53 -m owner --uid-owner ntpsec -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing dns for ntp"
 
         echo -e " - DROP local OUT"
             iptables -A OUTPUT -d 10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,169.254.0.0/16 -j DROP -m comment --comment "DROP local"
@@ -27,7 +27,7 @@ function firewall_server_wol
             iptables -A OUTPUT -p tcp --dport 443 -m owner --uid-owner _apt -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing https for _apt"
         
         echo -e " - ACCEPT ntp OUT for ntp"
-            iptables -A OUTPUT -p udp --dport 123 -m owner --uid-owner ntp -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing NTP"
+            iptables -A OUTPUT -p udp --dport 123 -m owner --uid-owner ntpsec -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing NTP"
 
     firewall_persistentSave
 }
