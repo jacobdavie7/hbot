@@ -25,8 +25,8 @@ function config_vpn_mobile ()
             mullvad relay set tunnel-protocol wireguard
        
     # Wireguard Settings
-        echo -e "\nSet Port to 51820"
-            mullvad relay set tunnel wireguard --port 51820
+        echo -e "\nSet Port to 53"
+            mullvad relay set tunnel wireguard --port 53
 
         echo -e "\nObfuscation Auto"
             mullvad obfuscation set mode auto
