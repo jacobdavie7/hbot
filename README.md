@@ -56,7 +56,6 @@ home     standard home use"
 lax      lax home use - Allow all Out"
 lax_in   lax home use with inbound - Allow all Out, AND accept ssh and ping IN"
 limited  limited home use - Internet Only (HTTP, HTTPS, DNS)"
-secure   encrypted internt only (HTTPS, DoH, DoT) - HTTP and DNS over 53 will NOT work"
 
 web      web server use"
 backup   backup server use"

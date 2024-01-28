@@ -27,7 +27,6 @@ MAIN_DIR=/usr/local/bin/hbot_package/hbotModules
         source $MAIN_DIR/firewalls/home_rulesets/firewall_home_limited_no_local_vm.sh
         source $MAIN_DIR/firewalls/home_rulesets/firewall_home_limited.sh
         source $MAIN_DIR/firewalls/home_rulesets/firewall_home_limited_vpn.sh
-        source $MAIN_DIR/firewalls/home_rulesets/firewall_home_secure.sh
         source $MAIN_DIR/firewalls/home_rulesets/firewall_home.sh
     # server_rulesets
         source $MAIN_DIR/firewalls/server_rulesets/firewall_server_backup.sh
@@ -93,8 +92,6 @@ while getopts "umdsf:iwav:xct:g" FLAG; do
                 firewall_home_lax_in
             elif [ "$OPTARG" == "local" ]; then
                 firewall_support_allow_local_only
-            elif [ "$OPTARG" == "secure" ]; then
-                firewall_home_secure
             elif [ "$OPTARG" == "wol" ]; then
                 firewall_server_wol
             elif [ "$OPTARG" == "vm" ]; then
