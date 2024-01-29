@@ -31,6 +31,7 @@ function special_install
                         autorandr                       # default display layout
                         curl                            # interact with urls
                         dnsutils                        # contains dig
+                        fail2ban                        # ssh rate limiting
                         ffmpeg                          # video converter/media formats
                         fonts-unfonts-core              # display more lanuages
                         git                             # content tracker
@@ -203,6 +204,13 @@ function special_install
                 sleep 2
             nmcli networking on
                 sleep 10
+
+    # setup fail2ban
+        echo -e "\n\n\e[45m setup fail2ban \e[49m\n\n"
+            cp /etc/fail2ban/fail2ban.conf  /etc/fail2ban/fail2ban.local                        # create fail2ban.local file
+            cp /etc/fail2ban/jail.conf  /etc/fail2ban/jail.local                                # create jail.local file
+            echo -e "[sshd]\nenabled=true" | sudo tee /etc/fail2ban/jail.local                  # setup sshd for debian
+            echo -e "[sshd]\nbackend=systemd\nenabled=true" | sudo tee /etc/fail2ban/jail.local # setup sshd for debian
 
     # setup autorandr for default dispaly order
         echo -e "\n\n\e[45m setup autorandr \e[49m\n\n"
