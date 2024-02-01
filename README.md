@@ -58,7 +58,7 @@ lax_in   lax home use with inbound - Allow all Out, AND accept ssh and ping IN"
 limited  limited home use - Internet Only (HTTP, HTTPS, DNS)"
 
 web      web server use"
-backup   backup server use"
+pbs      backup server use"
 wol      wake on lan server use"
 
 reset    FLUSH ALL rules and ACCEPT by default !!DANGER!!"

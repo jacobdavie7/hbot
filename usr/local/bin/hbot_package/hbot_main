@@ -29,7 +29,7 @@ MAIN_DIR=/usr/local/bin/hbot_package/hbotModules
         source $MAIN_DIR/firewalls/home_rulesets/firewall_home_limited_vpn.sh
         source $MAIN_DIR/firewalls/home_rulesets/firewall_home.sh
     # server_rulesets
-        source $MAIN_DIR/firewalls/server_rulesets/firewall_server_backup.sh
+        source $MAIN_DIR/firewalls/server_rulesets/firewall_server_pbs.sh
         source $MAIN_DIR/firewalls/server_rulesets/firewall_server_web.sh
         source $MAIN_DIR/firewalls/server_rulesets/firewall_server_wol.sh
 
@@ -80,8 +80,8 @@ while getopts "umdsf:iwav:xct:g" FLAG; do
                 firewall_home
             elif [ "$OPTARG" == "web" ]; then
                 firewall_server_web
-            elif [ "$OPTARG" == "backup" ]; then
-                firewall_server_backup
+            elif [ "$OPTARG" == "pbs" ]; then
+                firewall_server_pbs
             elif [ "$OPTARG" == "limited" ]; then
                 firewall_home_limited
             elif [ "$OPTARG" == "reset" ]; then

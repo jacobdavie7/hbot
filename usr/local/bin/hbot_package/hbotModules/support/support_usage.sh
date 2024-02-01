@@ -29,7 +29,7 @@ function support_usage
     echo -e "                   limited  limited home use - Internet Only (HTTP, HTTPS, DNS)"
     echo -e ""
     echo -e "                   web      web server use"
-    echo -e "                   backup   backup server use"
+    echo -e "                   pbs      backup server use"
     echo -e "                   wol      wake on lan server use"
     echo -e ""
     echo -e "                   reset    FLUSH ALL rules and ACCEPT by default !!DANGER!!"
