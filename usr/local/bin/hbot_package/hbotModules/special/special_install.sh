@@ -203,7 +203,7 @@ function special_install
             nmcli networking off
                 sleep 2
             nmcli networking on
-                sleep 10
+                sleep 15
 
     # setup fail2ban
         echo -e "\n\n\e[45m setup fail2ban \e[49m\n\n"
@@ -222,7 +222,12 @@ function special_install
     # update timeout from 90s to 5s. This will only give nvidia-persisted 5s before being killed during shutdown, instead of needing to wait the full 90s.
         echo -e "\n\n\e[45m update stop timeout \e[49m\n\n"
             sed -i 's/#DefaultTimeoutStopSec=90s/DefaultTimeoutStopSec=5s/' /etc/systemd/system.conf
-            
+    
+    
+    # updates
+        echo -e "\n\n\e[45m add weekly cronjob to remove files deleted from gui \e[49m\n\n"
+            echo "0 0 * * 0 $USER_ACCOUNT rm -rf /home/$USER_ACCOUNT/.local/share/Trash/*" | sudo tee -a /etc/crontab
+        
     # updates
         echo -e "\n\n\e[45m run update module \e[49m\n\n"
             general_updater
@@ -250,7 +255,6 @@ function special_install
     #    sudo dpkg-reconfigure --priority=low unattended-upgrades
     #    make choose yes
     #    check with "sudo systemctl status unattended-upgrades.service"
-
 
 }
 
