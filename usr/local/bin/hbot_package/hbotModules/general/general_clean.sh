@@ -5,8 +5,11 @@ function general_clean
     echo -e "\nRemoving unused apt dependencies (autoremove)"
         apt autoremove -y
     
-    echo -e "\nRemoving apt cache (clean)"
-        apt clean
+    echo -e "\nRemoving old apt cache (autoclean) [deletes packages from cache that are obsolte or have newer versions]"
+        apt autoclean -y
+
+    echo -e "\nRemoving entire apt cache (clean) [delete all packages from cache, more agressive than autoclean]"
+        apt clean -y
     
     echo -e "\nRemoving unused flatpak runtimes"
         flatpak uninstall --unused -y
