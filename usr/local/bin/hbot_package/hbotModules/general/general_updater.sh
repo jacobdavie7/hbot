@@ -26,4 +26,10 @@ function general_updater
     
     echo -e "\n\e[95;4mnpm\e[39;24m"
         npm update -g
+    
+    echo -e "\n\e[95;4mhomebrew\e[39;24m"
+        echo -e "\n\e[96mupdate\e[39m"
+            brew update
+        echo -e "\n\e[96mupgrade\e[39m"
+            brew upgrade
 }
