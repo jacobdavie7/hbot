@@ -29,6 +29,7 @@ function special_install
                 echo -e "\n\n\e[45m install utility apt packages \e[49m\n\n"
                     UTILITIES=(
                         autorandr                       # default display layout
+                        btop                            # better proccess viewer
                         curl                            # interact with urls
                         dnsutils                        # contains dig
                         fail2ban                        # ssh rate limiting
