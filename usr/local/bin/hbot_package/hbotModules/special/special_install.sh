@@ -49,6 +49,7 @@ function special_install
                         network-manager-gnome           # panel applet
                         ntp                             # get time from ntp server
                         nvidia-detect                   # detect package for nvidia drivers (probally going to be nvidia-driver)
+                        p7zip-full                      # support for unzipping z7 zipped files
                         pipewire-alsa                   # configures pipewire to use alsa plugin
                         pipewire-media-session-         # needed for pipewire
                         pipewire-pulse                  # pipewire replacment daemon for pulse
@@ -84,6 +85,7 @@ function special_install
                         keepassxc                       # password manager
                         libreoffice                     # productivity suite
                         libreoffice-gtk3                # make libreoffice look better 
+                        metadata-cleaner                # gnome exif cleaner
                         pavucontrol                     # audio mixer, made for pulse, but works with pipewire
                         qdirstat                        # visualize storage
                         vlc                             # media player
@@ -126,14 +128,15 @@ function special_install
                 flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 
             FLATPAK=(
-                org.cryptomator.Cryptomator     # cryptomator   # client side encryption
-                com.visualstudio.code-oss       # code-oss      # IDE; vscode without microsoft temlemetry, vscodium is 'better' built before micosoft but have had endless problems with git. Code-oss works much better
-                com.discordapp.Discord          # discord       # gamer chat
-                com.github.tchx84.Flatseal      # flatseal      # gui for flapak permissons
-                org.kde.kdenlive                # kdenlive      # video editor  # is in apt repos, but installs a ton of kde bloat like kde connect for phone. Flathub stops crap from being downloaded and is actually smaller than apt repos, plus don't have to deal with bloat
-                com.system76.Popsicle           # popsicle      # easy iso flasher
-                com.spotify.Client              # spotify       # music
-                com.github.xournalpp.xournalpp  # xournalpp     # pdf editor
+                org.cryptomator.Cryptomator             # cryptomator   # client side encryption
+                com.visualstudio.code-oss               # code-oss      # IDE; vscode without microsoft temlemetry, vscodium is 'better' built before micosoft but have had endless problems with git. Code-oss works much better
+                com.discordapp.Discord                  # discord       # gamer chat
+                com.github.tchx84.Flatseal              # flatseal      # gui for flapak permissons
+                org.kde.kdenlive                        # kdenlive      # video editor  # is in apt repos, but installs a ton of kde bloat like kde connect for phone. Flathub stops crap from being downloaded and is actually smaller than apt repos, plus don't have to deal with bloat
+                com.system76.Popsicle                   # popsicle      # easy iso flasher
+                com.spotify.Client                      # spotify       # music
+                com.github.xournalpp.xournalpp          # xournalpp     # pdf editor
+                org.gnome.gitlab.YaLTeR.VideoTrimmer    # video trimmer # quick video trimmer from gnome, does not re-encode so quick and simple
                 )
             for F in "${FLATPAK[@]}"
             do
