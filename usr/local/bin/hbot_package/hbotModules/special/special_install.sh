@@ -19,6 +19,29 @@ function special_install
         echo -e "\n\n\e[45m update apt to use new sources.list changes \e[49m\n\n"
             apt update
 
+    # app custom repos
+
+            # mullvad
+            echo -e "\n\n\e[45m add mullvad repo \e[49m\n\n"
+                sudo curl -fsSLo /usr/share/keyrings/mullvad-keyring.asc https://repository.mullvad.net/deb/mullvad-keyring.asc
+                echo "deb [signed-by=/usr/share/keyrings/mullvad-keyring.asc arch=$( dpkg --print-architecture )] https://repository.mullvad.net/deb/stable $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/mullvad.list
+
+            # signal
+            echo -e "\n\n\e[45m add signal repo \e[49m\n\n"
+                wget -O- https://updates.signal.org/desktop/apt/keys.asc | gpg --dearmor > signal-desktop-keyring.gpg
+                cat signal-desktop-keyring.gpg | sudo tee /usr/share/keyrings/signal-desktop-keyring.gpg > /dev/null
+                echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/signal-desktop-keyring.gpg] https://updates.signal.org/desktop/apt xenial main' |\
+                sudo tee /etc/apt/sources.list.d/signal-xenial.list
+
+            # virtual box - ensure distro and virtual box version are correct (distro (bookmark) in 1st line, virtualbox version in last. Versions do no perfectly match downloadable on website, tab complete to check what the latest version in the repo is)
+            echo -e "\n\n\e[45m add virtualbox repo \e[49m\n\n"
+                echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/oracle-virtualbox-2016.gpg] https://download.virtualbox.org/virtualbox/debian bookworm contrib' |\
+                sudo tee /etc/apt/sources.list.d/oracle-virtualbox.list
+                wget -O- https://www.virtualbox.org/download/oracle_vbox_2016.asc | sudo gpg --dearmor --yes --output /usr/share/keyrings/oracle-virtualbox-2016.gpg
+            
+            # update repos
+            echo -e "\n\n\e[45m update apt repos with new ones \e[49m\n\n"
+                apt update
     # updates
         echo -e "\n\n\e[45m run update module \e[49m\n\n"
             general_updater
@@ -31,6 +54,7 @@ function special_install
                         autorandr                       # default display layout
                         btop                            # better proccess viewer
                         curl                            # interact with urls
+                        dnsmasq                         # dns
                         dnsutils                        # contains dig
                         fail2ban                        # ssh rate limiting
                         ffmpeg                          # video converter/media formats
@@ -45,6 +69,7 @@ function special_install
                         lm-sensors                      # sensor command to view temps
                         lshw                            # list hardware, view cpu details
                         menulibre                       # edit applications whisker menu can open (add app images)
+                        mullvad-vpn                     # vpn # from custom repo
                         ncdu                            # file sizes
                         network-manager-gnome           # panel applet
                         ntp                             # get time from ntp server
@@ -54,14 +79,18 @@ function special_install
                         pipewire-media-session-         # needed for pipewire
                         pipewire-pulse                  # pipewire replacment daemon for pulse
                         ranger                          # terminal file explorer
+                        resolvconf                      # dns
                         screen                          # screen manager with terminal emulation
                         secure-delete                   # contains sfill command
+                        signal-desktop                  # messaging # from custom repo
                         software-properties-common      # repo manager
+                        steam-installer                 # games # from contrib repo. # many need to enable multi-arch with "dpkg --add-architecture i386" # many need to install libaries for vulkan/32-bit titles "apt install mesa-vulkan-drivers libglx-mesa0:i386 mesa-vulkan-drivers:i386 libgl1-mesa-dri:i386" # https://wiki.debian.org/Steam
                         sudo                            # super
                         tree                            # show directory structure
                         unattended-upgrades             # keep apt upgraded
                         unzip                           # unzip files
                         vim                             # text editor
+                        virtualbox-7.0                  # easy vm's # from custom repo # ENSURE version number is UPDATED
                         whois                           # make whois lookups
                         wireplumber                     # pipewire session manager
                         zenity                          # draw windows for ibus
@@ -142,42 +171,6 @@ function special_install
             do
                 flatpak install flathub $F -y
             done
-
-        # apt local packages
-            echo -e "\n\n\e[45m install local apt packages \e[49m\n\n"
-
-            # mullvad
-                echo -e "\n\n\e[45m install mullvad \e[49m\n\n"
-                    mkdir /tmp/packages
-                    chmod 170 /tmp/packages
-                    chown _apt:jacob /tmp/packages
-                    wget -O /tmp/packages/mullvad.deb https://mullvad.net/en/download/app/deb/latest -P /tmp/packages # -O used to put into file, page does not give .deb file
-                    apt install -y /tmp/packages/./mullvad.deb
-                    rm -r /tmp/packages
-
-            # signal
-                echo -e "\n\n\e[45m install signal \e[49m\n\n"
-                    wget -O- https://updates.signal.org/desktop/apt/keys.asc | gpg --dearmor > signal-desktop-keyring.gpg
-                    cat signal-desktop-keyring.gpg | sudo tee /usr/share/keyrings/signal-desktop-keyring.gpg > /dev/null
-                    echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/signal-desktop-keyring.gpg] https://updates.signal.org/desktop/apt xenial main' |\
-                    sudo tee /etc/apt/sources.list.d/signal-xenial.list
-                    sudo apt update && sudo apt install -y signal-desktop
-
-            # steam     # this is the best way to install steam
-                echo -e "\n\n\e[45m install Steam \e[49m\n\n"
-                    mkdir /tmp/packages
-                    chmod 170 /tmp/packages
-                    chown _apt:jacob /tmp/packages
-                    wget -O /tmp/packages/steam_latest.deb https://cdn.cloudflare.steamstatic.com/client/installer/steam.deb -P /tmp/packages # -O used to put into file, page does not give .deb file
-                    apt install -y /tmp/packages/./steam_latest.deb
-                    rm -r /tmp/packages
-
-            # virtual box - ensure distro and virtual box version are correct (distro (bookmark) in 1st line, virtualbox version in last. Versions do no perfectly match downloadable on website, tab complete to check what the latest version in the repo is)
-                echo -e "\n\n\e[45m install virtualbox \e[49m\n\n"
-                    echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/oracle-virtualbox-2016.gpg] https://download.virtualbox.org/virtualbox/debian bookworm contrib' |\
-                    sudo tee /etc/apt/sources.list.d/oracle-virtualbox.list
-                    wget -O- https://www.virtualbox.org/download/oracle_vbox_2016.asc | sudo gpg --dearmor --yes --output /usr/share/keyrings/oracle-virtualbox-2016.gpg
-                    sudo apt update && sudo apt install virtualbox-7.0 -y
 
     # setup firewall
         echo -e "\n\n\e[45m call firewall home module \e[49m\n\n"
