@@ -124,16 +124,6 @@ function special_install
                         apt install -y $A
                     done
 
-            # package managers from apt
-                echo -e "\n\n\e[45m install package managers from apt \e[49m\n\n"
-                    PACKAGE_MANAGERS=(
-                        flatpak
-                    )
-                    for P in "${PACKAGE_MANAGERS[@]}"
-                    do
-                        apt install -y $P
-                    done
-
             # apt fun
                 echo -e "\n\n\e[45m install fun apt packages \e[49m\n\n"
                     FUN=(
@@ -153,6 +143,8 @@ function special_install
         # flatpak
             echo -e "\n\n\e[45m install flatpak packages \e[49m\n\n"
 
+            # install flatpak
+                apt install flatpak
             # add flathub repo
                 flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 
@@ -221,7 +213,7 @@ function special_install
             sed -i 's/#DefaultTimeoutStopSec=90s/DefaultTimeoutStopSec=5s/' /etc/systemd/system.conf
     
     
-    # updates
+    # cronjobs
         echo -e "\n\n\e[45m add weekly cronjob to remove files deleted from gui \e[49m\n\n"
             echo "0 0 * * 0 $USER_ACCOUNT rm -rf /home/$USER_ACCOUNT/.local/share/Trash/*" | sudo tee -a /etc/crontab
         
