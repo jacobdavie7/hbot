@@ -68,8 +68,6 @@ function special_install
                         iptables-persistent             # make ruleset persistent upon restart         
                         lm-sensors                      # sensor command to view temps
                         lshw                            # list hardware, view cpu details
-                        menulibre                       # edit applications whisker menu can open (add app images)
-                        mullvad-vpn                     # vpn # from custom repo
                         ncdu                            # file sizes
                         network-manager-gnome           # panel applet
                         ntp                             # get time from ntp server
@@ -82,15 +80,12 @@ function special_install
                         resolvconf                      # dns
                         screen                          # screen manager with terminal emulation
                         secure-delete                   # contains sfill command
-                        signal-desktop                  # messaging # from custom repo
                         software-properties-common      # repo manager
-                        steam-installer                 # games # from contrib repo. # many need to enable multi-arch with "dpkg --add-architecture i386" # many need to install libaries for vulkan/32-bit titles "apt install mesa-vulkan-drivers libglx-mesa0:i386 mesa-vulkan-drivers:i386 libgl1-mesa-dri:i386" # https://wiki.debian.org/Steam
                         sudo                            # super
                         tree                            # show directory structure
                         unattended-upgrades             # keep apt upgraded
                         unzip                           # unzip files
                         vim                             # text editor
-                        virtualbox-7.0                  # easy vm's # from custom repo # ENSURE version number is UPDATED
                         whois                           # make whois lookups
                         wireplumber                     # pipewire session manager
                         zenity                          # draw windows for ibus
@@ -113,10 +108,15 @@ function special_install
                         gsmartcontrol                   # gui for smart data
                         keepassxc                       # password manager
                         libreoffice                     # productivity suite
-                        libreoffice-gtk3                # make libreoffice look better 
+                        libreoffice-gtk3                # make libreoffice look better
+                        menulibre                       # edit applications whisker menu can open (add app images)
                         metadata-cleaner                # gnome exif cleaner
+                        mullvad-vpn                     # vpn # from custom repo
                         pavucontrol                     # audio mixer, made for pulse, but works with pipewire
                         qdirstat                        # visualize storage
+                        steam-installer                 # games # from contrib repo. # many need to enable multi-arch with "dpkg --add-architecture i386" # many need to install libaries for vulkan/32-bit titles "apt install mesa-vulkan-drivers libglx-mesa0:i386 mesa-vulkan-drivers:i386 libgl1-mesa-dri:i386" # https://wiki.debian.org/Steam
+                        signal-desktop                  # messaging # from custom repo
+                        virtualbox-7.0                  # easy vm's # from custom repo # ENSURE version number is UPDATED
                         vlc                             # media player
                     )
                     for A in "${APPLICATIONS[@]}"
