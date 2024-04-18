@@ -91,10 +91,12 @@ function special_install
                         zenity                          # draw windows for ibus
                         zip                             # create zip files
                     )
-                    for U in "${UTILITIES[@]}"
-                    do
-                        apt install -y $U
-                    done
+
+                    # join array elements with space as separator
+                        UTILITIES_LIST="${UTILITIES[*]}"
+                    
+                    # install packages
+                        apt install -y $UTILITIES_LIST
 
             # apt applications
                 echo -e "\n\n\e[45m install application apt packages \e[49m\n\n"
@@ -120,10 +122,12 @@ function special_install
                         virtualbox-7.0                  # easy vm's # from custom repo # ENSURE version number is UPDATED
                         vlc                             # media player
                     )
-                    for A in "${APPLICATIONS[@]}"
-                    do
-                        apt install -y $A
-                    done
+
+                    # join array elements with space as separator
+                        APPLICATIONS_LIST="${APPLICATIONS[*]}"
+                    
+                    # install packages
+                        apt install -y $APPLICATIONS_LIST
 
             # apt fun
                 echo -e "\n\n\e[45m install fun apt packages \e[49m\n\n"
@@ -136,10 +140,12 @@ function special_install
                         neofetch                        # i run arch btw
                         rig                             # generate random fake id
                     )
-                    for F in "${FUN[@]}"
-                    do
-                        apt install -y $F
-                    done
+
+                    # join array elements with space as separator
+                        FUN_LIST="${FUN[*]}"
+                    
+                    # install packages
+                        apt install -y $FUN_LIST
 
         # flatpak
             echo -e "\n\n\e[45m install flatpak packages \e[49m\n\n"
@@ -164,6 +170,12 @@ function special_install
             do
                 flatpak install flathub $F -y
             done
+
+            # join array elements with space as separator
+                FLATPAK_LIST="${FLATPAK[*]}"
+            
+            # install packages
+                apt install -y $FLATPAK_LIST
 
     # setup firewall
         echo -e "\n\n\e[45m call firewall home module \e[49m\n\n"
