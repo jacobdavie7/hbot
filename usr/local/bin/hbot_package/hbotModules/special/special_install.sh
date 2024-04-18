@@ -116,6 +116,7 @@ function special_install
                         qdirstat                        # visualize storage
                         steam-installer                 # games # from contrib repo. # many need to enable multi-arch with "dpkg --add-architecture i386" # many need to install libaries for vulkan/32-bit titles "apt install mesa-vulkan-drivers libglx-mesa0:i386 mesa-vulkan-drivers:i386 libgl1-mesa-dri:i386" # https://wiki.debian.org/Steam
                         signal-desktop                  # messaging # from custom repo
+                        thunderbird                     # email client
                         virtualbox-7.0                  # easy vm's # from custom repo # ENSURE version number is UPDATED
                         vlc                             # media player
                     )
@@ -217,6 +218,13 @@ function special_install
         echo -e "\n\n\e[45m add weekly cronjob to remove files deleted from gui \e[49m\n\n"
             echo "0 0 * * 0 $USER_ACCOUNT rm -rf /home/$USER_ACCOUNT/.local/share/Trash/*" | sudo tee -a /etc/crontab
         
+    # create directories and set permissions
+        echo -e "\n\n\e[45m create directories and set permissions \e[49m\n\n"
+            mkdir /srv/git
+            chmod 750 /srv/git
+            mkdir /var/virtual_box_vms
+            chmod 700 /var/virtual_box_vms
+
     # updates
         echo -e "\n\n\e[45m run update module \e[49m\n\n"
             general_updater
@@ -247,8 +255,6 @@ function special_install
 
 }
 
-
-
 # apt extra
 #   echo -e "\n\n\e[45m install extra apt packages \e[49m\n\n"
 #      EXTRA=(
@@ -256,26 +262,9 @@ function special_install
 #      libreadline-dev                 # consistent ui to recall lines of previously input (proxmark)
 #      v4l2loopback-dkms               # video loopback device - needed for obs
 #      gqrx-sdr                        # sdr
-#      obs-studio                      # screencast
-#      pulseeffects                    # effects for pulse
-#      steam                           # games     #contrib repo      # flatpak more stable
-#      thunderbird                     # email client
 #      wireshark                       # analyze packets and network traffic
-#      gummi                           # laTeX editor
-#      speedcrunch                     # advanced calculator
 #      )
 #      for E in "${EXTRA[@]}"
 #      do
 #          apt install -y $E
-#      done
-
-# flatpak extra
-#   echo -e "\n\n\e[45m install extra apt packages \e[49m\n\n"
-#      FLATPAK=(
-#           com.jgraph.drawio.desktop
-#           com.visualstudio.code-oss       # IDE
-#      )
-#      for F in "${FLATPAK[@]}"
-#      do
-#           flatpak install flathub $F -y
 #      done
