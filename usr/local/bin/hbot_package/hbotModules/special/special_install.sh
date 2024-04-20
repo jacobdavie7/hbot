@@ -158,9 +158,10 @@ function special_install
             FLATPAK=(
                 org.cryptomator.Cryptomator             # cryptomator   # client side encryption
                 com.visualstudio.code-oss               # code-oss      # IDE; vscode without microsoft temlemetry, vscodium is 'better' built before micosoft but have had endless problems with git. Code-oss works much better
+                com.belmoussaoui.Decoder                # decoder       # scan/generate qr codes
                 com.discordapp.Discord                  # discord       # gamer chat
                 com.github.tchx84.Flatseal              # flatseal      # gui for flapak permissons
-                org.kde.kdenlive                        # kdenlive      # video editor  # is in apt repos, but installs a ton of kde bloat like kde connect for phone. Flathub stops crap from being downloaded and is actually smaller than apt repos, plus don't have to deal with bloat
+                #org.kde.kdenlive                        # kdenlive      # video editor  # is in apt repos, but installs a ton of kde bloat like kde connect for phone. Flathub stops crap from being downloaded and is actually smaller than apt repos, plus don't have to deal with bloat
                 com.system76.Popsicle                   # popsicle      # easy iso flasher
                 com.spotify.Client                      # spotify       # music
                 com.github.xournalpp.xournalpp          # xournalpp     # pdf editor
