@@ -7,6 +7,7 @@ MAIN_DIR=/usr/local/bin/hbot_package/hbotModules
     source $MAIN_DIR/config/config_monitors.sh
     source $MAIN_DIR/config/config_monitors_custom.sh
     source $MAIN_DIR/config/config_timezone.sh
+    source $MAIN_DIR/config/config_proxmox_unlock_stop.sh
 
         # vpn
             source $MAIN_DIR/config/vpn/config_vpn_home.sh
@@ -49,7 +50,7 @@ MAIN_DIR=/usr/local/bin/hbot_package/hbotModules
     source $MAIN_DIR/support/support_elevateCheck.sh
     source $MAIN_DIR/support/support_userAccount.sh
     
-while getopts "umdsf:iwav:xct:g" FLAG; do
+while getopts "umdsf:iwav:xct:gp:" FLAG; do
     case "$FLAG" in
         u)
             support_elevateCheck
@@ -167,6 +168,16 @@ while getopts "umdsf:iwav:xct:g" FLAG; do
             exit
             else
                 echo -e "\n\e[31mSorry, but '$OPTARG' is not a valid argument. See valid Arugments for option 'timezone' below\e[39m"
+                support_usage
+            fi
+            exit
+            ;;
+
+        p)
+            if [ "$OPTARG" == "stop" ]; then
+                config_proxmox_unlock_stop
+            else
+                echo -e "\n\e[31mSorry, but '$OPTARG' is not a valid argument. See valid Arugments for option 'vpn' below\e[39m"
                 support_usage
             fi
             exit

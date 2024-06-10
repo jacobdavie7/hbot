@@ -21,6 +21,8 @@ function support_usage
     echo -e "                   arizona  America/Phoenix"
     echo -e "                   korea    Asia/Seoul"
     echo -e "                   auto     GeoClue"
+    echo -e "           -p  proxmox      scripts for proxmox"
+    echo -e "                   stop     Force unlock and stop vm. Command line passthough of VM ID !!DANGER!!"
     echo -e "\n       Firewalls"
     echo -e "           -f  firewall*    deploy firewall ruleset - REQUIRES ARGUMENT"
     echo -e "                   home     standard home use"
