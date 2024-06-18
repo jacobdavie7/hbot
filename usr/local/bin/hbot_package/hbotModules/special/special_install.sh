@@ -117,6 +117,7 @@ function special_install
                         menulibre                       # edit applications whisker menu can open (add app images)
                         metadata-cleaner                # gnome exif cleaner
                         mullvad-vpn                     # vpn # from custom repo
+                        nextcloud-desktop               # sync to nextcloud
                         pavucontrol                     # audio mixer, made for pulse, but works with pipewire
                         qdirstat                        # visualize storage
                         steam-installer                 # games # from contrib repo. # many need to enable multi-arch with "dpkg --add-architecture i386" # many need to install libaries for vulkan/32-bit titles "apt install mesa-vulkan-drivers libglx-mesa0:i386 mesa-vulkan-drivers:i386 libgl1-mesa-dri:i386" # https://wiki.debian.org/Steam
