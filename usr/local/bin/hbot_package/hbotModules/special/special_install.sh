@@ -52,6 +52,7 @@ function special_install
                 echo -e "\n\n\e[45m install utility apt packages \e[49m\n\n"
                     UTILITIES=(
                         autorandr                       # default display layout
+                        bat                             # batcat utility, better cat
                         btop                            # better proccess viewer
                         curl                            # interact with urls
                         dnsmasq                         # dns
@@ -64,8 +65,10 @@ function special_install
                         hdparm                          # get drive parameters
                         htop                            # proccess viewer
                         ibus-hangul                     # input korean
+                        imagemagick                     # convert command, ffmpeg for images
                         iptables                        # firewall
                         iptables-persistent             # make ruleset persistent upon restart         
+                        libdvd-pkg                      # needed to decode encrypted dvds, needed to playback dvds. See dvd playback wiki page for more detail
                         lm-sensors                      # sensor command to view temps
                         lshw                            # list hardware, view cpu details
                         ncdu                            # file sizes
@@ -108,7 +111,7 @@ function special_install
                         gnome-disk-utility              # gui disk manager
                         gparted                         # gui partition manager
                         gsmartcontrol                   # gui for smart data
-                        keepassxc                       # password manager
+                        #keepassxc                       # password manager
                         libreoffice                     # productivity suite
                         libreoffice-gtk3                # make libreoffice look better
                         menulibre                       # edit applications whisker menu can open (add app images)
@@ -132,12 +135,15 @@ function special_install
             # apt fun
                 echo -e "\n\n\e[45m install fun apt packages \e[49m\n\n"
                     FUN=(
+                        bb                              # ascii art music video, does not work with pulseaudio
+                        boxes                           # draw boxes
                         cmatrix                         # enter the matrix
                         cowsay                          # what does the cow say
+                        figlet                          # draw ascii banners
                         fortune                         # random (or not???) message
                         hollywood                       # l337 h@x
+                        hyfetch                         # neofetch replacment EOL 04/26/2024 (neowofetch), in deb 13, trixie repos
                         lolcat                          # love is love
-                        neofetch                        # i run arch btw
                         rig                             # generate random fake id
                     )
 
@@ -162,6 +168,7 @@ function special_install
                 com.discordapp.Discord                  # discord       # gamer chat
                 com.github.tchx84.Flatseal              # flatseal      # gui for flapak permissons
                 #org.kde.kdenlive                        # kdenlive      # video editor  # is in apt repos, but installs a ton of kde bloat like kde connect for phone. Flathub stops crap from being downloaded and is actually smaller than apt repos, plus don't have to deal with bloat
+                org.keepassxc.KeePassXC                 # keepassxc     # flatpak reccomend by dev
                 com.system76.Popsicle                   # popsicle      # easy iso flasher
                 com.spotify.Client                      # spotify       # music
                 com.github.xournalpp.xournalpp          # xournalpp     # pdf editor
@@ -172,12 +179,6 @@ function special_install
                 flatpak install flathub $F -y
             done
 
-            # join array elements with space as separator
-                FLATPAK_LIST="${FLATPAK[*]}"
-            
-            # install packages
-                apt install -y $FLATPAK_LIST
-
     # setup firewall
         echo -e "\n\n\e[45m call firewall home module \e[49m\n\n"
             firewall_home
@@ -186,13 +187,13 @@ function special_install
         echo -e "\n\n\e[45m add user account to sudo group \e[49m\n\n"
             usermod -a -G sudo $USER_ACCOUNT
 
+    # reconfigure libdvd-pkg to allow for dvd playback without blocky artifacting
+        echo -e "\n\n\e[45m reconfigure libdvd-pkg \e[49m\n\n"
+            dpkg-reconfigure libdvd-pkg
+
     # enable wireplumber session manger for pipewire
         echo -e "\n\n\e[45m enable wireplumber service \e[49m\n\n"
             systemctl --user --now enable wireplumber.service
-
-    # update DNS servers
-    #    echo -e "\n\n\e[45m update dns servers \e[49m\n\n"
-    #        echo -e '9.9.9.9\n1.1.1.1\n8.8.8.8' >> /etc/resolv.conf
 
     # static route 
         echo -e "\n\n\e[45m add static route \e[49m\n\n"
