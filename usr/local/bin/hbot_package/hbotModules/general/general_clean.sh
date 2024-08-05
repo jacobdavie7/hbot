@@ -16,12 +16,24 @@ function general_clean
     
     echo -e "\nRemoving flatpak cache"
         rm -rf /var/tmp/flatpak-cache-*
+    
+    echo -e "\nRepair flatpak [remove invalid objects, not referenced, etc]"
+        flatpak repair
+
+    echo -e "\nRemoving disabled snaps"
+        snap list --all | awk '/disabled/{print $1, $3}' |
+        while read snapname revision; do
+            snap remove "$snapname" --revision="$revision"
+        done
 
     echo -e "\nEmpyting notification log"
         rm -r /home/$USER_ACCOUNT/.cache/xfce4/notifyd/*
 
-    echo -e "\nVacuuming journalctl logs over 3 days"
-        journalctl --vacuum-time=3d
+    echo -e "\nVacuuming journalctl logs over 2 weeks"
+        journalctl --vacuum-time=2w
+
+    echo -e "\nVacuuming journalctl logs over 1G"
+        journalctl --vacuum-size=1G
     
     echo -e "\nEmptying tmp"
         rm -r /tmp/*
