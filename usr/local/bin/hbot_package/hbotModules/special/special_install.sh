@@ -165,7 +165,7 @@ function special_install
                 flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 
             FLATPAK=(
-                com.visualstudio.code-oss               # code-oss       # IDE; vscode without microsoft temlemetry, vscodium is 'better' built before micosoft but have had endless problems with git. Code-oss works much better
+                com.vscodium.codium                     # code-oss       # IDE; vscode without microsoft temlemetry; code-oss is open-source from microsoft before they add their closed junk to get vscode; vscodium is 'better'. vscodium disables temlemety during builds, uses open-source marketplace, ETC.  
                 org.cryptomator.Cryptomator             # cryptomator    # client side encryption
                 com.discordapp.Discord                  # discord        # gamer chat
                 com.github.tchx84.Flatseal              # flatseal       # gui for flapak permissons
@@ -233,7 +233,6 @@ function special_install
     # update timeout from 90s to 5s. This will only give nvidia-persisted 5s before being killed during shutdown, instead of needing to wait the full 90s.
         echo -e "\n\n\e[45m update stop timeout \e[49m\n\n"
             sed -i 's/#DefaultTimeoutStopSec=90s/DefaultTimeoutStopSec=5s/' /etc/systemd/system.conf
-    
     
     # cronjobs
         echo -e "\n\n\e[45m add weekly cronjob to remove files deleted from gui \e[49m\n\n"
