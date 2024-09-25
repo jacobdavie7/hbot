@@ -113,7 +113,7 @@ function special_install
                         gnome-disk-utility              # gui disk manager
                         gparted                         # gui partition manager
                         gsmartcontrol                   # gui for smart data
-                        #keepassxc                       # password manager
+                        #keepassxc                       # password manager ; use flatpak, debian maintainer went off the rails, devs reccomed flatpak
                         libreoffice                     # productivity suite
                         libreoffice-gtk3                # make libreoffice look better
                         menulibre                       # edit applications whisker menu can open (add app images)
