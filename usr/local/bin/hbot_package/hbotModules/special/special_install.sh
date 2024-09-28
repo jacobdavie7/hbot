@@ -165,15 +165,15 @@ function special_install
                 flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 
             FLATPAK=(
-                com.vscodium.codium                     # code-oss       # IDE; vscode without microsoft temlemetry; code-oss is open-source from microsoft before they add their closed junk to get vscode; vscodium is 'better'. vscodium disables temlemety during builds, uses open-source marketplace, ETC.  
                 org.cryptomator.Cryptomator             # cryptomator    # client side encryption
                 com.discordapp.Discord                  # discord        # gamer chat
                 com.github.tchx84.Flatseal              # flatseal       # gui for flapak permissons
                 org.gnome.Loupe                         # image viewer   # gnome image viewer
+                io.gitlab.adhami3310.Impression         # impression     # iso flasher
                 org.keepassxc.KeePassXC                 # keepassxc      # flatpak reccomend by dev
                 io.missioncenter.MissionCenter          # mission center # monitor system resources
-                com.system76.Popsicle                   # popsicle       # easy iso flasher
                 com.spotify.Client                      # spotify        # music
+                com.vscodium.codium                     # code-oss       # IDE; vscode without microsoft temlemetry; code-oss is open-source from microsoft before they add their closed junk to get vscode; vscodium is 'better'. vscodium disables temlemety during builds, uses open-source marketplace, ETC.  
                 com.github.xournalpp.xournalpp          # xournalpp      # pdf editor
                 
                 #com.belmoussaoui.Decoder                # decoder        # scan/generate qr codes
