@@ -93,6 +93,7 @@ function special_install
                         vim                             # text editor
                         whois                           # make whois lookups
                         wireplumber                     # pipewire session manager
+                        xinput                          # needed for drawing tablet and controller input
                         zenity                          # draw windows for ibus
                         zip                             # create zip files
                     )
@@ -178,6 +179,7 @@ function special_install
                 
                 #com.belmoussaoui.Decoder                # decoder        # scan/generate qr codes
                 #org.kde.kdenlive                        # kdenlive       # video editor  # is in apt repos, but installs a ton of kde bloat like kde connect for phone. Flathub stops crap from being downloaded and is actually smaller than apt repos, plus don't have to deal with bloat
+                #org.prismlauncher.PrismLauncher         # prism launcher # minecraft launcher. Do NOT use polymc. 
                 #org.gnome.gitlab.YaLTeR.VideoTrimmer    # video trimmer  # quick video trimmer from gnome, does not re-encode so quick and simple                #com.belmoussaoui.Decoder
 
                 )
@@ -202,6 +204,26 @@ function special_install
         echo -e "\n\n\e[45m enable wireplumber service \e[49m\n\n"
             systemctl --user --now enable wireplumber.service
 
+    # setup game controller to see 8bit controller as generic xbox
+        XINPUTFILE="/etc/udev/rules.d/99-8bitdo-xinput.rules"
+        if [ ! -f "$XINPUTFILE" ]; then
+            # File does not exist, create it with the specified content
+                cat <<EOL > "$XINPUTFILE"
+ACTION=="add", ATTRS{idVendor}=="2dc8", ATTRS{idProduct}=="310a", RUN+="/sbin/modprobe xpad", RUN+="/bin/sh -c 'echo 2dc8 310a > /sys/bus/usb/drivers/xpad/new_id'"EOL
+EOL
+            # Ensure owned by root
+            chown root:root "$XINPUTFILE"
+            
+            # Set permissions
+            chmod 644 "$XINPUTFILE"
+
+            echo "created xinput file"
+        else
+            echo "xinput file exists"
+        fi
+
+        udevadm control --reload
+    
     # static route 
         echo -e "\n\n\e[45m add static route \e[49m\n\n"
             nmcli connection modify "Wired connection 1" +ipv4.routes "10.0.0.0/8 10.0.40.1"
@@ -278,7 +300,7 @@ function special_install
 # apt extra
 #   echo -e "\n\n\e[45m install extra apt packages \e[49m\n\n"
 #      EXTRA=(
-#      libpcslite-dev                  # smartcard access via pc/sc (proxmark)
+#      libpcsclite-dev                  # smartcard access via pc/sc (proxmark)
 #      libreadline-dev                 # consistent ui to recall lines of previously input (proxmark)
 #      v4l2loopback-dkms               # video loopback device - needed for obs
 #      gqrx-sdr                        # sdr
