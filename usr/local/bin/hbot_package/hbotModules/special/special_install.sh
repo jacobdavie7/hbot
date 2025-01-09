@@ -208,9 +208,8 @@ function special_install
         XINPUTFILE="/etc/udev/rules.d/99-8bitdo-xinput.rules"
         if [ ! -f "$XINPUTFILE" ]; then
             # File does not exist, create it with the specified content
-                cat <<EOL > "$XINPUTFILE"
-ACTION=="add", ATTRS{idVendor}=="2dc8", ATTRS{idProduct}=="310a", RUN+="/sbin/modprobe xpad", RUN+="/bin/sh -c 'echo 2dc8 310a > /sys/bus/usb/drivers/xpad/new_id'"
-EOL
+            echo -e "ACTION==\"add\", ATTRS{idVendor}==\"2dc8\", ATTRS{idProduct}==\"310a\", RUN+=\"/sbin/modprobe xpad\", RUN+=\"/bin/sh -c 'echo 2dc8 310a > /sys/bus/usb/drivers/xpad/new_id'\"" >> "$XINPUTFILE"
+
             # Ensure owned by root
             chown root:root "$XINPUTFILE"
             
