@@ -209,7 +209,7 @@ function special_install
         if [ ! -f "$XINPUTFILE" ]; then
             # File does not exist, create it with the specified content
                 cat <<EOL > "$XINPUTFILE"
-ACTION=="add", ATTRS{idVendor}=="2dc8", ATTRS{idProduct}=="310a", RUN+="/sbin/modprobe xpad", RUN+="/bin/sh -c 'echo 2dc8 310a > /sys/bus/usb/drivers/xpad/new_id'"EOL
+ACTION=="add", ATTRS{idVendor}=="2dc8", ATTRS{idProduct}=="310a", RUN+="/sbin/modprobe xpad", RUN+="/bin/sh -c 'echo 2dc8 310a > /sys/bus/usb/drivers/xpad/new_id'" EOL
 EOL
             # Ensure owned by root
             chown root:root "$XINPUTFILE"
