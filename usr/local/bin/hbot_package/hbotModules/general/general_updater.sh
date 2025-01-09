@@ -4,7 +4,7 @@ function general_updater
 {
     echo -e "\n\e[44mUpdating Packages\e[49m"
 
-    echo -e "\n\e[95;4mapt\e[39;24m"
+    echo -e "\n\e[95;4mapt.\e[39;24m"
         echo -e "\n\e[96mupdate\e[39m"
             apt update
         echo -e "\n\e[96mupgrade\e[39m"
