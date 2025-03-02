@@ -175,6 +175,7 @@ function special_install
                 io.missioncenter.MissionCenter          # mission center # monitor system resources
                 com.spotify.Client                      # spotify        # music
                 com.vscodium.codium                     # code-oss       # IDE; vscode without microsoft temlemetry; code-oss is open-source from microsoft before they add their closed junk to get vscode; vscodium is 'better'. vscodium disables temlemety during builds, uses open-source marketplace, ETC.  
+                io.github.flattool.Warehouse            # warehouse      # flatpak manager and remove unused files
                 com.github.xournalpp.xournalpp          # xournalpp      # pdf editor
                 
                 #com.belmoussaoui.Decoder                # decoder        # scan/generate qr codes

@@ -21,6 +21,8 @@ function firewall_server_pbs
             iptables -A OUTPUT -p udp --dport 53 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing dns"
         echo -e " - ACCEPT ntp OUT"
             iptables -A OUTPUT -p udp --dport 123 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing NTP"
+        echo -e " - ACCEPT SMTP OUT"
+            iptables -A OUTPUT -p tcp --dport 587 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing SMTP"
 
     firewall_persistentSave
 
