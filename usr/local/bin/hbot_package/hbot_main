@@ -95,6 +95,8 @@ while getopts "umdsf:iwav:xct:gp:" FLAG; do
                 firewall_support_allow_local_only
             elif [ "$OPTARG" == "wol" ]; then
                 firewall_server_wol
+            elif [ "$OPTARG" == "status" ]; then
+                firewall_server_status
             elif [ "$OPTARG" == "vm" ]; then
                 firewall_home_limited_no_local_vm
             else
