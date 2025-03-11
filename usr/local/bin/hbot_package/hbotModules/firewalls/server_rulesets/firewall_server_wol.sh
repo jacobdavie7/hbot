@@ -9,7 +9,8 @@ function firewall_server_wol
     echo -e "\nINPUT"
         echo -e " - ACCEPT ssh IN from devices, vpn"
             iptables -A INPUT -p tcp -s 10.0.40.0/24,10.0.90.0/24 --dport 22 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new incoming ssh from devices/vpn"
-
+        echo " - icmp ping (IN)"
+                    iptables -A INPUT -p icmp --icmp-type 8 -s 10.0.30.18 -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new incoming ping from docker server (uptime kuma)"
     echo -e "\nOUTPUT"
         echo -e " - ACCEPT dns out for _apt to network"
             iptables -A OUTPUT -p udp -d 10.0.30.1 --dport 53 -m owner --uid-owner _apt -m conntrack --ctstate NEW -j ACCEPT -m comment --comment "ACCEPT new outgoing dns for _apt"
