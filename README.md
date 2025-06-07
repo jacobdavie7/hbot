@@ -15,7 +15,7 @@ t toolkit
 This is a constant work in progress so be prepared for stuff to break and many updates.
 <br>
 <br>
-Note all updates will get a new package realease. When I am working on this project, they come way to fast for that. I finally turned this into a package mostly becuase I was tired of navingating to the script :)
+Note all updates will get a new package realease. When I am working on this project, they come way to fast for that. I finally turned this into a package mostly becuase I was tired of navingating to the script
 <br>
 <br>
 Most of the functions are highly customized for me, my specific use case and setup. I recommend looking though the functions, understand what they are doing and make modifications that work for you and your enviroment.
@@ -52,29 +52,30 @@ Special
 ## Arguments 
 Firewall
 ```
-home     standard home use"
-lax      lax home use - Allow all Out"
-lax_in   lax home use with inbound - Allow all Out, AND accept ssh and ping IN"
-limited  limited home use - Internet Only (HTTP, HTTPS, DNS)"
+home     standard home use
+lax      lax home use - Allow all Out
+lax_in   lax home use with inbound - Allow all Out, AND accept ssh and ping IN
+limited  limited home use - Internet Only (HTTP, HTTPS, DNS)
 
-web      web server use"
-pbs      backup server use"
-wol      wake on lan server use"
+web      web server use
+pbs      backup server use
+wol      wake on lan server use
+uptime   uptime server use
 
-reset    FLUSH ALL rules and ACCEPT by default !!DANGER!!"
-vm       limited home use - Internet Only (HTTP, HTTPS, DNS) WITHOUT local access"
-local    no internet, use when doing 1337 hax"
+reset    FLUSH ALL rules and ACCEPT by default !!DANGER!!
+vm       limited home use - Internet Only (HTTP, HTTPS, DNS) WITHOUT local access
+local    no internet, use when doing 1337 hax
 ```
 
 Timezone
 ```
-pacific  America/Los_Angeles"
-mountain America/Denver"
-central  America/Chicago"
-eastern  America/New_York"
-arizona  America/Phoenix"
-korea    Asia/Seoul"
-auto     GeoClue"
+pacific  America/Los_Angeles
+mountain America/Denver
+central  America/Chicago
+eastern  America/New_York
+arizona  America/Phoenix
+korea    Asia/Seoul
+auto     GeoClue
 ```
 
 VPN
